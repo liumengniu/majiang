@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "es6",
+    "target": "es6",
+    "strict": true,
+    "strictNullChecks": false,
+    "noEmitHelpers": true,
+    "sourceMap": false,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "./assets",
+    "./src",
+	  "./src/**/*.ts",
+	  "./src/**/*.d.ts",
+    "./engine"
+  ]
+}

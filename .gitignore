@@ -1,0 +1,8 @@
+.DS_Store
+temp
+library
+local
+release
+node_modules
+bin/js/bundles
+.idea
