@@ -6,16 +6,16 @@
 
 import appConfig from '../configs';
 
-class HttpHelper{
+class HttpHelper {
 	constructor() {
 	
 	}
 	
-	private cb:Function;
+	private cb: Function;
 	private httpUrl: string = `${appConfig?.host}:${appConfig?.port}`
 	
-	public get(data:any, cb: any): void{
-
+	public get(data: any, cb: any): void {
+		
 		let http: Laya.HttpRequest = new Laya.HttpRequest();
 		//设置超时时间
 		http.http.timeout = 10000;
@@ -29,8 +29,7 @@ class HttpHelper{
 		http.on(Laya.Event.PROGRESS, this, this.processHandler);
 	}
 	
-	public post(url: string,data:any, cb: Function): void{
-		console.log(`${this.httpUrl}url`, '=========================')
+	public post(url: string, data: any, cb: Function): void {
 		let http: Laya.HttpRequest = new Laya.HttpRequest();
 		this.cb = cb;
 		//设置超时时间
@@ -45,15 +44,15 @@ class HttpHelper{
 		http.on(Laya.Event.PROGRESS, this, this.processHandler);
 	}
 	
-	private processHandler(data:any): void {
+	private processHandler(data: any): void {
 		console.log("processHandler");
 	}
 	
-	private errorHandler(error:any): void {
+	private errorHandler(error: any): void {
 		console.log("errorHandler");
 	}
 	
-	private completeHandler(data:any): void {
+	private completeHandler(data: any): void {
 		console.log("completeHandler");
 	}
 }
