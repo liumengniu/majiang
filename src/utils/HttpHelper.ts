@@ -4,7 +4,9 @@
  * @Date: 2024-6-18
  */
 
-import config from "../configs";
+// import {someConfig} from "../configs";
+//
+// console.log(someConfig, '-----------------')
 
 class HttpHelper{
 	constructor() {
@@ -12,7 +14,8 @@ class HttpHelper{
 	}
 	
 	private cb:Function;
-	private httpUrl: string = `${config?.host}:${config?.port}`
+	// private httpUrl: string = `${config?.host}:${config?.port}`
+	private httpUrl: string = `http://192.168.1.8:4000`;
 	
 	public get(data:any, cb: any): void{
 
@@ -30,12 +33,13 @@ class HttpHelper{
 	}
 	
 	public post(url: string,data:any, cb: Function): void{
+		console.log(`${this.httpUrl}url`, '=========================')
 		let http: Laya.HttpRequest = new Laya.HttpRequest();
 		this.cb = cb;
 		//设置超时时间
 		http.http.timeout = 10000;
 		//发送了一个简单的请求
-		http.send(`${this.httpUrl}url`, data, "post", "json");//需要在resources文件夹下新建一个data.txt文件
+		http.send(`${this.httpUrl}${url}`, data, "post", "json");//需要在resources文件夹下新建一个data.txt文件
 		//设置完成事件，添加回调方法
 		http.once(Laya.Event.COMPLETE, this, this.completeHandler);
 		//设置错误事件，添加回调方法
