@@ -4,9 +4,7 @@
  * @Date: 2024-6-18
  */
 
-// import {someConfig} from "../configs";
-//
-// console.log(someConfig, '-----------------')
+import appConfig from '../configs';
 
 class HttpHelper{
 	constructor() {
@@ -14,8 +12,7 @@ class HttpHelper{
 	}
 	
 	private cb:Function;
-	// private httpUrl: string = `${config?.host}:${config?.port}`
-	private httpUrl: string = `http://192.168.1.8:4000`;
+	private httpUrl: string = `${appConfig?.host}:${appConfig?.port}`
 	
 	public get(data:any, cb: any): void{
 
