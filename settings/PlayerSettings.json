@@ -1,0 +1,24 @@
+{
+  "resolution": {
+    "scaleMode": "fixedwidth"
+  },
+  "3D": {
+    "lightClusterCount": {
+      "x": 12,
+      "y": 12,
+      "z": 12
+    }
+  },
+  "physics2D": {
+    "gravity": {
+      "y": 9.8
+    }
+  },
+  "modules": {
+    "laya.d3": true,
+    "laya.ui": true
+  },
+  "splash": {
+    "fit": "center"
+  }
+}
