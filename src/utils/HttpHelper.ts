@@ -52,8 +52,13 @@ class HttpHelper {
 		console.log("errorHandler");
 	}
 	
+	/**
+	 * 请求回调
+	 * @param data
+	 * @private
+	 */
 	private completeHandler(data: any): void {
-		console.log("completeHandler");
+		this.cb(data)
 	}
 }
 

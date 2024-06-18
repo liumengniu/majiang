@@ -14,7 +14,7 @@ export class Script extends Laya.Script {
 	public passwordTextInput: Laya.TextInput;
 	
 	@property({type: Laya.Button})
-	public btn: Laya.TextInput;
+	public btn: Laya.Button;
 	
 	//组件被激活后执行，此时所有节点和组件均已创建完毕，此方法只执行一次
 	onAwake(): void {
@@ -39,6 +39,9 @@ export class Script extends Laya.Script {
 	 */
 	public loginCallback(data: any): any{
 		console.log(data, '=====================data')
+		if(data.errCode === 0){
+			Laya.Scene.open("Hall.ls");
+		}
 	}
 	
 	//组件被启用后执行，例如节点被添加到舞台后
