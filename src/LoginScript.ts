@@ -1,4 +1,6 @@
 import HttpHelper from "./utils/HttpHelper";
+import mapManager from './configs/mapManager';
+
 
 const {regClass, property} = Laya;
 const Event = Laya.Event;
@@ -40,6 +42,9 @@ export class Script extends Laya.Script {
 	public loginCallback(data: any): any{
 		console.log(data, '=====================data')
 		if(data.errCode === 0){
+			const dataManager = new mapManager();
+			dataManager.setData('GameServerInfo', data?.result?.GameServerInfo);
+			dataManager.setData('userInfo',data?.result?.GameServerInfo);
 			Laya.Scene.open("Hall.ls");
 		}
 	}

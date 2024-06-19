@@ -7,6 +7,21 @@
   "top": 0,
   "bottom": 0,
   "name": "Scene2D",
+  "_$comp": [
+    {
+      "_$type": "a14bacd4-ac54-4dc4-b597-c83f2d3064a4",
+      "scriptPath": "../src/HallScript.ts",
+      "createRoomBtn": {
+        "_$ref": "zvtmz89l"
+      },
+      "joinRoomBtn": {
+        "_$ref": "8uo8wovt"
+      },
+      "roomTextInput": {
+        "_$ref": "del74y1f"
+      }
+    }
+  ],
   "_$child": [
     {
       "_$id": "sx1kyb58",
@@ -55,7 +70,7 @@
         {
           "_$id": "del74y1f",
           "_$type": "TextInput",
-          "name": "TextInput",
+          "name": "roomNum",
           "x": 496,
           "y": 301,
           "width": 147,

@@ -3,22 +3,41 @@
  * @author Kevin
  * @Date: 2024-6-18
  */
+import appConfig from '../configs';
+
 class SocketHelper {
-	
 	private socket: Laya.Socket;
+	private onSocketOpenCallback: Function;
+	private static _instance: SocketHelper;
 	private output: Laya.Byte;
+	private wsUrl: string = `${appConfig?.ws}`
 	
-	private connect(): void {
-		
+	constructor(onSocketOpenCallback: Function) {
 		//创建Socket对象
 		this.socket = new Laya.Socket();
-		
+		this.onSocketOpenCallback = onSocketOpenCallback;
+	}
+	
+	/**
+	 * websocket单例
+	 * @param onSocketOpenCallback
+	 */
+	static getInstance(onSocketOpenCallback: Function): SocketHelper {
+		if (!this._instance) {
+			this._instance = new SocketHelper(onSocketOpenCallback);
+		}
+		return this._instance;
+	}
+	
+	/**
+	 * 客户端主动连接
+	 * @param url
+	 */
+	connect(url: string): void {
 		//对服务器建立连接
-		this.socket.connectByUrl("ws://echo.websocket.org:80");
-		
+		this.socket.connectByUrl(`${this.wsUrl}${url}`);
 		//表示需要发送至服务端的缓冲区中的数据
 		this.output = this.socket.output;
-		
 		//添加监听事件
 		this.socket.on(Laya.Event.OPEN, this, this.onSocketOpen);
 		this.socket.on(Laya.Event.CLOSE, this, this.onSocketClose);
@@ -26,13 +45,29 @@ class SocketHelper {
 		this.socket.on(Laya.Event.ERROR, this, this.onConnectError);
 	}
 	
-	//连接建立成功回调
+	/**
+	 * 连接建立成功回调
+	 * @param e
+	 * @private
+	 */
 	private onSocketOpen(e: any = null): void {
-		console.log("Connected");
-		
-		// 发送字符串
-		this.socket.send("demonstrate <sendString>");
-		
+		console.log("ws连接服务端成功");
+		this.onSocketOpenCallback();
+	}
+	
+	/**
+	 * 客户端发送消息
+	 * @param msg
+	 */
+	public sendMessage(msg: any): void {
+		this.socket.send(msg);
+	}
+	
+	/**
+	 * 客户端发送byte数据
+	 * @param byte
+	 */
+	public sendByte(byte: Laya.Byte): void {
 		// 使用output.writeByte发送
 		var message: string = "demonstrate <output.writeByte>";
 		for (var i: number = 0; i < message.length; ++i) {
@@ -44,12 +79,20 @@ class SocketHelper {
 		this.socket.flush();
 	}
 	
-	// 连接断开后的事件回调
+	/**
+	 * 连接断开后的事件回调
+	 * @param e
+	 * @private
+	 */
 	private onSocketClose(e: any = null): void {
 		console.log("Socket closed");
 	}
 	
-	// 有数据接收时的事件回调
+	/**
+	 * 有数据接收时的事件回调
+	 * @param message
+	 * @private
+	 */
 	private onMessageReceived(message: any = null): void {
 		console.log("Message from server:");
 		if (typeof (message) == 'string') {
@@ -61,8 +104,14 @@ class SocketHelper {
 		this.socket.input.clear();
 	}
 	
-	// 出现异常后的事件回调
+	/**
+	 * 出现异常后的事件回调
+	 * @param e
+	 * @private
+	 */
 	private onConnectError(e: Event = null): void {
 		console.log("error");
 	}
 }
+
+export default SocketHelper
