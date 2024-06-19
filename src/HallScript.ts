@@ -1,16 +1,17 @@
 import SocketHelper from "./utils/SocketHelper";
 import HttpHelper from "./utils/HttpHelper";
+import mapManager from "./configs/mapManager";
 
 const Event = Laya.Event
 
 const {regClass, property} = Laya;
+const dataManager = new mapManager();
 
 @regClass()
 export class HallScript extends Laya.Script {
-	//declare owner : Laya.Sprite3D;
-	declare owner: Laya.Sprite;
+	declare owner : Laya.Sprite;
 	//ws实例
-	private _socket: SocketHelper;
+	public _socket: SocketHelper;
 	
 	@property({type: Laya.Button})
 	public createRoomBtn: Laya.Button;
@@ -22,11 +23,16 @@ export class HallScript extends Laya.Script {
 	public roomTextInput: Laya.TextInput;
 	
 	//组件被激活后执行，此时所有节点和组件均已创建完毕，此方法只执行一次
-	onAwake(): void {
+	onEnable(): void {
 		// 1、登陆之后就可以通过websocket与服务端进行连接
-		// this._socket = SocketHelper.getInstance(this.onSocketOpen);
-		// this._socket.connect("")
-		
+		this._socket = SocketHelper.getInstance("");
+		this._socket.connect(()=>{
+			const userInfo = dataManager.getData('userInfo');
+			// 通知服务端进行长连接的用户，也可以在connect的时候将 唯一标识带在请求url后面（这样会暴露）
+			console.log('-----------------111------------------', userInfo)
+			this._socket.sendMessage(JSON.stringify({type: "setUserId", data: userInfo.id}))
+		});
+		// 2、UI挂载事件
 		this.createRoomBtn.on(Event.CLICK, this, this.handleCreateRoom)
 		this.joinRoomBtn.on(Event.CLICK, this, this.handleJoinRoom)
 	}
@@ -35,10 +41,11 @@ export class HallScript extends Laya.Script {
 	 * websocket连接成功后的回调
 	 * @private
 	 */
-	onSocketOpen(): void {
-		// UI组件挂载回调事件
-		this.createRoomBtn.on(Event.CLICK, this, this.handleCreateRoom)
-		this.joinRoomBtn.on(Event.CLICK, this, this.handleJoinRoom)
+	public onSocketOpen(): void {
+		// const userInfo = dataManager.getData('userInfo');
+		// // 通知服务端进行长连接的用户，也可以在connect的时候将 唯一标识带在请求url后面（这样会暴露）
+		// console.log(this._socket,'-----------------111------------------', this)
+		// HallScript._socket.sendMessage(JSON.stringify({type: "setUserId", data: userInfo.id}))
 	}
 	
 	/**
@@ -47,8 +54,9 @@ export class HallScript extends Laya.Script {
 	 */
 	private handleCreateRoom(): void {
 		console.log("在大厅创建一个房间")
+		const userInfo = dataManager.getData('userInfo');
 		let http = new HttpHelper();
-		http.post("/room/createRoom", {userId: "xxxx"}, this.onCreateRoomCallback)
+		http.post("/room/createRoom", {userId: userInfo?.id}, this.onCreateRoomCallback)
 	}
 	
 	/**
@@ -57,6 +65,11 @@ export class HallScript extends Laya.Script {
 	 * @private
 	 */
 	private onCreateRoomCallback(data: any) {
+		if(!data || JSON.stringify(data) === "{}"){
+			return
+		}
+		const keys = Object.keys(data);
+		dataManager.setData("roomInfo", data[keys[0]])
 		console.log(data, '2222222222222222222222222222222222222222222')
 	}
 	
@@ -68,5 +81,16 @@ export class HallScript extends Laya.Script {
 		if (this.roomTextInput?.text) { //未输入房间号
 			return
 		}
+		const userInfo = dataManager.getData('userInfo');
+		let http = new HttpHelper();
+		http.post("/room/joinRoom", {userId: userInfo?.id, roomId: this.roomTextInput?.text}, this.onJoinRoomCallback)
+	}
+	
+	/**
+	 * 加入房间
+	 * @private
+	 */
+	private onJoinRoomCallback(data: any): void{
+	
 	}
 }

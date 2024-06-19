@@ -44,7 +44,7 @@ export class Script extends Laya.Script {
 		if(data.errCode === 0){
 			const dataManager = new mapManager();
 			dataManager.setData('GameServerInfo', data?.result?.GameServerInfo);
-			dataManager.setData('userInfo',data?.result?.GameServerInfo);
+			dataManager.setData('userInfo',data?.result?.userInfo);
 			Laya.Scene.open("Hall.ls");
 		}
 	}

@@ -4,45 +4,51 @@
  * @Date: 2024-6-18
  */
 import appConfig from '../configs';
+import HandleReceivedMessage from './HandleReceivedMessage';
 
 class SocketHelper {
-	private socket: Laya.Socket;
+	private websocket: Laya.Socket | null = null;
 	private onSocketOpenCallback: Function;
 	private static _instance: SocketHelper;
 	private output: Laya.Byte;
 	private wsUrl: string = `${appConfig?.ws}`
+	private url: string;
 	
-	constructor(onSocketOpenCallback: Function) {
+	private constructor(url: string) {
 		//创建Socket对象
-		this.socket = new Laya.Socket();
-		this.onSocketOpenCallback = onSocketOpenCallback;
+		// this.websocket = new Laya.Socket();
+		this.url = `${this.wsUrl}${url}`;
 	}
 	
 	/**
 	 * websocket单例
-	 * @param onSocketOpenCallback
 	 */
-	static getInstance(onSocketOpenCallback: Function): SocketHelper {
+	public static getInstance(url: string): SocketHelper {
 		if (!this._instance) {
-			this._instance = new SocketHelper(onSocketOpenCallback);
+			this._instance = new SocketHelper(url);
 		}
 		return this._instance;
 	}
 	
 	/**
 	 * 客户端主动连接
-	 * @param url
+	 * @param onSocketOpenCallback
 	 */
-	connect(url: string): void {
+	public connect(onSocketOpenCallback: Function): Laya.Socket {
+		//创建Socket对象
+		this.websocket = new Laya.Socket();
 		//对服务器建立连接
-		this.socket.connectByUrl(`${this.wsUrl}${url}`);
+		this.websocket.connectByUrl(this.url);
 		//表示需要发送至服务端的缓冲区中的数据
-		this.output = this.socket.output;
+		this.output = this.websocket.output;
+		this.onSocketOpenCallback = onSocketOpenCallback;
+		// console.log("开始链接------------connect", SocketHelper._instance)
 		//添加监听事件
-		this.socket.on(Laya.Event.OPEN, this, this.onSocketOpen);
-		this.socket.on(Laya.Event.CLOSE, this, this.onSocketClose);
-		this.socket.on(Laya.Event.MESSAGE, this, this.onMessageReceived);
-		this.socket.on(Laya.Event.ERROR, this, this.onConnectError);
+		this.websocket.on(Laya.Event.OPEN, this, this.onSocketOpen);
+		this.websocket.on(Laya.Event.CLOSE, this, this.onSocketClose);
+		this.websocket.on(Laya.Event.MESSAGE, this, this.onMessageReceived);
+		this.websocket.on(Laya.Event.ERROR, this, this.onConnectError);
+		return this.websocket;
 	}
 	
 	/**
@@ -50,7 +56,7 @@ class SocketHelper {
 	 * @param e
 	 * @private
 	 */
-	private onSocketOpen(e: any = null): void {
+	public onSocketOpen(e: any = null): void {
 		console.log("ws连接服务端成功");
 		this.onSocketOpenCallback();
 	}
@@ -59,8 +65,9 @@ class SocketHelper {
 	 * 客户端发送消息
 	 * @param msg
 	 */
-	public sendMessage(msg: any): void {
-		this.socket.send(msg);
+	sendMessage(msg: any): void {
+		this.websocket.send(msg);
+		this.websocket.flush();
 	}
 	
 	/**
@@ -76,7 +83,7 @@ class SocketHelper {
 		}
 		
 		// 发送缓冲区中的数据到服务器
-		this.socket.flush();
+		this.websocket.flush();
 	}
 	
 	/**
@@ -94,14 +101,15 @@ class SocketHelper {
 	 * @private
 	 */
 	private onMessageReceived(message: any = null): void {
-		console.log("Message from server:");
+		console.log("从服务端接收websocket消息:", message);
 		if (typeof (message) == 'string') {
 			console.log(message);
+			HandleReceivedMessage.onMessageReceived(message);
 		} else if (message instanceof ArrayBuffer) {
 			console.log(new Laya.Byte(message).readUTFBytes());
 		}
 		// 清理缓存的服务端发来的数据
-		this.socket.input.clear();
+		this.websocket.input.clear();
 	}
 	
 	/**
