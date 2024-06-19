@@ -11,7 +11,6 @@
     {
       "_$type": "88cea8c6-4a81-42db-a610-0031e37e3bcb",
       "scriptPath": "../src/LoginScript.ts",
-      "text": "",
       "accountTextInput": {
         "_$ref": "b7a6xxay"
       },
@@ -28,8 +27,8 @@
       "_$id": "d3yz20nd",
       "_$type": "Sprite",
       "name": "Sprite",
-      "width": 1136,
-      "height": 640,
+      "width": 1334,
+      "height": 750,
       "texture": {
         "_$uuid": "bb8c567d-43a6-4933-b438-73695c461efe",
         "_$type": "Texture"

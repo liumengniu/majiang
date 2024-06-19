@@ -1,6 +1,9 @@
 {
   "resolution": {
-    "scaleMode": "fixedwidth"
+    "designWidth": 1334,
+    "designHeight": 750,
+    "scaleMode": "fixedwidth",
+    "screenMode": "horizontal"
   },
   "3D": {
     "lightClusterCount": {

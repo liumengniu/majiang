@@ -27,10 +27,8 @@
       "_$id": "sx1kyb58",
       "_$type": "Sprite",
       "name": "Sprite",
-      "x": -5,
-      "y": -2,
-      "width": 1136,
-      "height": 640,
+      "width": 1334,
+      "height": 750,
       "texture": {
         "_$uuid": "bb8c567d-43a6-4933-b438-73695c461efe",
         "_$type": "Texture"
