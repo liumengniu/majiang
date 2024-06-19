@@ -1,6 +1,8 @@
 import MainRT from "../MainRT";
+import mapManager from "../configs/mapManager";
 
 const {regClass, property} = Laya;
+const dataManager = new mapManager();
 
 @regClass()
 class HandleReceivedMessage{
@@ -29,10 +31,12 @@ class HandleReceivedMessage{
 		const type = data?.type;
 		if (type === "create") { //创建房间成功
 			// todo 是否 1、再加个房间场景，做准备使用，全部准备开始再进游戏场景 ？？？  2、还是进房就是进游戏场景
-			// 进入游戏场景
+			// 1、进入游戏场景
 			MainRT.getInstance().enterGameScene();
-		} else if (message === "join") {  //加入房间成功
-		
+			// 2、绘制头像
+			
+		} else if (type === "join") {  //加入房间成功
+			dataManager.setData("roomInfo", data?.data);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 import SocketHelper from "./utils/SocketHelper";
 import HttpHelper from "./utils/HttpHelper";
 import mapManager from "./configs/mapManager";
+import MainRT from "./MainRT";
 
 const Event = Laya.Event
 
@@ -68,8 +69,9 @@ export class HallScript extends Laya.Script {
 		if(!data || JSON.stringify(data) === "{}"){
 			return
 		}
-		const keys = Object.keys(data);
-		dataManager.setData("roomInfo", data[keys[0]])
+		// const keys = Object.keys(data);
+		// dataManager.setData("roomInfo", data[keys[0]])
+		dataManager.setData("roomInfo", data?.result)
 		console.log(data, '2222222222222222222222222222222222222222222')
 	}
 	
@@ -78,7 +80,8 @@ export class HallScript extends Laya.Script {
 	 * @private
 	 */
 	private handleJoinRoom(): void {
-		if (this.roomTextInput?.text) { //未输入房间号
+		if (!this.roomTextInput?.text) { //未输入房间号
+			console.log("未输入房间号！！！！", this.roomTextInput?.text)
 			return
 		}
 		const userInfo = dataManager.getData('userInfo');
@@ -91,6 +94,10 @@ export class HallScript extends Laya.Script {
 	 * @private
 	 */
 	private onJoinRoomCallback(data: any): void{
-	
+		if(data?.errCode === 0){
+			console.log(data, '--------------------------')
+			dataManager.setData("roomInfo", data?.result);
+			MainRT.getInstance().enterGameScene()
+		}
 	}
 }
