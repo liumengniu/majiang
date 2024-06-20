@@ -74,7 +74,7 @@
           "width": 147,
           "height": 37,
           "_mouseState": 2,
-          "text": "房间号",
+          "text": "",
           "fontSize": 20,
           "color": "#FFFFFF",
           "valign": "middle",
