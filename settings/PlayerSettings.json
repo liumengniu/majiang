@@ -19,7 +19,8 @@
   },
   "modules": {
     "laya.d3": true,
-    "laya.ui": true
+    "laya.ui": true,
+    "laya.physics2D": true
   },
   "splash": {
     "fit": "center"

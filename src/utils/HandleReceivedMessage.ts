@@ -19,7 +19,7 @@ class HandleReceivedMessage{
 		}
 	}
 	/**
-	 * ws回调操作
+	 * websocket接收服务端消息后 - 回调操作
 	 */
 	onMessageReceived (message: string) {
 		let data:any;
@@ -29,6 +29,7 @@ class HandleReceivedMessage{
 			data = JSON.parse(message);
 		}
 		const type = data?.type;
+		const cards = data?.data || [];
 		if (type === "create") { //创建房间成功
 			// todo 是否 1、再加个房间场景，做准备使用，全部准备开始再进游戏场景 ？？？  2、还是进房就是进游戏场景
 			// 1、进入游戏场景
@@ -37,6 +38,9 @@ class HandleReceivedMessage{
 			
 		} else if (type === "join") {  //加入房间成功
 			dataManager.setData("roomInfo", data?.data);
+		} else if (type === "startGame"){
+			dataManager.setData("cards", data?.data);
+			MainRT.getInstance().getHandCards()
 		}
 	}
 }

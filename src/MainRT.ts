@@ -23,8 +23,16 @@ export default class MainRT extends Laya.Scene {
 		return MainRT.instance
 	}
 	
-	onEnable(): void {}
+	onEnable(): void {
+		this._control = this.getComponent(GameControl);
+	}
 	
+	/**
+	 * 获取起手牌
+	 */
+	getHandCards(): void{
+		this._control.getHandCards()
+	}
 	/**
 	 * 进入游戏场景
 	 */

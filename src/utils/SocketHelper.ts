@@ -34,7 +34,7 @@ class SocketHelper {
 	 * 客户端主动连接
 	 * @param onSocketOpenCallback
 	 */
-	public connect(onSocketOpenCallback: Function): Laya.Socket {
+	public connect(onSocketOpenCallback: Function): void {
 		//创建Socket对象
 		this.websocket = new Laya.Socket();
 		//对服务器建立连接
@@ -48,7 +48,6 @@ class SocketHelper {
 		this.websocket.on(Laya.Event.CLOSE, this, this.onSocketClose);
 		this.websocket.on(Laya.Event.MESSAGE, this, this.onMessageReceived);
 		this.websocket.on(Laya.Event.ERROR, this, this.onConnectError);
-		return this.websocket;
 	}
 	
 	/**
@@ -103,7 +102,6 @@ class SocketHelper {
 	private onMessageReceived(message: any = null): void {
 		console.log("从服务端接收websocket消息:", message);
 		if (typeof (message) == 'string') {
-			console.log(message);
 			HandleReceivedMessage.onMessageReceived(message);
 		} else if (message instanceof ArrayBuffer) {
 			console.log(new Laya.Byte(message).readUTFBytes());

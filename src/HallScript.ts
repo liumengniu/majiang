@@ -43,10 +43,7 @@ export class HallScript extends Laya.Script {
 	 * @private
 	 */
 	public onSocketOpen(): void {
-		// const userInfo = dataManager.getData('userInfo');
-		// // 通知服务端进行长连接的用户，也可以在connect的时候将 唯一标识带在请求url后面（这样会暴露）
-		// console.log(this._socket,'-----------------111------------------', this)
-		// HallScript._socket.sendMessage(JSON.stringify({type: "setUserId", data: userInfo.id}))
+
 	}
 	
 	/**

@@ -25,6 +25,20 @@
         "_$uuid": "3bcdb12e-2fba-4b29-bc6c-4d417d63069f",
         "_$type": "Texture"
       }
+    },
+    {
+      "_$id": "bqc9netk",
+      "_$type": "Image",
+      "name": "time",
+      "x": 602,
+      "y": 310,
+      "width": 130,
+      "height": 130,
+      "centerX": 0,
+      "centerY": 0,
+      "skin": "res://0ccff280-642c-419c-bc42-82b7a2d34f2b",
+      "useSourceSize": true,
+      "color": "#ffffff"
     }
   ]
 }

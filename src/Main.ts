@@ -1,4 +1,5 @@
 import mapManager from "./configs/mapManager";
+import SocketHelper from "./utils/SocketHelper";
 
 const Stage = Laya.Stage;
 const Event = Laya.Event;
@@ -9,12 +10,17 @@ const dataManager = new mapManager();
 
 @regClass()
 export default class Main extends Laya.Script {
-	declare owner: Laya.Sprite;
+	declare owner : Laya.Sprite;
+	//ws实例
+	public _socket: SocketHelper;
 	private avatarImg: string = "resources/apes/single可爱姑娘.png";
+	private rightInHand: string = "resources/apes/right_inhand_0.png";
+	private oppositeInHand: string = "resources/apes/opposite_inhand_0.png";
+	private leftInHand: string = "resources/apes/left_inhand_0.png";
 	private playerNum: number = 0;
+	private viewPos: Array<number> = [];
 	
 	onStart() {
-		console.log("Game start");
 		// this.renderAvatar()
 	}
 	
@@ -23,6 +29,7 @@ export default class Main extends Laya.Script {
 	 */
 	onAwake(): void {
 		// this.handleAdaptive()
+		this._socket = SocketHelper.getInstance("");
 	}
 	
 	/**
@@ -41,7 +48,8 @@ export default class Main extends Laya.Script {
 	
 	/**
 	 * 绘制头像
-	 * @param room
+	 * @param viewPos
+	 * @param idx
 	 * @private
 	 */
 	private renderAvatar(viewPos: number[], idx: number): void {
@@ -51,13 +59,13 @@ export default class Main extends Laya.Script {
 		avatar.height = 100;
 		let x: number, y: number = 0;
 		if (viewPos[idx] === 0) { // 玩家本人位置
-			x = 200;
+			x = 100;
 			y = Laya.stage.designHeight - avatar.height - 30
 		} else if(viewPos[idx] === 1) {
 			x = Laya.stage.designWidth - avatar.width - 30;
 			y = Laya.stage.designHeight/2 - avatar.height/2;
 		} else if(viewPos[idx] === 2){
-			x = Laya.stage.designWidth/2 - avatar.width/2;;
+			x = Laya.stage.designWidth/2 - avatar.width/2;
 			y = 30;
 		} else if(viewPos[idx] === 3){
 			x = 30;
@@ -124,21 +132,122 @@ export default class Main extends Laya.Script {
 		this.playerNum = keys?.length;
 		const meIdx: number = keys.findIndex(o => o == userInfo?.id);
 		
-		const viewPos: Array<number> = this.getPlayerViewPos(meIdx, keys)
+		const viewPos: Array<number> = this.viewPos = this.getPlayerViewPos(meIdx, keys)
 		console.log(viewPos, '================================')
 		
 		keys.map((o, idx)=>{
 			this.renderAvatar(viewPos, idx)
 		})
-		
-		// keys.map((o, idx) => {
-		// 	if (idx === meIdx) {
-		// 		this.renderMeAvatar();
-		// 	} else {
-		// 		this.renderOtherAvatar(roomInfo[o], meIdx, idx)
-		// 	}
-		// })
+		// todo 此处自动判断4个人到房间开始，实际场景可能需要4人准备，房主点击开始，后期找到UI再优化
+		if(keys.length === 4){
+			this.startGame();
+		}
 	}
+	
+	/**
+	 * 开始游戏
+	 * @private
+	 */
+	private startGame(): void {
+		const roomInfo = dataManager.getData("roomInfo");
+		const userInfo = dataManager.getData("userInfo");
+		const room = roomInfo[userInfo?.id];
+		if (!room?.isHomeOwner) { // 仅有房主能开始游戏
+			return
+		}
+		const roomId = roomInfo[userInfo?.id]?.roomId;
+		this._socket.sendMessage(JSON.stringify({type: "startGame", roomId}))
+	}
+	
+	/**
+	 * 获取手牌
+	 * @private
+	 */
+	getHandCards(): void{
+		const cards = dataManager.getData("cards");
+		const roomInfo = dataManager.getData("roomInfo");
+		const keys = Object.keys(roomInfo);
+		keys.map((o, idx)=>{
+			this.renderHandCards(idx)
+		})
+	}
+	
+	/**
+	 * 获取手牌的图片资源
+	 */
+	getHandCardImageUrl(num: number): string{
+		let unit = num % 50 > 30 ? "b" : num % 50 > 20 ? 't' : num % 50 > 10 ? "w" : '';
+		let unitNum = (num % 50)%10;
+		return `resources/apes/${unit}${unitNum}.png`
+	}
+	
+	/**
+	 * 绘制手牌
+	 */
+	renderHandCards(idx: number): void{
+		const cards = dataManager.getData("cards");
+		// 按服务端位置获取手牌
+		const handCards = idx === 0 ? cards.slice(0, 14) : idx === 1 ? cards.slice(14, 27) : idx === 2 ? cards.slice(27, 40) : idx === 3 ? cards.slice(40, 53) : [];
+		// 按客户端玩家视角绘制手牌
+		if (this.viewPos[idx] === 0) { // 玩家本人位置
+			let firstX = 250, firstY = Laya.stage.designHeight - 99 - 30;
+			handCards.map((h: number, idx: number) => {
+				let imgUrl = this.getHandCardImageUrl(h);
+				let img = new Image(imgUrl);
+				img.pos(firstX + idx * 65, firstY);
+				this.owner.addChild(img);
+			})
+			
+		} else if (this.viewPos[idx] === 1) {
+			let firstX = Laya.stage.designWidth - 100 - 30 - 26 - 30, firstY = 200;
+			handCards.map((h: number, idx: number) => {
+				let img = new Image(this.rightInHand);
+				img.pos(firstX, firstY + 22 * idx);
+				this.owner.addChild(img);
+			})
+		} else if (this.viewPos[idx] === 2) {
+			let firstX = 370, firstY = 100 + 30 + 30;
+			handCards.map((h: number, idx: number) => {
+				let img = new Image(this.oppositeInHand);
+				img.pos(firstX + idx * 44, firstY);
+				this.owner.addChild(img);
+			})
+		} else if (this.viewPos[idx] === 3) {
+			let firstX = 100 + 30 + 30, firstY = 200;
+			handCards.map((h: number, idx: number) => {
+				let img = new Image(this.leftInHand);
+				img.pos(firstX, firstY + 22 * idx);
+				this.owner.addChild(img);
+			})
+		}
+	}
+	
+	/**
+	 * 绘制打出去的牌
+	 */
+	renderPlayedCards(): void {
+	
+	}
+	
+	/**
+	 * 绘制桌上未开的牌
+	 */
+	renderTableCards(): void{
+	
+	}
+	
+	/**
+	 * 暂停游戏
+	 */
+	private pauseGame(): void{}
+	
+	
+	/**
+	 * 停止游戏
+	 */
+	private stopGame(): void {
+	}
+	
 	
 	
 	/**
