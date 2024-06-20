@@ -10,6 +10,15 @@ const dataManager = new mapManager();
 
 @regClass()
 export default class Main extends Laya.Script {
+	@property({type: Laya.Sprite})
+	public optionsSpe: Laya.Button;
+	@property({type: Laya.Button})
+	public playBtn: Laya.Button;
+	@property({type: Laya.Button})
+	public bumpBtn: Laya.Button;
+	@property({type: Laya.Button})
+	public winningBtn: Laya.Button;
+	
 	declare owner : Laya.Sprite;
 	//ws实例
 	public _socket: SocketHelper;
@@ -19,6 +28,9 @@ export default class Main extends Laya.Script {
 	private leftInHand: string = "resources/apes/left_inhand_0.png";
 	private playerNum: number = 0;
 	private viewPos: Array<number> = [];
+	
+	private cardNum: number;   //当前出的牌
+	
 	
 	private myCardImgs: Array<Laya.Image> =[];
 	
@@ -36,7 +48,9 @@ export default class Main extends Laya.Script {
 			this.myCardImgs.map((i: Laya.Image, index: number) => {
 				i.y = Laya.stage.designHeight - 99 - 30;
 			})
+			this.optionsSpe.visible = false;
 		})
+		this.playBtn.on(Event.CLICK, this, this.handleCardPlay)
 	}
 	
 	/**
@@ -203,7 +217,7 @@ export default class Main extends Laya.Script {
 				let img = new Image(imgUrl);
 				img.name = "myCard";
 				img.pos(firstX + idx * 65, firstY);
-				img.on(Event.CLICK, this, this.handleCardClick,[firstY, img, idx])
+				img.on(Event.CLICK, this, this.handleCardClick,[firstY, img, idx, h])
 				this.myCardImgs.push(img)
 				this.owner.addChild(img);
 			})
@@ -236,11 +250,14 @@ export default class Main extends Laya.Script {
 	 * @param y
 	 * @param img
 	 * @param idx
+	 * @param cardNum
 	 * @private
 	 */
-	private handleCardClick(y: number, img: Laya.Image, idx: number): void {
+	private handleCardClick(y: number, img: Laya.Image, idx: number, cardNum: number): void {
 		if (img.y === y) {
 			img.y = y - 50;
+			this.optionsSpe.visible = true;
+			this.cardNum = cardNum;
 			// todo 这个_children没有对外声明，实际下面注释的代码也可以起作用，但是编辑器会有错误提示
 			// let myCardImgs = this.owner._children.filter((o:Laya.Image)=> o.name === "myCard");
 			// myCardImgs.map((i: Laya.Image, index: number) => {
@@ -251,7 +268,15 @@ export default class Main extends Laya.Script {
 			})
 		} else {
 			img.y = y;
+			this.optionsSpe.visible = false;
 		}
+	}
+	
+	/**
+	 * 出牌
+	 */
+	handleCardPlay(): void{
+	
 	}
 	
 	/**
