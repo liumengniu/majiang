@@ -186,6 +186,7 @@ export default class Main extends Laya.Script {
 	 */
 	renderHandCards(idx: number): void{
 		const cards = dataManager.getData("cards");
+		let img: Laya.Image;
 		// 按服务端位置获取手牌
 		const handCards = idx === 0 ? cards.slice(0, 14) : idx === 1 ? cards.slice(14, 27) : idx === 2 ? cards.slice(27, 40) : idx === 3 ? cards.slice(40, 53) : [];
 		// 按客户端玩家视角绘制手牌
@@ -193,7 +194,7 @@ export default class Main extends Laya.Script {
 			let firstX = 250, firstY = Laya.stage.designHeight - 99 - 30;
 			handCards.map((h: number, idx: number) => {
 				let imgUrl = this.getHandCardImageUrl(h);
-				let img = new Image(imgUrl);
+				img = new Image(imgUrl);
 				img.pos(firstX + idx * 65, firstY);
 				this.owner.addChild(img);
 			})
@@ -201,21 +202,21 @@ export default class Main extends Laya.Script {
 		} else if (this.viewPos[idx] === 1) {
 			let firstX = Laya.stage.designWidth - 100 - 30 - 26 - 30, firstY = 200;
 			handCards.map((h: number, idx: number) => {
-				let img = new Image(this.rightInHand);
+				img = new Image(this.rightInHand);
 				img.pos(firstX, firstY + 22 * idx);
 				this.owner.addChild(img);
 			})
 		} else if (this.viewPos[idx] === 2) {
 			let firstX = 370, firstY = 100 + 30 + 30;
 			handCards.map((h: number, idx: number) => {
-				let img = new Image(this.oppositeInHand);
+				img = new Image(this.oppositeInHand);
 				img.pos(firstX + idx * 44, firstY);
 				this.owner.addChild(img);
 			})
 		} else if (this.viewPos[idx] === 3) {
 			let firstX = 100 + 30 + 30, firstY = 200;
 			handCards.map((h: number, idx: number) => {
-				let img = new Image(this.leftInHand);
+				img = new Image(this.leftInHand);
 				img.pos(firstX, firstY + 22 * idx);
 				this.owner.addChild(img);
 			})
