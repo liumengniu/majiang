@@ -20,6 +20,8 @@ export default class Main extends Laya.Script {
 	private playerNum: number = 0;
 	private viewPos: Array<number> = [];
 	
+	private myCardImgs: Array<Laya.Image> =[];
+	
 	onStart() {
 		// this.renderAvatar()
 	}
@@ -30,6 +32,11 @@ export default class Main extends Laya.Script {
 	onAwake(): void {
 		// this.handleAdaptive()
 		this._socket = SocketHelper.getInstance("");
+		Laya.stage.on(Event.FOCUS, this, () => {
+			this.myCardImgs.map((i: Laya.Image, index: number) => {
+				i.y = Laya.stage.designHeight - 99 - 30;
+			})
+		})
 	}
 	
 	/**
@@ -133,13 +140,12 @@ export default class Main extends Laya.Script {
 		const meIdx: number = keys.findIndex(o => o == userInfo?.id);
 		
 		const viewPos: Array<number> = this.viewPos = this.getPlayerViewPos(meIdx, keys)
-		console.log(viewPos, '================================')
 		
 		keys.map((o, idx)=>{
 			this.renderAvatar(viewPos, idx)
 		})
 		// todo 此处自动判断4个人到房间开始，实际场景可能需要4人准备，房主点击开始，后期找到UI再优化
-		if(keys.length === 4){
+		if(keys.length === 2){
 			this.startGame();
 		}
 	}
@@ -194,11 +200,13 @@ export default class Main extends Laya.Script {
 			let firstX = 250, firstY = Laya.stage.designHeight - 99 - 30;
 			handCards.map((h: number, idx: number) => {
 				let imgUrl = this.getHandCardImageUrl(h);
-				img = new Image(imgUrl);
+				let img = new Image(imgUrl);
+				img.name = "myCard";
 				img.pos(firstX + idx * 65, firstY);
+				img.on(Event.CLICK, this, this.handleCardClick,[firstY, img, idx])
+				this.myCardImgs.push(img)
 				this.owner.addChild(img);
 			})
-			
 		} else if (this.viewPos[idx] === 1) {
 			let firstX = Laya.stage.designWidth - 100 - 30 - 26 - 30, firstY = 200;
 			handCards.map((h: number, idx: number) => {
@@ -220,6 +228,29 @@ export default class Main extends Laya.Script {
 				img.pos(firstX, firstY + 22 * idx);
 				this.owner.addChild(img);
 			})
+		}
+	}
+	
+	/**
+	 * 选中牌
+	 * @param y
+	 * @param img
+	 * @param idx
+	 * @private
+	 */
+	private handleCardClick(y: number, img: Laya.Image, idx: number): void {
+		if (img.y === y) {
+			img.y = y - 50;
+			// todo 这个_children没有对外声明，实际下面注释的代码也可以起作用，但是编辑器会有错误提示
+			// let myCardImgs = this.owner._children.filter((o:Laya.Image)=> o.name === "myCard");
+			// myCardImgs.map((i: Laya.Image, index: number) => {
+			// 	if (idx !== index) i.y = y
+			// })
+			this.myCardImgs.map((i: Laya.Image, index: number) => {
+				if (idx !== index) i.y = y
+			})
+		} else {
+			img.y = y;
 		}
 	}
 	
