@@ -279,7 +279,7 @@ export default class Main extends Laya.Script {
 		const keys = Object.keys(roomInfo);
 		const idx = keys?.findIndex(o=> o === playerId);
 		if (this.viewPos[idx] === 0) {
-			this.activeCard.pos(300, Laya.stage.designHeight - 99 - 30 - 300);
+			this.activeCard.pos(400, Laya.stage.designHeight - 99 - 30 - 160);
 			this.activeCard.scale(0.7, 0.7);
 			this.activeCard.off(Laya.Event.CLICK, this);
 		} else if (this.viewPos[idx] === 1) {
@@ -289,6 +289,8 @@ export default class Main extends Laya.Script {
 		} else if (this.viewPos[idx] === 3) {
 
 		}
+		// 重绘手牌
+		this.renderHandCards(idx, roomInfo[playerId].handCards);
 	}
 	
 	/**

@@ -119,35 +119,6 @@
           "labelColors": "#ffffff,#32cc6b,#ff0000",
           "labelAlign": "center",
           "labelVAlign": "middle"
-        },
-        {
-          "_$id": "yldagtqz",
-          "_$type": "Image",
-          "name": "Image",
-          "x": 423.1216797971737,
-          "y": 599.2466575070653,
-          "width": 65,
-          "height": 99,
-          "skewX": 45,
-          "skin": "res://5c672e2c-13cb-440f-88f2-3c17919176f4",
-          "useSourceSize": true,
-          "color": "#ffffff"
-        },
-        {
-          "_$id": "65y0dd5n",
-          "_$type": "Image",
-          "name": "Image(1)",
-          "x": 966,
-          "y": 564,
-          "width": 65,
-          "height": 99,
-          "anchorX": 0.5230769230769231,
-          "scaleX": 0.7,
-          "scaleY": 0.7,
-          "rotation": 360,
-          "skin": "res://0b9affe0-ed54-48c1-8b54-c8962ebdf39d",
-          "useSourceSize": true,
-          "color": "#ffffff"
         }
       ]
     }
