@@ -10,6 +10,7 @@ export default class MainRT extends Laya.Scene {
 	private _score: number;
 	/**游戏控制脚本引用，避免每次获取组件带来不必要的性能开销 */
 	private _control: GameControl;
+	// declare owner : Laya.Sprite;
 	
 	constructor() {
 		super();
@@ -23,15 +24,34 @@ export default class MainRT extends Laya.Scene {
 		return MainRT.instance
 	}
 	
-	onEnable(): void {
+	/**
+	 * 有时候onEnable执行的太慢，长连接的回调先于onEnable执行，导致this._control还没初始化
+	 */
+	init(): void {
 		this._control = this.getComponent(GameControl);
 	}
 	
+	onEnable(): void {
+		console.log("执行了onEnable")
+		this._control = this.getComponent(GameControl);
+	}
+	
+	startGame(): void{
+		this._control.startGame()
+	}
+	
 	/**
-	 * 获取起手牌
+	 * 准备绘制游戏牌和人物
 	 */
-	getHandCards(): void{
-		this._control.getHandCards()
+	readyGameStart(): void{
+		this._control.readyGameStart()
+	}
+	
+	/**
+	 * 绘制打出去的牌
+	 */
+	renderPlayedCards(cardNum: number, playerId: string,roomInfo: any): void{
+		this._control.renderPlayedCards(cardNum, playerId,roomInfo);
 	}
 	/**
 	 * 进入游戏场景

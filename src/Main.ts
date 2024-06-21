@@ -10,16 +10,16 @@ const dataManager = new mapManager();
 
 @regClass()
 export default class Main extends Laya.Script {
+	@property({type: Laya.Button})
+	public startBtn: Laya.Button;
 	@property({type: Laya.Sprite})
 	public optionsSpe: Laya.Button;
-	@property({type: Laya.Button})
-	public playBtn: Laya.Button;
 	@property({type: Laya.Button})
 	public bumpBtn: Laya.Button;
 	@property({type: Laya.Button})
 	public winningBtn: Laya.Button;
 	
-	declare owner : Laya.Sprite;
+	// declare owner : Laya.Sprite;
 	//ws实例
 	public _socket: SocketHelper;
 	private avatarImg: string = "resources/apes/single可爱姑娘.png";
@@ -29,7 +29,11 @@ export default class Main extends Laya.Script {
 	private playerNum: number = 0;
 	private viewPos: Array<number> = [];
 	
-	private cardNum: number;   //当前出的牌
+	private cardIdx: number;
+	private tableCards: number[] = [];
+	private playedCards: any;   //出在桌上的牌（这里需要分用户绘制，还是用 map结构）
+	
+	private activeCard: Laya.Image;    //用户当前操作的牌
 	
 	
 	private myCardImgs: Array<Laya.Image> =[];
@@ -42,30 +46,19 @@ export default class Main extends Laya.Script {
 	 * 场景启动
 	 */
 	onAwake(): void {
-		// this.handleAdaptive()
+		const userInfo = dataManager.getData("userInfo");
+		const roomInfo = dataManager.getData("roomInfo");
 		this._socket = SocketHelper.getInstance("");
 		Laya.stage.on(Event.FOCUS, this, () => {
-			this.myCardImgs.map((i: Laya.Image, index: number) => {
-				i.y = Laya.stage.designHeight - 99 - 30;
-			})
 			this.optionsSpe.visible = false;
 		})
-		this.playBtn.on(Event.CLICK, this, this.handleCardPlay)
+		
+		if(userInfo?.id === Object.keys(roomInfo)[0]){ //我是房主，可以开始游戏
+			this.startBtn.visible = true;
+		}
+		this.startBtn.on(Event.CLICK, this, this.startGame)
 	}
 	
-	/**
-	 * 屏幕自适应
-	 * @private
-	 */
-	private handleAdaptive(): void {
-		Laya.stage.screenMode = Stage.SCREEN_HORIZONTAL;
-		Laya.stage.designWidth = Laya.stage.width;
-		Laya.stage.designHeight = Laya.stage.height;
-		Laya.stage.on(Event.RESIZE, this, () => {
-			Laya.stage.designWidth = Laya.stage.width;
-			Laya.stage.designHeight = Laya.stage.height;
-		})
-	}
 	
 	/**
 	 * 绘制头像
@@ -168,29 +161,22 @@ export default class Main extends Laya.Script {
 	 * 开始游戏
 	 * @private
 	 */
-	private startGame(): void {
+	startGame(): void {
 		const roomInfo = dataManager.getData("roomInfo");
 		const userInfo = dataManager.getData("userInfo");
 		const room = roomInfo[userInfo?.id];
 		if (!room?.isHomeOwner) { // 仅有房主能开始游戏
 			return
 		}
+		const keys = Object.keys(roomInfo);
+		this.playerNum = keys?.length;
+		const meIdx: number = keys.findIndex(o => o == userInfo?.id);
+		const viewPos: Array<number> = this.viewPos = this.getPlayerViewPos(meIdx, keys)
 		const roomId = roomInfo[userInfo?.id]?.roomId;
 		this._socket.sendMessage(JSON.stringify({type: "startGame", roomId}))
+		this.startBtn.visible = false;
 	}
 	
-	/**
-	 * 获取手牌
-	 * @private
-	 */
-	getHandCards(): void{
-		const cards = dataManager.getData("cards");
-		const roomInfo = dataManager.getData("roomInfo");
-		const keys = Object.keys(roomInfo);
-		keys.map((o, idx)=>{
-			this.renderHandCards(idx)
-		})
-	}
 	
 	/**
 	 * 获取手牌的图片资源
@@ -204,11 +190,12 @@ export default class Main extends Laya.Script {
 	/**
 	 * 绘制手牌
 	 */
-	renderHandCards(idx: number): void{
-		const cards = dataManager.getData("cards");
+	renderHandCards(idx: number, handCards: number[]): void{
+		console.log(111111111111111111111111111111111111111, handCards, this.viewPos[idx])
 		let img: Laya.Image;
 		// 按服务端位置获取手牌
-		const handCards = idx === 0 ? cards.slice(0, 14) : idx === 1 ? cards.slice(14, 27) : idx === 2 ? cards.slice(27, 40) : idx === 3 ? cards.slice(40, 53) : [];
+		// const handCards = idx === 0 ? cards.slice(0, 14) : idx === 1 ? cards.slice(14, 27) : idx === 2 ? cards.slice(27, 40) : idx === 3 ? cards.slice(40, 53) : [];
+	
 		// 按客户端玩家视角绘制手牌
 		if (this.viewPos[idx] === 0) { // 玩家本人位置
 			let firstX = 250, firstY = Laya.stage.designHeight - 99 - 30;
@@ -256,8 +243,7 @@ export default class Main extends Laya.Script {
 	private handleCardClick(y: number, img: Laya.Image, idx: number, cardNum: number): void {
 		if (img.y === y) {
 			img.y = y - 50;
-			this.optionsSpe.visible = true;
-			this.cardNum = cardNum;
+			// this.cardNum = cardNum;
 			// todo 这个_children没有对外声明，实际下面注释的代码也可以起作用，但是编辑器会有错误提示
 			// let myCardImgs = this.owner._children.filter((o:Laya.Image)=> o.name === "myCard");
 			// myCardImgs.map((i: Laya.Image, index: number) => {
@@ -267,23 +253,42 @@ export default class Main extends Laya.Script {
 				if (idx !== index) i.y = y
 			})
 		} else {
-			img.y = y;
-			this.optionsSpe.visible = false;
+			// img.y = y;
+			// this.optionsSpe.visible = false;
+			this.activeCard = img;
+			this.handleCardPlay(cardNum)
 		}
 	}
 	
 	/**
 	 * 出牌
 	 */
-	handleCardPlay(): void{
-	
+	handleCardPlay(cardNum: number): void{
+		// todo 首先判断现在的出牌顺位是否是我
+		const roomInfo = dataManager.getData("roomInfo");
+		const userInfo = dataManager.getData("userInfo");
+		const roomId = roomInfo[userInfo?.id]?.roomId;
+		this._socket.sendMessage(JSON.stringify({type: "playCard", data: {roomId, cardNum, userId: userInfo?.id}}))
 	}
 	
 	/**
 	 * 绘制打出去的牌
 	 */
-	renderPlayedCards(): void {
-	
+	renderPlayedCards(cardNum: number, playerId: string, roomInfo: any): void {
+		console.log(cardNum, playerId, '===========')
+		const keys = Object.keys(roomInfo);
+		const idx = keys?.findIndex(o=> o === playerId);
+		if (this.viewPos[idx] === 0) {
+			this.activeCard.pos(300, Laya.stage.designHeight - 99 - 30 - 300);
+			this.activeCard.scale(0.7, 0.7);
+			this.activeCard.off(Laya.Event.CLICK, this);
+		} else if (this.viewPos[idx] === 1) {
+
+		} else if (this.viewPos[idx] === 2) {
+
+		} else if (this.viewPos[idx] === 3) {
+
+		}
 	}
 	
 	/**
@@ -305,6 +310,23 @@ export default class Main extends Laya.Script {
 	private stopGame(): void {
 	}
 	
+	/**
+	 * 已经准备好，开始游戏
+	 */
+	readyGameStart(): void {
+		const userInfo = dataManager.getData("userInfo");
+		const roomInfo = dataManager.getData("roomInfo");
+		const keys = Object.keys(roomInfo);
+		this.playerNum = keys?.length;
+		const meIdx: number = keys.findIndex(o => o == userInfo?.id);
+		const viewPos: Array<number> = this.viewPos = this.getPlayerViewPos(meIdx, keys)
+		// const roomInfo = dataManager.getData("gameInfo");
+
+		keys.map((o, idx) => {
+			console.log(roomInfo,'--------------------------------', roomInfo[o]?.handCards)
+			this.renderHandCards(idx, roomInfo[o]?.handCards)
+		})
+	}
 	
 	
 	/**
@@ -318,10 +340,10 @@ export default class Main extends Laya.Script {
 	
 	//每帧更新时执行，尽量不要在这里写大循环逻辑或者使用getComponent方法
 	onUpdate(): void {
-		const roomInfo = dataManager.getData("roomInfo");
-		// console.log(roomInfo, '=================roomInfo==================')
-		if (Object.keys(roomInfo).length > this.playerNum) { //玩家数量更新
-			this.renderAllPlayer(roomInfo);
-		}
+		// const roomInfo = dataManager.getData("roomInfo");
+		// todo 这里似乎放在4个玩家进房之后，websocket的回调里更好， onUpdate逻辑更适合做其他逻辑
+		// if (Object.keys(roomInfo).length > this.playerNum) { //玩家数量更新
+		// 	this.renderAllPlayer(roomInfo);
+		// }
 	}
 }
