@@ -5,6 +5,7 @@ const Stage = Laya.Stage;
 const Event = Laya.Event;
 const Image = Laya.Image;
 const HBox = Laya.HBox;
+const VBox = Laya.VBox;
 
 
 const {regClass, property} = Laya;
@@ -214,7 +215,6 @@ export default class Main extends Laya.Script {
 				img.name = "myCard";
 				this.myCardImgs.push(img);
 				img.on(Event.CLICK, this, this.handleCardClick, [firstY, `hbox${idx}`, childIdx, h])
-				// hbox.on(Event.CLICK, this, this.handleCardClick, [firstY, `hbox${idx}`, childIdx, h])
 				hbox.pos((Laya.stage.designWidth - handCards.length * 65) / 2, firstY);
 				hbox.addChild(img)
 				return img;
@@ -288,19 +288,50 @@ export default class Main extends Laya.Script {
 			playerCards?.map((k: number, childIdx: number) => {
 				let imgUrl = this.getHandCardImageUrl(k);
 				let img = new Image(imgUrl);
-				img.name = "myPlayedCard";
+				img.name = `playedCard${childIdx}`;
 				img.scale(0.6,0.6);
 				hbox.pos(400, Laya.stage.designHeight - 99 - 30 - 160);
-				hbox.size(530, 120);
+				hbox.size(540, 120);
 				hbox.addChild(img)
 			})
 			this.owner.addChild(hbox)
 		} else if (this.viewPos[idx] === 1) {
-
+			const vbox = new VBox;
+			playerCards?.map((k: number, childIdx: number) => {
+				let imgUrl = this.getHandCardImageUrl(k);
+				let img = new Image(imgUrl);
+				img.name = `playedCard${childIdx}`;
+				img.scale(0.6,0.6);
+				vbox.pos(Laya.stage.designWidth/2 + 100, Laya.stage.designHeight /2 - 135);
+				vbox.size(540, 120);
+				vbox.addChild(img)
+			})
+			this.owner.addChild(vbox)
 		} else if (this.viewPos[idx] === 2) {
-
+			const hbox = new HBox();
+			playerCards?.map((k: number, childIdx: number) => {
+				let imgUrl = this.getHandCardImageUrl(k);
+				let img = new Image(imgUrl);
+				img.name = `playedCard${childIdx}`;
+				img.scale(0.6,0.6);
+				hbox.pos(400, 160);
+				hbox.size(540, 120);
+				hbox.align = "bottom"
+				hbox.addChild(img)
+			})
+			this.owner.addChild(hbox)
 		} else if (this.viewPos[idx] === 3) {
-
+			const vbox = new VBox;
+			playerCards?.map((k: number, childIdx: number) => {
+				let imgUrl = this.getHandCardImageUrl(k);
+				let img = new Image(imgUrl);
+				img.name = `playedCard${childIdx}`;
+				img.scale(0.6,0.6);
+				vbox.pos(Laya.stage.designWidth/2 - 100, Laya.stage.designHeight /2 - 135);
+				vbox.size(540, 120);
+				vbox.addChild(img)
+			})
+			this.owner.addChild(vbox)
 		}
 	}
 	
