@@ -192,6 +192,17 @@ export default class Main extends Laya.Script {
 	}
 	
 	/**
+	 * 获取打出去的牌的图片资源
+	 * @param num
+	 */
+	getPlayedCardsImageUrl(num: number): string{
+		let unit = num % 50 > 30 ? "b" : num % 50 > 20 ? 't' : num % 50 > 10 ? "w" : '';
+		let unitNum = (num % 50)%10;
+		return `resources/apes/${unit}${unit}${unitNum}.png`
+	}
+	
+	
+	/**
 	 * 绘制手牌
 	 */
 	renderHandCards(idx: number, handCards: number[]): void{
@@ -286,10 +297,9 @@ export default class Main extends Laya.Script {
 		if (this.viewPos[idx] === 0) {
 			const hbox = new HBox();
 			playerCards?.map((k: number, childIdx: number) => {
-				let imgUrl = this.getHandCardImageUrl(k);
+				let imgUrl = this.getPlayedCardsImageUrl(k);
 				let img = new Image(imgUrl);
 				img.name = `playedCard${childIdx}`;
-				img.scale(0.6,0.6);
 				hbox.pos(400, Laya.stage.designHeight - 99 - 30 - 160);
 				hbox.size(540, 120);
 				hbox.addChild(img)
@@ -298,37 +308,37 @@ export default class Main extends Laya.Script {
 		} else if (this.viewPos[idx] === 1) {
 			const vbox = new VBox;
 			playerCards?.map((k: number, childIdx: number) => {
-				let imgUrl = this.getHandCardImageUrl(k);
+				let imgUrl = this.getPlayedCardsImageUrl(k);
 				let img = new Image(imgUrl);
 				img.name = `playedCard${childIdx}`;
-				img.scale(0.6,0.6);
 				vbox.pos(Laya.stage.designWidth/2 + 100, Laya.stage.designHeight /2 - 135);
 				vbox.size(540, 120);
+				vbox.rotation = 270;
 				vbox.addChild(img)
 			})
 			this.owner.addChild(vbox)
 		} else if (this.viewPos[idx] === 2) {
 			const hbox = new HBox();
 			playerCards?.map((k: number, childIdx: number) => {
-				let imgUrl = this.getHandCardImageUrl(k);
+				let imgUrl = this.getPlayedCardsImageUrl(k);
 				let img = new Image(imgUrl);
 				img.name = `playedCard${childIdx}`;
-				img.scale(0.6,0.6);
 				hbox.pos(400, 160);
 				hbox.size(540, 120);
-				hbox.align = "bottom"
+				hbox.align = "bottom";
+				hbox.rotation = 180;
 				hbox.addChild(img)
 			})
 			this.owner.addChild(hbox)
 		} else if (this.viewPos[idx] === 3) {
 			const vbox = new VBox;
 			playerCards?.map((k: number, childIdx: number) => {
-				let imgUrl = this.getHandCardImageUrl(k);
+				let imgUrl = this.getPlayedCardsImageUrl(k);
 				let img = new Image(imgUrl);
 				img.name = `playedCard${childIdx}`;
-				img.scale(0.6,0.6);
 				vbox.pos(Laya.stage.designWidth/2 - 100, Laya.stage.designHeight /2 - 135);
 				vbox.size(540, 120);
+				vbox.rotation = 90;
 				vbox.addChild(img)
 			})
 			this.owner.addChild(vbox)
