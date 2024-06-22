@@ -4,6 +4,8 @@ import SocketHelper from "./utils/SocketHelper";
 const Stage = Laya.Stage;
 const Event = Laya.Event;
 const Image = Laya.Image;
+const HBox = Laya.HBox;
+
 
 const {regClass, property} = Laya;
 const dataManager = new mapManager();
@@ -37,6 +39,7 @@ export default class Main extends Laya.Script {
 	
 	
 	private myCardImgs: Array<Laya.Image> =[];
+	private allUiCards: Array<Laya.Image> =[];   // 存储所有牌的UI节点，方便特殊操作
 	
 	onStart() {
 		// this.renderAvatar()
@@ -191,42 +194,52 @@ export default class Main extends Laya.Script {
 	 * 绘制手牌
 	 */
 	renderHandCards(idx: number, handCards: number[]): void{
-		console.log(111111111111111111111111111111111111111, handCards, this.viewPos[idx])
+		console.log(handCards, '====================================')
+		this.myCardImgs = [];
 		let img: Laya.Image;
-		// 按服务端位置获取手牌
-		// const handCards = idx === 0 ? cards.slice(0, 14) : idx === 1 ? cards.slice(14, 27) : idx === 2 ? cards.slice(27, 40) : idx === 3 ? cards.slice(40, 53) : [];
-	
 		// 按客户端玩家视角绘制手牌
 		if (this.viewPos[idx] === 0) { // 玩家本人位置
+			let hbox:any = this.owner.getChildByName(`hbox${idx}`);
+			if (hbox) {
+				hbox?.destroy(true);
+				hbox = new HBox()
+			} else {
+				hbox = new HBox()
+			}
 			let firstX = 250, firstY = Laya.stage.designHeight - 99 - 30;
-			handCards.map((h: number, idx: number) => {
+			let imgs: Laya.Image[] = handCards.map((h: number, childIdx: number) => {
 				let imgUrl = this.getHandCardImageUrl(h);
 				let img = new Image(imgUrl);
+				hbox.name = `hbox${idx}`;
 				img.name = "myCard";
-				img.pos(firstX + idx * 65, firstY);
-				img.on(Event.CLICK, this, this.handleCardClick,[firstY, img, idx, h])
-				this.myCardImgs.push(img)
-				this.owner.addChild(img);
+				this.myCardImgs.push(img);
+				img.on(Event.CLICK, this, this.handleCardClick, [firstY, `hbox${idx}`, childIdx, h])
+				// hbox.on(Event.CLICK, this, this.handleCardClick, [firstY, `hbox${idx}`, childIdx, h])
+				hbox.pos((Laya.stage.designWidth - handCards.length * 65) / 2, firstY);
+				hbox.addChild(img)
+				return img;
 			})
+			// hbox.addChildren(imgs);
+			this.owner.addChild(hbox);
 		} else if (this.viewPos[idx] === 1) {
 			let firstX = Laya.stage.designWidth - 100 - 30 - 26 - 30, firstY = 200;
-			handCards.map((h: number, idx: number) => {
+			handCards.map((h: number, childIdx: number) => {
 				img = new Image(this.rightInHand);
-				img.pos(firstX, firstY + 22 * idx);
+				img.pos(firstX, firstY + 22 * childIdx);
 				this.owner.addChild(img);
 			})
 		} else if (this.viewPos[idx] === 2) {
 			let firstX = 370, firstY = 100 + 30 + 30;
-			handCards.map((h: number, idx: number) => {
+			handCards.map((h: number, childIdx: number) => {
 				img = new Image(this.oppositeInHand);
-				img.pos(firstX + idx * 44, firstY);
+				img.pos(firstX + childIdx * 44, firstY);
 				this.owner.addChild(img);
 			})
 		} else if (this.viewPos[idx] === 3) {
 			let firstX = 100 + 30 + 30, firstY = 200;
-			handCards.map((h: number, idx: number) => {
+			handCards.map((h: number, childIdx: number) => {
 				img = new Image(this.leftInHand);
-				img.pos(firstX, firstY + 22 * idx);
+				img.pos(firstX, firstY + 22 * childIdx);
 				this.owner.addChild(img);
 			})
 		}
@@ -235,27 +248,18 @@ export default class Main extends Laya.Script {
 	/**
 	 * 选中牌
 	 * @param y
-	 * @param img
-	 * @param idx
+	 * @param name
+	 * @param childIdx
 	 * @param cardNum
 	 * @private
 	 */
-	private handleCardClick(y: number, img: Laya.Image, idx: number, cardNum: number): void {
-		if (img.y === y) {
-			img.y = y - 50;
-			// this.cardNum = cardNum;
-			// todo 这个_children没有对外声明，实际下面注释的代码也可以起作用，但是编辑器会有错误提示
-			// let myCardImgs = this.owner._children.filter((o:Laya.Image)=> o.name === "myCard");
-			// myCardImgs.map((i: Laya.Image, index: number) => {
-			// 	if (idx !== index) i.y = y
-			// })
-			this.myCardImgs.map((i: Laya.Image, index: number) => {
-				if (idx !== index) i.y = y
-			})
+	private handleCardClick(y: number, name: string, childIdx: number, cardNum: number): void {
+		const hbox = this.owner.getChildByName(name);
+		const cardNode: any = hbox.getChildAt(childIdx);
+		if (cardNode.y === 0) {
+			cardNode.y = cardNode.y - 50;
 		} else {
-			// img.y = y;
-			// this.optionsSpe.visible = false;
-			this.activeCard = img;
+			this.activeCard = cardNode;
 			this.handleCardPlay(cardNum)
 		}
 	}
@@ -276,12 +280,21 @@ export default class Main extends Laya.Script {
 	 */
 	renderPlayedCards(cardNum: number, playerId: string, roomInfo: any): void {
 		console.log(cardNum, playerId, '===========')
+		const playerCards = roomInfo[playerId]?.playedCards;
 		const keys = Object.keys(roomInfo);
 		const idx = keys?.findIndex(o=> o === playerId);
 		if (this.viewPos[idx] === 0) {
-			this.activeCard.pos(400, Laya.stage.designHeight - 99 - 30 - 160);
-			this.activeCard.scale(0.7, 0.7);
-			this.activeCard.off(Laya.Event.CLICK, this);
+			const hbox = new HBox();
+			playerCards?.map((k: number, childIdx: number) => {
+				let imgUrl = this.getHandCardImageUrl(k);
+				let img = new Image(imgUrl);
+				img.name = "myPlayedCard";
+				img.scale(0.6,0.6);
+				hbox.pos(400, Laya.stage.designHeight - 99 - 30 - 160);
+				hbox.size(530, 120);
+				hbox.addChild(img)
+			})
+			this.owner.addChild(hbox)
 		} else if (this.viewPos[idx] === 1) {
 
 		} else if (this.viewPos[idx] === 2) {
@@ -289,8 +302,6 @@ export default class Main extends Laya.Script {
 		} else if (this.viewPos[idx] === 3) {
 
 		}
-		// 重绘手牌
-		this.renderHandCards(idx, roomInfo[playerId].handCards);
 	}
 	
 	/**

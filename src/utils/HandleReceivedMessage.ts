@@ -41,8 +41,14 @@ class HandleReceivedMessage{
 			dataManager.setData("roomInfo", data?.data);
 			MainRT.getInstance().readyGameStart();
 		} else if(type === "playCard"){
-			dataManager.setData("roomInfo", data?.data?.roomInfo);
-			MainRT.getInstance().renderPlayedCards(data?.data?.cardNum, data?.data?.playerId, data?.data?.roomInfo);
+			const roomInfo = data?.data?.roomInfo;
+			const playerId = data?.data?.playerId;
+			const cardNum = data?.data?.cardNum;
+			dataManager.setData("roomInfo", roomInfo);
+			MainRT.getInstance().renderPlayedCards(cardNum, playerId, roomInfo);
+			const keys = Object.keys(roomInfo);
+			const idx = keys?.findIndex(o=> o === playerId);
+			MainRT.getInstance().renderHandCards(idx, roomInfo[playerId].handCards);
 		}
 	}
 }
