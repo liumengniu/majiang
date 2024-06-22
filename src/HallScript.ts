@@ -14,11 +14,12 @@ export class HallScript extends Laya.Script {
 	//ws实例
 	public _socket: SocketHelper;
 	
-	@property({type: Laya.Button})
-	public createRoomBtn: Laya.Button;
+	@property({type: Laya.Image})
+	public createRoomBtn: Laya.Image;
 	
-	@property({type: Laya.Button})
-	public joinRoomBtn: Laya.Button;
+	
+	@property({type: Laya.Image})
+	public joinRoomBtn: Laya.Image;
 	
 	@property({type: Laya.TextInput})
 	public roomTextInput: Laya.TextInput;
@@ -51,7 +52,6 @@ export class HallScript extends Laya.Script {
 	 * @private
 	 */
 	private handleCreateRoom(): void {
-		console.log("在大厅创建一个房间")
 		const userInfo = dataManager.getData('userInfo');
 		let http = new HttpHelper();
 		http.post("/room/createRoom", {userId: userInfo?.id}, this.onCreateRoomCallback)

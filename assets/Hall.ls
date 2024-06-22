@@ -12,10 +12,10 @@
       "_$type": "a14bacd4-ac54-4dc4-b597-c83f2d3064a4",
       "scriptPath": "../src/HallScript.ts",
       "createRoomBtn": {
-        "_$ref": "zvtmz89l"
+        "_$ref": "oh6d5a16"
       },
       "joinRoomBtn": {
-        "_$ref": "8uo8wovt"
+        "_$ref": "wjce7fko"
       },
       "roomTextInput": {
         "_$ref": "del74y1f"
@@ -36,43 +36,13 @@
       "_mouseState": 2,
       "_$child": [
         {
-          "_$id": "zvtmz89l",
-          "_$type": "Button",
-          "name": "createRoom",
-          "x": 492,
-          "y": 228,
-          "width": 120,
-          "height": 40,
-          "_mouseState": 2,
-          "skin": "res://d4cfd6a8-0d0a-475b-ac93-d85eaa646936",
-          "label": "创建房间",
-          "labelSize": 20,
-          "labelAlign": "center",
-          "labelVAlign": "middle"
-        },
-        {
-          "_$id": "8uo8wovt",
-          "_$type": "Button",
-          "name": "joinRoom",
-          "x": 498,
-          "y": 356,
-          "width": 120,
-          "height": 40,
-          "_mouseState": 2,
-          "skin": "res://d4cfd6a8-0d0a-475b-ac93-d85eaa646936",
-          "label": "加入房间",
-          "labelSize": 20,
-          "labelAlign": "center",
-          "labelVAlign": "middle"
-        },
-        {
           "_$id": "del74y1f",
           "_$type": "TextInput",
           "name": "roomNum",
-          "x": 496,
-          "y": 301,
-          "width": 147,
-          "height": 37,
+          "x": 730,
+          "y": 590,
+          "width": 386,
+          "height": 89,
           "_mouseState": 2,
           "text": "",
           "fontSize": 20,
@@ -85,6 +55,30 @@
           "maxChars": 0,
           "prompt": "",
           "promptColor": "#A9A9A9"
+        },
+        {
+          "_$id": "wjce7fko",
+          "_$type": "Image",
+          "name": "joinRoom",
+          "x": 713.7078216417017,
+          "y": 68.65641451783529,
+          "width": 405,
+          "height": 470,
+          "skin": "res://b633d23d-2736-47b4-8b75-27f174eb3495",
+          "useSourceSize": true,
+          "color": "#ffffff"
+        },
+        {
+          "_$id": "oh6d5a16",
+          "_$type": "Image",
+          "name": "createRoom",
+          "x": 134,
+          "y": 81.00000000000003,
+          "width": 406,
+          "height": 460,
+          "skin": "res://767309d1-a17f-43fc-91af-b13ac9c34a0b",
+          "useSourceSize": true,
+          "color": "#ffffff"
         }
       ]
     }

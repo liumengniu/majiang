@@ -121,33 +121,6 @@
           "labelVAlign": "middle"
         }
       ]
-    },
-    {
-      "_$id": "zlrm4xso",
-      "_$type": "Image",
-      "name": "Image",
-      "x": 444,
-      "y": 474,
-      "width": 65,
-      "height": 79,
-      "skin": "res://e087f878-8627-4d04-8678-837207d7a36f",
-      "useSourceSize": true,
-      "color": "#ffffff"
-    },
-    {
-      "_$id": "u848hie9",
-      "_$type": "Image",
-      "name": "Image(1)",
-      "x": 952.9999999999999,
-      "y": 426.9999957664061,
-      "width": 65,
-      "height": 79,
-      "anchorX": 0.5,
-      "anchorY": 0.5,
-      "rotation": 90,
-      "skin": "res://074f032b-c161-4a15-8ec4-bb8a91be8f57",
-      "useSourceSize": true,
-      "color": "#ffffff"
     }
   ]
 }

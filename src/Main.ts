@@ -25,7 +25,7 @@ export default class Main extends Laya.Script {
 	// declare owner : Laya.Sprite;
 	//ws实例
 	public _socket: SocketHelper;
-	private avatarImg: string = "resources/apes/single可爱姑娘.png";
+	private avatarImg: string = "resources/apes/avatar.png";
 	private rightInHand: string = "resources/apes/right_inhand_0.png";
 	private oppositeInHand: string = "resources/apes/opposite_inhand_0.png";
 	private leftInHand: string = "resources/apes/left_inhand_0.png";
