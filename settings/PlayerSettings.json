@@ -20,7 +20,10 @@
   "modules": {
     "laya.d3": true,
     "laya.ui": true,
-    "laya.physics2D": true
+    "laya.physics2D": true,
+    "laya.ani": true,
+    "laya.spine": true,
+    "laya.device": true
   },
   "splash": {
     "fit": "center"

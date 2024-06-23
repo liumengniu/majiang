@@ -17,10 +17,15 @@ export default class Main extends Laya.Script {
 	public startBtn: Laya.Button;
 	@property({type: Laya.Sprite})
 	public optionsSpe: Laya.Button;
-	@property({type: Laya.Button})
-	public bumpBtn: Laya.Button;
-	@property({type: Laya.Button})
-	public winningBtn: Laya.Button;
+	
+	@property({type: Laya.Image})
+	public passBtn: Laya.Image;
+	@property({type: Laya.Image})
+	public bumpBtn: Laya.Image;
+	@property({type: Laya.Image})
+	public gangBtn: Laya.Image;
+	@property({type: Laya.Image})
+	public winningBtn: Laya.Image;
 	
 	// declare owner : Laya.Sprite;
 	//ws实例
@@ -57,12 +62,11 @@ export default class Main extends Laya.Script {
 			this.optionsSpe.visible = false;
 		})
 		
-		if(userInfo?.id === Object.keys(roomInfo)[0]){ //我是房主，可以开始游戏
+		if(roomInfo && userInfo?.id === Object.keys(roomInfo)[0]){ //我是房主，可以开始游戏
 			this.startBtn.visible = true;
 		}
 		this.startBtn.on(Event.CLICK, this, this.startGame)
 	}
-	
 	
 	/**
 	 * 绘制头像
@@ -198,7 +202,7 @@ export default class Main extends Laya.Script {
 	getPlayedCardsImageUrl(num: number): string{
 		let unit = num % 50 > 30 ? "b" : num % 50 > 20 ? 't' : num % 50 > 10 ? "w" : '';
 		let unitNum = (num % 50)%10;
-		return `resources/apes/${unit}${unit}${unitNum}.png`
+		return `resources/apes/b${unit}${unitNum}.png`
 	}
 	
 	

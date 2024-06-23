@@ -49,6 +49,10 @@ class HandleReceivedMessage{
 			const keys = Object.keys(roomInfo);
 			const idx = keys?.findIndex(o=> o === playerId);
 			MainRT.getInstance().renderHandCards(idx, roomInfo[playerId].handCards);
+		} else if(type === "nextHandCard"){  //轮到下家摸牌
+		
+		} else if(type === "deliverCard") {  // 服务器发给下家一张新牌
+		
 		}
 	}
 }
