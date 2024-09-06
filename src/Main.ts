@@ -198,11 +198,13 @@ export default class Main extends Laya.Script {
 	/**
 	 * 获取打出去的牌的图片资源
 	 * @param num
+	 * @param viewPosNum
 	 */
-	getPlayedCardsImageUrl(num: number): string{
-		let unit = num % 50 > 30 ? "b" : num % 50 > 20 ? 't' : num % 50 > 10 ? "w" : '';
-		let unitNum = (num % 50)%10;
-		return `resources/apes/b${unit}${unitNum}.png`
+	getPlayedCardsImageUrl(num: number, viewPosNum: number): string{
+		const unit = num % 50 > 30 ? "b" : num % 50 > 20 ? 't' : num % 50 > 10 ? "w" : '';
+		const unitNum = (num % 50)%10;
+		const posFolder = viewPosNum === 0 ? 'first' : viewPosNum === 1 ? 'second' : viewPosNum === 2 ? 'third' : viewPosNum === 3 ? 'fourth' : "";
+		return `resources/apes/${posFolder}/b${unit}${unitNum}.png`
 	}
 	
 	
@@ -294,14 +296,14 @@ export default class Main extends Laya.Script {
 	 * 绘制打出去的牌
 	 */
 	renderPlayedCards(cardNum: number, playerId: string, roomInfo: any): void {
-		console.log(cardNum, playerId, '===========')
+		console.log(cardNum, playerId, '========')
 		const playerCards = roomInfo[playerId]?.playedCards;
 		const keys = Object.keys(roomInfo);
 		const idx = keys?.findIndex(o=> o === playerId);
 		if (this.viewPos[idx] === 0) {
 			const hbox = new HBox();
 			playerCards?.map((k: number, childIdx: number) => {
-				let imgUrl = this.getPlayedCardsImageUrl(k);
+				let imgUrl = this.getPlayedCardsImageUrl(k, this.viewPos[idx]);
 				let img = new Image(imgUrl);
 				img.name = `playedCard${childIdx}`;
 				hbox.pos(400, Laya.stage.designHeight - 99 - 30 - 160);
@@ -312,7 +314,7 @@ export default class Main extends Laya.Script {
 		} else if (this.viewPos[idx] === 1) {
 			const vbox = new VBox;
 			playerCards?.map((k: number, childIdx: number) => {
-				let imgUrl = this.getPlayedCardsImageUrl(k);
+				let imgUrl = this.getPlayedCardsImageUrl(k, this.viewPos[idx]);
 				let img = new Image(imgUrl);
 				img.name = `playedCard${childIdx}`;
 				vbox.pos(Laya.stage.designWidth/2 + 100, Laya.stage.designHeight /2 - 135);
@@ -324,7 +326,7 @@ export default class Main extends Laya.Script {
 		} else if (this.viewPos[idx] === 2) {
 			const hbox = new HBox();
 			playerCards?.map((k: number, childIdx: number) => {
-				let imgUrl = this.getPlayedCardsImageUrl(k);
+				let imgUrl = this.getPlayedCardsImageUrl(k, this.viewPos[idx]);
 				let img = new Image(imgUrl);
 				img.name = `playedCard${childIdx}`;
 				hbox.pos(400, 160);
@@ -337,7 +339,7 @@ export default class Main extends Laya.Script {
 		} else if (this.viewPos[idx] === 3) {
 			const vbox = new VBox;
 			playerCards?.map((k: number, childIdx: number) => {
-				let imgUrl = this.getPlayedCardsImageUrl(k);
+				let imgUrl = this.getPlayedCardsImageUrl(k, this.viewPos[idx]);
 				let img = new Image(imgUrl);
 				img.name = `playedCard${childIdx}`;
 				vbox.pos(Laya.stage.designWidth/2 - 100, Laya.stage.designHeight /2 - 135);
