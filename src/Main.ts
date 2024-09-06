@@ -27,6 +27,17 @@ export default class Main extends Laya.Script {
 	@property({type: Laya.Image})
 	public winningBtn: Laya.Image;
 	
+	@property({type: Laya.Image})
+	public time0: Laya.Image;
+	@property({type: Laya.Image})
+	public time1: Laya.Image;
+	@property({type: Laya.Image})
+	public time2: Laya.Image;
+	@property({type: Laya.Image})
+	public time3: Laya.Image;
+	// 指示灯资源数组
+	public timesArr: Array<number> = [0,1,2,3]
+	
 	// declare owner : Laya.Sprite;
 	//ws实例
 	public _socket: SocketHelper;
@@ -363,7 +374,31 @@ export default class Main extends Laya.Script {
 	/**
 	 * 停止游戏
 	 */
-	private stopGame(): void {
+	private stopGame(): void {}
+	
+	/**
+	 * 渲染牌桌状态（出牌人、倒计时等）
+	 */
+	renderTimeStatus(): void {
+		const userInfo = dataManager.getData("userInfo");
+		const roomInfo = dataManager.getData("roomInfo");
+		const keys = Object.keys(roomInfo);
+		this.playerNum = keys?.length;
+		const move: number = keys.findIndex(o => o == userInfo?.id);
+		const optionPos = roomInfo[keys[0]]?.optionPos;
+		let optionIdx: number = 0;
+		optionIdx = optionPos - move >= 0 ? optionPos - move : optionPos - move + this.viewPos.length;
+		// @ts-ignore
+		// this[`time${optionIdx}`].visible = true
+		this.timesArr.map(tmp=>{
+			if(optionIdx === tmp){
+				// @ts-ignore
+				this[`time${tmp}`].visible = true
+			} else {
+				// @ts-ignore
+				this[`time${tmp}`].visible = false
+			}
+		})
 	}
 	
 	/**
@@ -376,8 +411,7 @@ export default class Main extends Laya.Script {
 		this.playerNum = keys?.length;
 		const meIdx: number = keys.findIndex(o => o == userInfo?.id);
 		const viewPos: Array<number> = this.viewPos = this.getPlayerViewPos(meIdx, keys)
-		// const roomInfo = dataManager.getData("gameInfo");
-
+		this.renderTimeStatus()
 		keys.map((o, idx) => {
 			console.log(roomInfo,'--------------------------------', roomInfo[o]?.handCards)
 			this.renderHandCards(idx, roomInfo[o]?.handCards)

@@ -29,6 +29,18 @@
       },
       "winningBtn": {
         "_$ref": "h8jepkrx"
+      },
+      "time0": {
+        "_$ref": "hvpp6fz8"
+      },
+      "time1": {
+        "_$ref": "ahs2xr0v"
+      },
+      "time2": {
+        "_$ref": "bkxkwcx7"
+      },
+      "time3": {
+        "_$ref": "6faz5vr0"
       }
     }
   ],
@@ -56,6 +68,58 @@
           "centerX": 1,
           "centerY": 0,
           "skin": "res://0ccff280-642c-419c-bc42-82b7a2d34f2b",
+          "useSourceSize": true,
+          "color": "#ffffff"
+        },
+        {
+          "_$id": "hvpp6fz8",
+          "_$type": "Image",
+          "name": "time0",
+          "x": 603.4717135689623,
+          "y": 308.6242814316442,
+          "width": 130,
+          "height": 130,
+          "visible": false,
+          "skin": "res://faf88699-e6a8-4445-9ccc-77b7eec1fdff",
+          "useSourceSize": true,
+          "color": "#ffffff"
+        },
+        {
+          "_$id": "ahs2xr0v",
+          "_$type": "Image",
+          "name": "time1",
+          "x": 604,
+          "y": 310.00000000000006,
+          "width": 130,
+          "height": 130,
+          "visible": false,
+          "skin": "res://1a16fd67-e523-489b-bdf5-dff83f8569c2",
+          "useSourceSize": true,
+          "color": "#ffffff"
+        },
+        {
+          "_$id": "bkxkwcx7",
+          "_$type": "Image",
+          "name": "time2",
+          "x": 602.1636130889623,
+          "y": 309.7932262316442,
+          "width": 130,
+          "height": 130,
+          "visible": false,
+          "skin": "res://34394130-dc95-4766-81bc-b24cbc32a8c1",
+          "useSourceSize": true,
+          "color": "#ffffff"
+        },
+        {
+          "_$id": "6faz5vr0",
+          "_$type": "Image",
+          "name": "time3",
+          "x": 603.8230703689622,
+          "y": 310.7391558316442,
+          "width": 130,
+          "height": 130,
+          "visible": false,
+          "skin": "res://f0e1a913-3031-43ea-ad0c-1091f41a572a",
           "useSourceSize": true,
           "color": "#ffffff"
         },
@@ -124,8 +188,8 @@
           "_$id": "o6a9cexi",
           "_$type": "Button",
           "name": "startBtn",
-          "x": 608,
-          "y": 349,
+          "x": 612,
+          "y": 494,
           "width": 120,
           "height": 40,
           "visible": false,
