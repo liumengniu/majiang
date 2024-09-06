@@ -330,7 +330,6 @@ export default class Main extends Laya.Script {
 				img.name = `playedCard${childIdx}`;
 				hbox.pos(400, 160);
 				hbox.size(540, 120);
-				// hbox.align = "bottom";
 				hbox.addChild(img)
 			})
 			this.owner.addChild(hbox)
