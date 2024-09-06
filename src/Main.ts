@@ -201,6 +201,7 @@ export default class Main extends Laya.Script {
 	 * @param viewPosNum
 	 */
 	getPlayedCardsImageUrl(num: number, viewPosNum: number): string{
+		console.log(num, '===============', viewPosNum)
 		const unit = num % 50 > 30 ? "b" : num % 50 > 20 ? 't' : num % 50 > 10 ? "w" : '';
 		const unitNum = (num % 50)%10;
 		const posFolder = viewPosNum === 0 ? 'first' : viewPosNum === 1 ? 'second' : viewPosNum === 2 ? 'third' : viewPosNum === 3 ? 'fourth' : "";
@@ -236,7 +237,6 @@ export default class Main extends Laya.Script {
 				hbox.addChild(img)
 				return img;
 			})
-			// hbox.addChildren(imgs);
 			this.owner.addChild(hbox);
 		} else if (this.viewPos[idx] === 1) {
 			let firstX = Laya.stage.designWidth - 100 - 30 - 26 - 30, firstY = 200;
@@ -319,7 +319,6 @@ export default class Main extends Laya.Script {
 				img.name = `playedCard${childIdx}`;
 				vbox.pos(Laya.stage.designWidth/2 + 100, Laya.stage.designHeight /2 - 135);
 				vbox.size(540, 120);
-				vbox.rotation = 270;
 				vbox.addChild(img)
 			})
 			this.owner.addChild(vbox)
@@ -331,8 +330,7 @@ export default class Main extends Laya.Script {
 				img.name = `playedCard${childIdx}`;
 				hbox.pos(400, 160);
 				hbox.size(540, 120);
-				hbox.align = "bottom";
-				hbox.rotation = 180;
+				// hbox.align = "bottom";
 				hbox.addChild(img)
 			})
 			this.owner.addChild(hbox)
@@ -344,7 +342,6 @@ export default class Main extends Laya.Script {
 				img.name = `playedCard${childIdx}`;
 				vbox.pos(Laya.stage.designWidth/2 - 100, Laya.stage.designHeight /2 - 135);
 				vbox.size(540, 120);
-				vbox.rotation = 90;
 				vbox.addChild(img)
 			})
 			this.owner.addChild(vbox)

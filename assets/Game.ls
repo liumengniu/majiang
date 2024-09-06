@@ -67,6 +67,7 @@
           "y": 386,
           "width": 395,
           "height": 181,
+          "visible": false,
           "_mouseState": 2,
           "_$child": [
             {
