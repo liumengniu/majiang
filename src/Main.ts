@@ -38,6 +38,13 @@ export default class Main extends Laya.Script {
 	// 指示灯资源数组
 	public timesArr: Array<number> = [0,1,2,3]
 	
+	@property({type: Laya.Image})
+	public countdown0: Laya.Image;
+	@property({type: Laya.Image})
+	public countdown1: Laya.Image;
+	// 每次打牌后最多20秒倒计时
+	private countdownNum: number = 20;
+	
 	// declare owner : Laya.Sprite;
 	//ws实例
 	public _socket: SocketHelper;
@@ -53,6 +60,7 @@ export default class Main extends Laya.Script {
 	private playedCards: any;   //出在桌上的牌（这里需要分用户绘制，还是用 map结构）
 	
 	private activeCard: Laya.Image;    //用户当前操作的牌
+	private activeCardNum: number;
 	
 	
 	private myCardImgs: Array<Laya.Image> =[];
@@ -60,6 +68,7 @@ export default class Main extends Laya.Script {
 	
 	onStart() {
 		// this.renderAvatar()
+		// this.bumpBtn.visible = true
 	}
 	
 	/**
@@ -70,13 +79,14 @@ export default class Main extends Laya.Script {
 		const roomInfo = dataManager.getData("roomInfo");
 		this._socket = SocketHelper.getInstance("");
 		Laya.stage.on(Event.FOCUS, this, () => {
-			this.optionsSpe.visible = false;
+			// this.optionsSpe.visible = false;
 		})
 		
 		if(roomInfo && userInfo?.id === Object.keys(roomInfo)[0]){ //我是房主，可以开始游戏
 			this.startBtn.visible = true;
 		}
 		this.startBtn.on(Event.CLICK, this, this.startGame)
+		this.bumpBtn.on(Event.CLICK, this, this.peng)
 	}
 	
 	/**
@@ -301,6 +311,7 @@ export default class Main extends Laya.Script {
 		const userInfo = dataManager.getData("userInfo");
 		const roomId = roomInfo[userInfo?.id]?.roomId;
 		this._socket.sendMessage(JSON.stringify({type: "playCard", data: {roomId, cardNum, userId: userInfo?.id}}))
+		this.activeCardNum = cardNum;
 	}
 	
 	/**
@@ -308,6 +319,7 @@ export default class Main extends Laya.Script {
 	 */
 	renderPlayedCards(cardNum: number, playerId: string, roomInfo: any): void {
 		console.log(cardNum, playerId, '========')
+		if (Number.isInteger(cardNum)) this.activeCardNum = cardNum;
 		const playerCards = roomInfo[playerId]?.playedCards;
 		const keys = Object.keys(roomInfo);
 		const idx = keys?.findIndex(o=> o === playerId);
@@ -377,7 +389,7 @@ export default class Main extends Laya.Script {
 	private stopGame(): void {}
 	
 	/**
-	 * 渲染牌桌状态（出牌人、倒计时等）
+	 * 渲染牌桌状态（出牌人指向等）
 	 */
 	renderTimeStatus(): void {
 		const userInfo = dataManager.getData("userInfo");
@@ -399,6 +411,37 @@ export default class Main extends Laya.Script {
 				this[`time${tmp}`].visible = false
 			}
 		})
+		// 开始倒计时
+		this.renderCountdownInterval()
+	}
+	
+	/**
+	 * 渲染牌桌中间的倒计时
+	 * 每次出牌自定义20秒杠碰胡考虑时间
+	 */
+	renderCountdown(timestamp: number): void{
+		const differenceInMillis:number = Date.now() - timestamp;
+		// let leaveTime = Math.floor(differenceInMillis / 1000);
+		let leaveTime = this.countdownNum;
+		let firstDigit = Math.floor(leaveTime / 10);
+		let secondDigit = leaveTime % 10;
+		const imgUrl1 = `resources/apes/number/${firstDigit}.png`
+		const imgUrl2 = `resources/apes/number/${secondDigit}.png`
+		this.countdown0.skin = imgUrl1;
+		this.countdown1.skin = imgUrl2;
+		this.countdown0.visible = true;
+		this.countdown1.visible = true;
+		this.countdownNum --;
+		if(this.countdownNum <= 0){
+			Laya.timer.clear(this, this.renderCountdown)
+		}
+	}
+	
+	/**
+	 * 倒计时定时器方法
+	 */
+	renderCountdownInterval(): void{
+		Laya.timer.frameLoop(60, this, this.renderCountdown);
 	}
 	
 	/**
@@ -420,13 +463,70 @@ export default class Main extends Laya.Script {
 	
 	
 	/**
-	 * 绘制手牌
+	 * 服务器下发一张牌（摸一张新牌）
 	 */
-	
+	deliverCard(cardNum: number): void{
+		const userInfo = dataManager.getData("userInfo");
+		const roomInfo = dataManager.getData("roomInfo");
+		const keys = Object.keys(roomInfo);
+		this.activeCardNum = cardNum;
+		keys.map((o, idx) => {
+			this.renderHandCards(idx, roomInfo[o]?.handCards)
+		})
+	}
 	
 	/**
-	 * 绘制桌面上的牌
+	 * 检测道可以执行操作（碰杠胡）
 	 */
+	public checkOperate(operateType: string, playerId: string): void{
+		if(operateType ==="peng") {
+			console.log("可以碰，显示碰按钮")
+			this.bumpBtn.visible = true;
+		} else if(operateType ==="gang"){
+			this.gangBtn.visible = true;
+		} else if(operateType ==="win"){
+			this.winningBtn.visible = true;
+		}
+	}
+	
+	/**
+	 * 碰
+	 * 【打出2张牌】
+	 */
+	peng(): void{
+		const userInfo = dataManager.getData("userInfo");
+		const roomInfo = dataManager.getData("roomInfo");
+		const handCards = roomInfo[userInfo?.id].handCards;
+		const roomId = roomInfo[userInfo?.id].roomId;
+		let pengArr: number[] = []
+		handCards.map((m: number)=>{
+			if(m%50 === this.activeCardNum%50){
+				pengArr.push(m)
+			}
+		})
+		this._socket.sendMessage(JSON.stringify({type: "peng", data: {roomId, pengArr, userId: userInfo?.id}}))
+		this.bumpBtn.visible = false;
+	}
+	
+	/**
+	 * 杠
+	 * 【打出3张牌】
+	 */
+	gang(): void{
+		const userInfo = dataManager.getData("userInfo");
+		const roomInfo = dataManager.getData("roomInfo");
+		const handCards = roomInfo[userInfo?.id].handCards;
+		const roomId = roomInfo[userInfo?.id].roomId;
+		let gangArr: number[] = []
+		handCards.map((m: number)=>{
+			if(m%50 === this.activeCardNum%50){
+				gangArr.push(m)
+			}
+		})
+		this._socket.sendMessage(JSON.stringify({type: "peng", data: {roomId, gangArr, userId: userInfo?.id}}))
+		this.gangBtn.visible = false
+	}
+	
 	
 	//每帧更新时执行，尽量不要在这里写大循环逻辑或者使用getComponent方法
 	onUpdate(): void {

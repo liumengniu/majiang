@@ -49,10 +49,35 @@ class HandleReceivedMessage{
 			const keys = Object.keys(roomInfo);
 			const idx = keys?.findIndex(o=> o === playerId);
 			MainRT.getInstance().renderHandCards(idx, roomInfo[playerId].handCards);
-		} else if(type === "nextHandCard"){  //轮到下家摸牌
+			//todo 20秒的碰杠胡考虑时间（不碰杠胡则自动判定不予任何操作），然后再轮到下家摸牌
+		} else if (type === "operate") { // 服务器检测到可以操作（杠、碰、胡）
+			const playerId = data?.data?.playerId;
+			const operateType = data?.data?.operateType
+			if(operateType === 2) {
+				MainRT.getInstance().checkOperate("peng", playerId);
+			} else if(operateType === 3){
+				MainRT.getInstance().checkOperate("gang", playerId);
+			}
+		} else if (type === "peng") {  // 碰
+			const roomInfo = data?.data?.roomInfo;
+			const playerId = data?.data?.playerId;
+			const keys = Object.keys(roomInfo);
+			const idx = keys?.findIndex(o=> o === playerId);
+			MainRT.getInstance().renderPlayedCards(null, playerId, roomInfo);
+			MainRT.getInstance().renderHandCards(idx, roomInfo[playerId].handCards);
+		} else if (type === "gang") {  // 杠
 		
-		} else if(type === "deliverCard") {  // 服务器发给下家一张新牌
+		} else if (type === "win")  {   //  胡
 		
+		} else if (type === "nextHandCard") {  //轮到下家摸牌
+		
+		} else if (type === "deliverCard") {  // 服务器发给下家一张新牌
+			const roomInfo = data?.data?.roomInfo;
+			const playerId = data?.data?.playerId;
+			const cardNum = data?.data?.cardNum;
+			const keys = Object.keys(roomInfo);
+			const idx = keys?.findIndex(o => o === playerId);
+			MainRT.getInstance().renderHandCards(idx, roomInfo[playerId].handCards);
 		}
 	}
 }

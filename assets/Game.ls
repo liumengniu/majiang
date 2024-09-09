@@ -41,6 +41,12 @@
       },
       "time3": {
         "_$ref": "6faz5vr0"
+      },
+      "countdown0": {
+        "_$ref": "m495doq0"
+      },
+      "countdown1": {
+        "_$ref": "siibza38"
       }
     }
   ],
@@ -124,6 +130,30 @@
           "color": "#ffffff"
         },
         {
+          "_$id": "m495doq0",
+          "_$type": "Image",
+          "name": "countdown0",
+          "x": 641,
+          "y": 352,
+          "width": 30,
+          "height": 40,
+          "visible": false,
+          "skin": "res://c13c1b8e-c516-4a0f-98ad-e356f45f0365",
+          "color": "#ffffff"
+        },
+        {
+          "_$id": "siibza38",
+          "_$type": "Image",
+          "name": "countdown1",
+          "x": 667,
+          "y": 352,
+          "width": 30,
+          "height": 40,
+          "visible": false,
+          "skin": "res://c13c1b8e-c516-4a0f-98ad-e356f45f0365",
+          "color": "#ffffff"
+        },
+        {
           "_$id": "ajigaid2",
           "_$type": "Sprite",
           "name": "optionsSpe",
@@ -131,7 +161,6 @@
           "y": 386,
           "width": 395,
           "height": 181,
-          "visible": false,
           "_mouseState": 2,
           "_$child": [
             {
@@ -142,6 +171,7 @@
               "y": 38.18969506163813,
               "width": 71,
               "height": 67,
+              "visible": false,
               "skin": "res://0deead69-755a-45a2-b20c-2af2282191d2",
               "useSourceSize": true,
               "color": "#ffffff"
@@ -154,6 +184,7 @@
               "y": 15.999999999999943,
               "width": 113,
               "height": 94,
+              "visible": false,
               "skin": "res://3cb4d606-90fc-41af-92e5-3f6b00589bf8",
               "useSourceSize": true,
               "color": "#ffffff"
@@ -166,6 +197,7 @@
               "y": 14,
               "width": 113,
               "height": 94,
+              "visible": false,
               "skin": "res://ef14c4b5-1ed7-478a-96e1-ed574bc0ed77",
               "useSourceSize": true,
               "color": "#ffffff"
@@ -178,6 +210,7 @@
               "y": 17,
               "width": 113,
               "height": 94,
+              "visible": false,
               "skin": "res://9da22823-6409-4054-8730-fb5f95a510af",
               "useSourceSize": true,
               "color": "#ffffff"

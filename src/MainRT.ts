@@ -62,6 +62,13 @@ export default class MainRT extends Laya.Scene {
 	}
 	
 	/**
+	 * 可以操作
+	 */
+	public checkOperate(operateType: string, playerId: string): void{
+		this._control.checkOperate(operateType,playerId);
+	}
+	
+	/**
 	 * 进入游戏场景
 	 */
 	enterGameScene() :void{
