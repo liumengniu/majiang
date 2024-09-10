@@ -267,7 +267,7 @@ export default class Main extends Laya.Script {
 				this.owner.addChild(img);
 			})
 		} else if (this.viewPos[idx] === 2) {
-			let firstX = 370, firstY = 100 + 30 + 30;
+			let firstX = 370, firstY = 30 + 30;
 			handCards.map((h: number, childIdx: number) => {
 				img = new Image(this.oppositeInHand);
 				img.pos(firstX + childIdx * 44, firstY);
@@ -326,49 +326,41 @@ export default class Main extends Laya.Script {
 		const keys = Object.keys(roomInfo);
 		const idx = keys?.findIndex(o=> o === playerId);
 		if (this.viewPos[idx] === 0) {
-			const hbox = new HBox();
+			const hCount: number = Math.floor(520/65);
 			playerCards?.map((k: number, childIdx: number) => {
 				let imgUrl = this.getPlayedCardsImageUrl(k, this.viewPos[idx]);
 				let img = new Image(imgUrl);
 				img.name = `playedCard${childIdx}`;
-				hbox.pos(400, Laya.stage.designHeight - 99 - 30 - 160);
-				hbox.size(540, 120);
-				hbox.addChild(img)
+				img.pos(400 + (childIdx % (hCount-1) ) * 65, Laya.stage.designHeight - 99 - 40 - 160 + Math.floor((childIdx + 1) / hCount) * 79)
+				this.owner.addChild(img)
 			})
-			this.owner.addChild(hbox)
 		} else if (this.viewPos[idx] === 1) {
-			const vbox = new VBox;
+			const vCount: number = 8;
 			playerCards?.map((k: number, childIdx: number) => {
 				let imgUrl = this.getPlayedCardsImageUrl(k, this.viewPos[idx]);
 				let img = new Image(imgUrl);
 				img.name = `playedCard${childIdx}`;
-				vbox.pos(Laya.stage.designWidth/2 + 100, Laya.stage.designHeight /2 - 135);
-				vbox.size(540, 120);
-				vbox.addChild(img)
+				img.pos(Laya.stage.designWidth/2 + 200 + Math.floor((childIdx + 1) / vCount) * 59, Laya.stage.designHeight /2 - 200 + (childIdx % (vCount-1) * 36))
+				this.owner.addChild(img)
 			})
-			this.owner.addChild(vbox)
 		} else if (this.viewPos[idx] === 2) {
-			const hbox = new HBox();
+			const hCount: number = 8;
 			playerCards?.map((k: number, childIdx: number) => {
 				let imgUrl = this.getPlayedCardsImageUrl(k, this.viewPos[idx]);
 				let img = new Image(imgUrl);
 				img.name = `playedCard${childIdx}`;
-				hbox.pos(400, 160);
-				hbox.size(540, 120);
-				hbox.addChild(img)
+				img.pos(400 + (childIdx % (hCount-1) ) * 42,  220 - Math.floor((childIdx + 1) / hCount) * 60)
+				this.owner.addChild(img)
 			})
-			this.owner.addChild(hbox)
 		} else if (this.viewPos[idx] === 3) {
-			const vbox = new VBox;
+			const vCount: number = 8;
 			playerCards?.map((k: number, childIdx: number) => {
 				let imgUrl = this.getPlayedCardsImageUrl(k, this.viewPos[idx]);
 				let img = new Image(imgUrl);
 				img.name = `playedCard${childIdx}`;
-				vbox.pos(Laya.stage.designWidth/2 - 100, Laya.stage.designHeight /2 - 135);
-				vbox.size(540, 120);
-				vbox.addChild(img)
+				img.pos( 300 - Math.floor((childIdx + 1) / vCount) * 59, Laya.stage.designHeight /2 - 200 + (childIdx % (vCount-1) * 36))
+				this.owner.addChild(img)
 			})
-			this.owner.addChild(vbox)
 		}
 	}
 	
