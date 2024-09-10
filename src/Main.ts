@@ -292,6 +292,8 @@ export default class Main extends Laya.Script {
 	 * @private
 	 */
 	private handleCardClick(y: number, name: string, childIdx: number, cardNum: number): void {
+		let permission = this.checkCanOperate()
+		if(!permission) return
 		const hbox = this.owner.getChildByName(name);
 		const cardNode: any = hbox.getChildAt(childIdx);
 		if (cardNode.y === 0) {
@@ -400,8 +402,6 @@ export default class Main extends Laya.Script {
 		const optionPos = roomInfo[keys[0]]?.optionPos;
 		let optionIdx: number = 0;
 		optionIdx = optionPos - move >= 0 ? optionPos - move : optionPos - move + this.viewPos.length;
-		// @ts-ignore
-		// this[`time${optionIdx}`].visible = true
 		this.timesArr.map(tmp=>{
 			if(optionIdx === tmp){
 				// @ts-ignore
@@ -476,6 +476,23 @@ export default class Main extends Laya.Script {
 	}
 	
 	/**
+	 * 检测我当前状态是否轮到我操作
+	 */
+	public checkCanOperate(): boolean {
+		const userInfo = dataManager.getData("userInfo");
+		const roomInfo = dataManager.getData("roomInfo");
+		const gameInfo = dataManager.getData("gameInfo");
+		const optionTime = gameInfo?.optionTime;
+		const optionPos = gameInfo?.optionPos;
+		const keys = Object.keys(roomInfo);
+		if (keys[optionPos] === userInfo?.id) {
+			return true
+		} else {
+			return false
+		}
+	}
+	
+	/**
 	 * 检测道可以执行操作（碰杠胡）
 	 */
 	public checkOperate(operateType: string, playerId: string): void{
@@ -525,6 +542,13 @@ export default class Main extends Laya.Script {
 		})
 		this._socket.sendMessage(JSON.stringify({type: "peng", data: {roomId, gangArr, userId: userInfo?.id}}))
 		this.gangBtn.visible = false
+	}
+	
+	/**
+	 * 胡牌 -> 结算
+	 */
+	win(): void{
+	
 	}
 	
 	

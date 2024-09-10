@@ -38,13 +38,16 @@ class HandleReceivedMessage{
 		} else if (type === "join") {  //加入房间成功
 			dataManager.setData("roomInfo", data?.data);
 		} else if (type === "startGame"){
-			dataManager.setData("roomInfo", data?.data);
+			dataManager.setData("roomInfo", data?.data?.roomInfo);
+			dataManager.setData("gameInfo", data?.data?.gameInfo);
 			MainRT.getInstance().readyGameStart();
 		} else if(type === "playCard"){
 			const roomInfo = data?.data?.roomInfo;
+			const gameInfo = data?.data?.gameInfo;
 			const playerId = data?.data?.playerId;
 			const cardNum = data?.data?.cardNum;
 			dataManager.setData("roomInfo", roomInfo);
+			dataManager.setData("gameInfo", gameInfo);
 			MainRT.getInstance().renderPlayedCards(cardNum, playerId, roomInfo);
 			const keys = Object.keys(roomInfo);
 			const idx = keys?.findIndex(o=> o === playerId);
@@ -58,15 +61,13 @@ class HandleReceivedMessage{
 			} else if(operateType === 3){
 				MainRT.getInstance().checkOperate("gang", playerId);
 			}
-		} else if (type === "peng") {  // 碰
+		} else if (type === "peng" || type === "gang") {  // 碰 or 杠
 			const roomInfo = data?.data?.roomInfo;
 			const playerId = data?.data?.playerId;
 			const keys = Object.keys(roomInfo);
 			const idx = keys?.findIndex(o=> o === playerId);
 			MainRT.getInstance().renderPlayedCards(null, playerId, roomInfo);
 			MainRT.getInstance().renderHandCards(idx, roomInfo[playerId].handCards);
-		} else if (type === "gang") {  // 杠
-		
 		} else if (type === "win")  {   //  胡
 		
 		} else if (type === "nextHandCard") {  //轮到下家摸牌
