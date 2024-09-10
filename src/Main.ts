@@ -108,7 +108,7 @@ export default class Main extends Laya.Script {
 			x = Laya.stage.designWidth - avatar.width - 30;
 			y = Laya.stage.designHeight/2 - avatar.height/2;
 		} else if(viewPos[idx] === 2){
-			x = Laya.stage.designWidth/2 - avatar.width/2;
+			x = Laya.stage.designWidth - 340;
 			y = 30;
 		} else if(viewPos[idx] === 3){
 			x = 30;
@@ -180,10 +180,11 @@ export default class Main extends Laya.Script {
 		keys.map((o, idx)=>{
 			this.renderAvatar(viewPos, idx)
 		})
+		
 		// todo 此处自动判断4个人到房间开始，实际场景可能需要4人准备，房主点击开始，后期找到UI再优化
-		if(keys.length === 2){
-			this.startGame();
-		}
+		// if(keys.length === 2){
+		// 	this.startGame();
+		// }
 	}
 	
 	/**
@@ -204,6 +205,9 @@ export default class Main extends Laya.Script {
 		const roomId = roomInfo[userInfo?.id]?.roomId;
 		this._socket.sendMessage(JSON.stringify({type: "startGame", roomId}))
 		this.startBtn.visible = false;
+		
+		// 绘制玩家头像
+		this.renderAllPlayer(roomInfo);
 	}
 	
 	
