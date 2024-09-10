@@ -493,12 +493,13 @@ export default class Main extends Laya.Script {
 	 */
 	public checkOperate(operateType: string, playerId: string): void{
 		if(operateType ==="peng") {
-			console.log("可以碰，显示碰按钮")
 			this.bumpBtn.visible = true;
 		} else if(operateType ==="gang"){
 			this.gangBtn.visible = true;
 		} else if(operateType ==="win"){
 			this.winningBtn.visible = true;
+		} else {
+		
 		}
 	}
 	
