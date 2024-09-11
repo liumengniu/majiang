@@ -47,7 +47,10 @@ export default class Main extends Laya.Script {
 	// declare owner : Laya.Sprite;
 	//ws实例
 	public _socket: SocketHelper;
-	private avatarImg: string = "resources/apes/avatar.png";
+	private avatarImg: string = "resources/apes/avatar/avatar.png";
+	private avatarImg2: string = "resources/apes/avatar/avatar2.png";
+	private avatarImg3: string = "resources/apes/avatar/avatar3.png";
+	private avatarImg4: string = "resources/apes/avatar/avatar4.png";
 	private rightInHand: string = "resources/apes/right_inhand_0.png";
 	private oppositeInHand: string = "resources/apes/opposite_inhand_0.png";
 	private leftInHand: string = "resources/apes/left_inhand_0.png";
@@ -103,12 +106,15 @@ export default class Main extends Laya.Script {
 		if (viewPos[idx] === 0) { // 玩家本人位置
 			x = 100;
 			y = Laya.stage.designHeight - avatar.height - 30
+			avatar.skin = this.avatarImg2
 		} else if(viewPos[idx] === 1) {
 			x = Laya.stage.designWidth - avatar.width - 30;
 			y = Laya.stage.designHeight/2 - avatar.height/2;
+			avatar.skin = this.avatarImg3
 		} else if(viewPos[idx] === 2){
 			x = Laya.stage.designWidth - 340;
 			y = 30;
+			avatar.skin = this.avatarImg4
 		} else if(viewPos[idx] === 3){
 			x = 30;
 			y = Laya.stage.designHeight/2 - avatar.height/2;
@@ -216,7 +222,7 @@ export default class Main extends Laya.Script {
 	getHandCardImageUrl(num: number): string{
 		let unit = num % 50 > 30 ? "b" : num % 50 > 20 ? 't' : num % 50 > 10 ? "w" : '';
 		let unitNum = (num % 50)%10;
-		return `resources/apes/${unit}${unitNum}.png`
+		return `resources/apes/myCard/${unit}${unitNum}.png`
 	}
 	
 	/**
