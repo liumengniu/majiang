@@ -312,12 +312,14 @@ export default class Main extends Laya.Script {
 	 * 出牌
 	 */
 	handleCardPlay(cardNum: number): void{
-		// todo 首先判断现在的出牌顺位是否是我
 		const roomInfo = dataManager.getData("roomInfo");
 		const userInfo = dataManager.getData("userInfo");
 		const roomId = roomInfo[userInfo?.id]?.roomId;
 		this._socket.sendMessage(JSON.stringify({type: "playCard", data: {roomId, cardNum, userId: userInfo?.id}}))
 		this.activeCardNum = cardNum;
+		if(this.bumpBtn.visible) this.bumpBtn.visible = false
+		if(this.gangBtn.visible) this.gangBtn.visible = false
+		if(this.winningBtn.visible) this.winningBtn.visible = false
 	}
 	
 	/**
