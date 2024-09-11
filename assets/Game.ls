@@ -58,22 +58,22 @@
       "width": 1334,
       "height": 750,
       "texture": {
-        "_$uuid": "3bcdb12e-2fba-4b29-bc6c-4d417d63069f",
+        "_$uuid": "97d4337a-aebd-4d8f-9686-b22756a5d14f",
         "_$type": "Texture"
       },
       "_mouseState": 2,
       "_$child": [
         {
-          "_$id": "bqc9netk",
+          "_$id": "o8o91qnt",
           "_$type": "Image",
-          "name": "time",
-          "x": 603,
+          "name": "roomTime",
+          "x": 602,
           "y": 310,
           "width": 130,
           "height": 130,
-          "centerX": 1,
+          "centerX": 0,
           "centerY": 0,
-          "skin": "res://0ccff280-642c-419c-bc42-82b7a2d34f2b",
+          "skin": "res://19247533-1fae-4dd0-9827-e310a38706b3",
           "useSourceSize": true,
           "color": "#ffffff"
         },
@@ -86,7 +86,7 @@
           "width": 130,
           "height": 130,
           "visible": false,
-          "skin": "res://faf88699-e6a8-4445-9ccc-77b7eec1fdff",
+          "skin": "res://781d1928-1c56-4338-a728-a5e0a6d71dbd",
           "useSourceSize": true,
           "color": "#ffffff"
         },
@@ -99,7 +99,7 @@
           "width": 130,
           "height": 130,
           "visible": false,
-          "skin": "res://1a16fd67-e523-489b-bdf5-dff83f8569c2",
+          "skin": "res://69b75b1a-d48f-47c8-b7b4-21e7c09372ca",
           "useSourceSize": true,
           "color": "#ffffff"
         },
@@ -112,7 +112,7 @@
           "width": 130,
           "height": 130,
           "visible": false,
-          "skin": "res://34394130-dc95-4766-81bc-b24cbc32a8c1",
+          "skin": "res://cbc0e896-9ed9-4a9b-9247-f5687f7aede9",
           "useSourceSize": true,
           "color": "#ffffff"
         },
@@ -125,7 +125,7 @@
           "width": 130,
           "height": 130,
           "visible": false,
-          "skin": "res://f0e1a913-3031-43ea-ad0c-1091f41a572a",
+          "skin": "res://cc697ed2-1dba-469e-aa3a-382b626e74a0",
           "useSourceSize": true,
           "color": "#ffffff"
         },
@@ -172,7 +172,7 @@
               "width": 71,
               "height": 67,
               "visible": false,
-              "skin": "res://0deead69-755a-45a2-b20c-2af2282191d2",
+              "skin": "res://7d39e1c8-02c8-4a9f-ad8f-973a41e9abf2",
               "useSourceSize": true,
               "color": "#ffffff"
             },
@@ -185,7 +185,7 @@
               "width": 71,
               "height": 67,
               "visible": false,
-              "skin": "res://3cb4d606-90fc-41af-92e5-3f6b00589bf8",
+              "skin": "res://90a36c7e-2df8-4984-9296-40a24007ebd3",
               "color": "#ffffff"
             },
             {
@@ -197,7 +197,7 @@
               "width": 71,
               "height": 67,
               "visible": false,
-              "skin": "res://ef14c4b5-1ed7-478a-96e1-ed574bc0ed77",
+              "skin": "res://6be844ce-d35b-4923-b51f-fbd9402eeaad",
               "color": "#ffffff"
             },
             {
@@ -209,7 +209,7 @@
               "width": 71,
               "height": 67,
               "visible": false,
-              "skin": "res://9da22823-6409-4054-8730-fb5f95a510af",
+              "skin": "res://1651d9db-8f9f-4675-9198-716b0bdc62e4",
               "color": "#ffffff"
             }
           ]

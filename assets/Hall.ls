@@ -53,7 +53,7 @@
           "width": 405,
           "height": 470,
           "right": 190,
-          "skin": "res://b633d23d-2736-47b4-8b75-27f174eb3495",
+          "skin": "res://f726b91c-d203-43c4-b3b1-5cd5af3643a5",
           "useSourceSize": true,
           "color": "#ffffff"
         },
@@ -66,7 +66,7 @@
           "width": 406,
           "height": 460,
           "left": 190,
-          "skin": "res://767309d1-a17f-43fc-91af-b13ac9c34a0b",
+          "skin": "res://6beeab39-0269-454b-87e3-8f921a10af16",
           "useSourceSize": true,
           "color": "#ffffff"
         },
