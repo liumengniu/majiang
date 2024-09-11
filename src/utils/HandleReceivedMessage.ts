@@ -58,10 +58,10 @@ class HandleReceivedMessage{
 			const operateType = data?.data?.operateType
 			if(operateType === 4){
 				MainRT.getInstance().checkOperate("win", playerId);
-			} else if(operateType === 2) {
-				MainRT.getInstance().checkOperate("peng", playerId);
-			} else if(operateType === 3){
+			} else if(operateType === 3) {
 				MainRT.getInstance().checkOperate("gang", playerId);
+			} else if(operateType === 2){
+				MainRT.getInstance().checkOperate("peng", playerId);
 			}
 		} else if (type === "peng" || type === "gang") {  // 碰 or 杠
 			const roomInfo = data?.data?.roomInfo;

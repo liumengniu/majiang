@@ -88,7 +88,9 @@ export default class Main extends Laya.Script {
 			this.startBtn.visible = true;
 		}
 		this.startBtn.on(Event.CLICK, this, this.startGame)
+		this.passBtn.on(Event.CLICK, this, this.pass)
 		this.bumpBtn.on(Event.CLICK, this, this.peng)
+		this.gangBtn.on(Event.CLICK, this, this.gang)
 	}
 	
 	/**
@@ -515,8 +517,10 @@ export default class Main extends Laya.Script {
 	public checkOperate(operateType: string, playerId: string): void{
 		if(operateType ==="peng") {
 			this.bumpBtn.visible = true;
+			this.passBtn.visible = true;
 		} else if(operateType ==="gang"){
 			this.gangBtn.visible = true;
+			this.passBtn.visible = true;
 		} else if(operateType ==="win"){
 			this.winningBtn.visible = true;
 		} else {
@@ -524,6 +528,15 @@ export default class Main extends Laya.Script {
 		}
 	}
 	
+	/**
+	 * 过
+	 * 【不执行任何操作，隐藏 杠/碰 】
+	 */
+	pass(): void{
+		this.passBtn.visible = false;
+		this.bumpBtn.visible = false;
+		this.gangBtn.visible = false;
+	}
 	/**
 	 * 碰
 	 * 【打出2张牌】
