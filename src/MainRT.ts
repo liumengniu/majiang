@@ -41,6 +41,13 @@ export default class MainRT extends Laya.Scene {
 	}
 	
 	/**
+	 * 结束游戏
+	 */
+	stopGame(): void{
+		this._control.stopGame()
+	}
+	
+	/**
 	 * 准备绘制游戏牌和人物
 	 */
 	readyGameStart(): void{

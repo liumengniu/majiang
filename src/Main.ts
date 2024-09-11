@@ -384,7 +384,16 @@ export default class Main extends Laya.Script {
 	/**
 	 * 停止游戏
 	 */
-	private stopGame(): void {}
+	public stopGame(): void {
+		// 1.销毁所有定时器
+		// Laya.timer.pause();
+		
+		// 2.推到展开全部的牌
+		
+		// 3.计算画面
+		
+		// 4.退出房间，回到大厅
+	}
 	
 	/**
 	 * 渲染牌桌状态（出牌人指向等）
