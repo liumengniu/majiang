@@ -392,10 +392,11 @@ export default class Main extends Laya.Script {
 	renderTimeStatus(): void {
 		const userInfo = dataManager.getData("userInfo");
 		const roomInfo = dataManager.getData("roomInfo");
+		const gameInfo = dataManager.getData("gameInfo");
 		const keys = Object.keys(roomInfo);
 		this.playerNum = keys?.length;
 		const move: number = keys.findIndex(o => o == userInfo?.id);
-		const optionPos = roomInfo[keys[0]]?.optionPos;
+		const optionPos = gameInfo?.optionPos;
 		let optionIdx: number = 0;
 		optionIdx = optionPos - move >= 0 ? optionPos - move : optionPos - move + this.viewPos.length;
 		this.timesArr.map(tmp=>{
@@ -415,8 +416,8 @@ export default class Main extends Laya.Script {
 	 * 渲染牌桌中间的倒计时
 	 * 每次出牌自定义20秒杠碰胡考虑时间
 	 */
-	renderCountdown(timestamp: number): void{
-		const differenceInMillis:number = Date.now() - timestamp;
+	renderCountdown(timestamp: number): void {
+		const differenceInMillis: number = Date.now() - timestamp;
 		// let leaveTime = Math.floor(differenceInMillis / 1000);
 		let leaveTime = this.countdownNum;
 		let firstDigit = Math.floor(leaveTime / 10);
@@ -427,9 +428,11 @@ export default class Main extends Laya.Script {
 		this.countdown1.skin = imgUrl2;
 		this.countdown0.visible = true;
 		this.countdown1.visible = true;
-		this.countdownNum --;
-		if(this.countdownNum <= 0){
+		this.countdownNum--;
+		if (this.countdownNum <= 0) {
 			Laya.timer.clear(this, this.renderCountdown)
+			this.countdown0.visible = false;
+			this.countdown1.visible = false;
 		}
 	}
 	
@@ -437,6 +440,7 @@ export default class Main extends Laya.Script {
 	 * 倒计时定时器方法
 	 */
 	renderCountdownInterval(): void{
+		Laya.timer.clear(this, this.renderCountdown);
 		Laya.timer.frameLoop(60, this, this.renderCountdown);
 	}
 	

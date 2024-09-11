@@ -62,6 +62,13 @@ export default class MainRT extends Laya.Scene {
 	}
 	
 	/**
+	 * 绘制操作人指示图标
+	 */
+	renderTimeStatus(): void{
+		this._control.renderTimeStatus()
+	}
+	
+	/**
 	 * 可以操作
 	 */
 	public checkOperate(operateType: string, playerId: string): void{
