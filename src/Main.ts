@@ -262,7 +262,7 @@ export default class Main extends Laya.Script {
 				let imgUrl = this.getHandCardImageUrl(h);
 				let img = new Image(imgUrl);
 				hbox.name = `hbox${idx}`;
-				img.name = "myCard";
+				img.name = `myCard`;
 				this.myCardImgs.push(img);
 				img.on(Event.CLICK, this, this.handleCardClick, [firstY, `hbox${idx}`, childIdx, h])
 				hbox.pos((Laya.stage.designWidth - handCards.length * 65) / 2, firstY);
@@ -309,6 +309,10 @@ export default class Main extends Laya.Script {
 		const cardNode: any = hbox.getChildAt(childIdx);
 		if (cardNode.y === 0) {
 			cardNode.y = cardNode.y - 50;
+			// @ts-ignore
+			hbox?._children.map((node: Laya.Image, idx: number)=>{
+				if(childIdx !== idx) node.y = 0
+			})
 		} else {
 			this.activeCard = cardNode;
 			this.handleCardPlay(cardNum)
@@ -318,7 +322,7 @@ export default class Main extends Laya.Script {
 	/**
 	 * 出牌
 	 */
-	handleCardPlay(cardNum: number): void{
+	public handleCardPlay(cardNum: number): void{
 		const roomInfo = dataManager.getData("roomInfo");
 		const userInfo = dataManager.getData("userInfo");
 		const roomId = roomInfo[userInfo?.id]?.roomId;
@@ -332,7 +336,7 @@ export default class Main extends Laya.Script {
 	/**
 	 * 绘制打出去的牌
 	 */
-	renderPlayedCards(cardNum: number, playerId: string, roomInfo: any): void {
+	public renderPlayedCards(cardNum: number, playerId: string, roomInfo: any): void {
 		console.log(cardNum, playerId, '========')
 		if (Number.isInteger(cardNum)) this.activeCardNum = cardNum;
 		const playerCards = roomInfo[playerId]?.playedCards;
@@ -407,7 +411,7 @@ export default class Main extends Laya.Script {
 	/**
 	 * 渲染牌桌状态（出牌人指向等）
 	 */
-	renderTimeStatus(): void {
+	public renderTimeStatus(): void {
 		const userInfo = dataManager.getData("userInfo");
 		const roomInfo = dataManager.getData("roomInfo");
 		const gameInfo = dataManager.getData("gameInfo");
@@ -434,7 +438,7 @@ export default class Main extends Laya.Script {
 	 * 渲染牌桌中间的倒计时
 	 * 每次出牌自定义20秒杠碰胡考虑时间
 	 */
-	renderCountdown(timestamp: number): void {
+	public renderCountdown(timestamp: number): void {
 		const differenceInMillis: number = Date.now() - timestamp;
 		// let leaveTime = Math.floor(differenceInMillis / 1000);
 		let leaveTime = this.countdownNum;
@@ -457,7 +461,7 @@ export default class Main extends Laya.Script {
 	/**
 	 * 倒计时定时器方法
 	 */
-	renderCountdownInterval(): void{
+	public renderCountdownInterval(): void{
 		this.countdownNum = 20;
 		Laya.timer.clear(this, this.renderCountdown);
 		Laya.timer.frameLoop(60, this, this.renderCountdown);
@@ -466,7 +470,7 @@ export default class Main extends Laya.Script {
 	/**
 	 * 已经准备好，开始游戏
 	 */
-	readyGameStart(): void {
+	public readyGameStart(): void {
 		const userInfo = dataManager.getData("userInfo");
 		const roomInfo = dataManager.getData("roomInfo");
 		const keys = Object.keys(roomInfo);
@@ -532,7 +536,7 @@ export default class Main extends Laya.Script {
 	 * 过
 	 * 【不执行任何操作，隐藏 杠/碰 】
 	 */
-	pass(): void{
+	private pass(): void{
 		this.passBtn.visible = false;
 		this.bumpBtn.visible = false;
 		this.gangBtn.visible = false;
@@ -541,7 +545,7 @@ export default class Main extends Laya.Script {
 	 * 碰
 	 * 【打出2张牌】
 	 */
-	peng(): void{
+	private peng(): void{
 		const userInfo = dataManager.getData("userInfo");
 		const roomInfo = dataManager.getData("roomInfo");
 		const handCards = roomInfo[userInfo?.id].handCards;
@@ -560,7 +564,7 @@ export default class Main extends Laya.Script {
 	 * 杠
 	 * 【打出3张牌】
 	 */
-	gang(): void{
+	private gang(): void{
 		const userInfo = dataManager.getData("userInfo");
 		const roomInfo = dataManager.getData("roomInfo");
 		const handCards = roomInfo[userInfo?.id].handCards;
