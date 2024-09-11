@@ -5,7 +5,6 @@ const Stage = Laya.Stage;
 const Event = Laya.Event;
 const Image = Laya.Image;
 const HBox = Laya.HBox;
-const VBox = Laya.VBox;
 
 
 const {regClass, property} = Laya;
@@ -332,7 +331,7 @@ export default class Main extends Laya.Script {
 		const keys = Object.keys(roomInfo);
 		const idx = keys?.findIndex(o=> o === playerId);
 		if (this.viewPos[idx] === 0) {
-			const hCount: number = Math.floor(520/65);
+			const hCount: number = 12;
 			playerCards?.map((k: number, childIdx: number) => {
 				let imgUrl = this.getPlayedCardsImageUrl(k, this.viewPos[idx]);
 				let img = new Image(imgUrl);
@@ -451,6 +450,7 @@ export default class Main extends Laya.Script {
 	 * 倒计时定时器方法
 	 */
 	renderCountdownInterval(): void{
+		this.countdownNum = 20;
 		Laya.timer.clear(this, this.renderCountdown);
 		Laya.timer.frameLoop(60, this, this.renderCountdown);
 	}

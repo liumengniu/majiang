@@ -15,8 +15,8 @@ export class Script extends Laya.Script {
 	@property({type: Laya.TextInput})
 	public passwordTextInput: Laya.TextInput;
 	
-	@property({type: Laya.Button})
-	public btn: Laya.Button;
+	@property({type: Laya.Image})
+	public btn: Laya.Image;
 	
 	//组件被激活后执行，此时所有节点和组件均已创建完毕，此方法只执行一次
 	onAwake(): void {

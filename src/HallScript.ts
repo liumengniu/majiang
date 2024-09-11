@@ -13,16 +13,26 @@ export class HallScript extends Laya.Script {
 	declare owner : Laya.Sprite;
 	//ws实例
 	public _socket: SocketHelper;
-	
+	/** 创建房间按钮 **/
 	@property({type: Laya.Image})
 	public createRoomBtn: Laya.Image;
-	
-	
+	/** 加入房间唤起弹框按钮 **/
 	@property({type: Laya.Image})
 	public joinRoomBtn: Laya.Image;
 	
 	@property({type: Laya.TextInput})
 	public roomTextInput: Laya.TextInput;
+	
+	/** 加入房间弹框 **/
+	@property({type: Laya.Dialog})
+	public joinRoomDialog: Laya.Dialog;
+	/** 加入房间弹框关闭按钮 **/
+	@property({type: Laya.Button})
+	public joinRoomDialogClose: Laya.Button;
+	/** 加入房间按钮 **/
+	@property({type: Laya.Image})
+	public joinBtn: Laya.Image;
+	
 	
 	//组件被激活后执行，此时所有节点和组件均已创建完毕，此方法只执行一次
 	onEnable(): void {
@@ -36,7 +46,9 @@ export class HallScript extends Laya.Script {
 		});
 		// 2、UI挂载事件
 		this.createRoomBtn.on(Event.CLICK, this, this.handleCreateRoom)
-		this.joinRoomBtn.on(Event.CLICK, this, this.handleJoinRoom)
+		this.joinRoomBtn.on(Event.CLICK, this, this.handleJoinRoomDialog)
+		this.joinRoomDialogClose.on(Event.CLICK, this, this.handleJoinRoomDialogClose)
+		this.joinBtn.on(Event.CLICK, this, this.handleJoinRoom)
 	}
 	
 	/***
@@ -71,6 +83,21 @@ export class HallScript extends Laya.Script {
 		dataManager.setData("roomInfo", data?.result)
 		console.log(data, '2222222222222222222222222222222222222222222')
 	}
+	
+	/**
+	 * 唤起加入房间弹框
+	 */
+	handleJoinRoomDialog(): void{
+		this.joinRoomDialog.visible = true
+	}
+	
+	/**
+	 * 关闭加入房间弹框
+	 */
+	handleJoinRoomDialogClose(): void{
+		this.joinRoomDialog.visible = false
+	}
+	
 	
 	/**
 	 * 加入房间

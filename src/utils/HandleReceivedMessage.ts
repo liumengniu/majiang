@@ -52,7 +52,6 @@ class HandleReceivedMessage{
 			const keys = Object.keys(roomInfo);
 			const idx = keys?.findIndex(o=> o === playerId);
 			MainRT.getInstance().renderHandCards(idx, roomInfo[playerId].handCards);
-			//todo 20秒的碰杠胡考虑时间（不碰杠胡则自动判定不予任何操作），然后再轮到下家摸牌
 			MainRT.getInstance().renderTimeStatus();
 		} else if (type === "operate") { // 服务器检测到可以操作（杠、碰、胡）
 			const playerId = data?.data?.playerId;
