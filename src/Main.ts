@@ -51,9 +51,9 @@ export default class Main extends Laya.Script {
 	private avatarImg2: string = "resources/apes/avatar/avatar2.png";
 	private avatarImg3: string = "resources/apes/avatar/avatar3.png";
 	private avatarImg4: string = "resources/apes/avatar/avatar4.png";
-	private rightInHand: string = "resources/apes/right_inhand_0.png";
-	private oppositeInHand: string = "resources/apes/opposite_inhand_0.png";
-	private leftInHand: string = "resources/apes/left_inhand_0.png";
+	private rightInHand: string = "resources/apes/cardBack/right_inhand_0.png";
+	private oppositeInHand: string = "resources/apes/cardBack/opposite_inhand_0.png";
+	private leftInHand: string = "resources/apes/cardBack/left_inhand_0.png";
 	private playerNum: number = 0;
 	private viewPos: Array<number> = [];
 	
