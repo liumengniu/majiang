@@ -54,14 +54,14 @@ export default class Main extends Laya.Script {
 	public settlementDialog: Laya.Dialog;
 	@property({type: Laya.Image})
 	public status: Laya.Image;
-	@property({type: Laya.HBox})
-	public playerCards0: Laya.HBox;
-	@property({type: Laya.HBox})
-	public playerCards1: Laya.HBox;
-	@property({type: Laya.HBox})
-	public playerCards2: Laya.HBox;
-	@property({type: Laya.HBox})
-	public playerCards3: Laya.HBox;
+	@property({type: Laya.Sprite})
+	public playerCards0: Laya.Sprite;
+	@property({type: Laya.Sprite})
+	public playerCards1: Laya.Sprite;
+	@property({type: Laya.Sprite})
+	public playerCards2: Laya.Sprite;
+	@property({type: Laya.Sprite})
+	public playerCards3: Laya.Sprite;
 	
 	// declare owner : Laya.Sprite;
 	//ws实例
@@ -235,9 +235,6 @@ export default class Main extends Laya.Script {
 		const roomId = roomInfo[userInfo?.id]?.roomId;
 		this._socket.sendMessage(JSON.stringify({type: "startGame", roomId}))
 		this.startBtn.visible = false;
-		
-		// 绘制玩家头像
-		this.renderAllPlayer(roomInfo);
 	}
 	
 	
@@ -505,6 +502,8 @@ export default class Main extends Laya.Script {
 			console.log(roomInfo,'--------------------------------', roomInfo[o]?.handCards)
 			this.renderHandCards(idx, roomInfo[o]?.handCards)
 		})
+		// 绘制全部玩家头像
+		this.renderAllPlayer(roomInfo);
 	}
 	
 	
@@ -575,6 +574,7 @@ export default class Main extends Laya.Script {
 		})
 		this._socket.sendMessage(JSON.stringify({type: "peng", data: {roomId, pengArr, userId: userInfo?.id}}))
 		this.bumpBtn.visible = false;
+		this.passBtn.visible = false;
 	}
 	
 	/**
@@ -594,6 +594,7 @@ export default class Main extends Laya.Script {
 		})
 		this._socket.sendMessage(JSON.stringify({type: "peng", data: {roomId, gangArr, userId: userInfo?.id}}))
 		this.gangBtn.visible = false
+		this.passBtn.visible = false;
 	}
 	
 	/**
@@ -628,11 +629,17 @@ export default class Main extends Laya.Script {
 			cards.map((c: any, cardIdx: number) => {
 				let imgUrl = this.getPlayedCardsImageUrl(c, 0);
 				const img = new Image(imgUrl);
-				img.scale(0.6,0.6);
+				img.scale(0.7,0.7);
 				// @ts-ignore
-				this[`playerCards${idx}`].addChild(img)
+				const hBox = this[`playerCards${idx}`].getChildByName("HBox")
+				hBox.addChild(img)
 			})
+			// @ts-ignore
+			const txt = this[`playerCards${idx}`].getChildByName("score")
+			txt.text = info?.score >= 0 ? '+' + info?.score : info?.score?.toString();
 		})
+		this.winningBtn.visible = false
+		this.passBtn.visible = false
 	}
 	
 	

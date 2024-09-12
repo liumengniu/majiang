@@ -58,16 +58,16 @@
         "_$ref": "5xqpbv1p"
       },
       "playerCards0": {
-        "_$ref": "r18nv4jo"
+        "_$ref": "uslg19rv"
       },
       "playerCards1": {
-        "_$ref": "kkbp4t1t"
+        "_$ref": "81huwths"
       },
       "playerCards2": {
-        "_$ref": "2ypbb5sm"
+        "_$ref": "xdavdao4"
       },
       "playerCards3": {
-        "_$ref": "y886ys1q"
+        "_$ref": "cug0t3t0"
       }
     }
   ],
@@ -297,60 +297,152 @@
               "color": "#ffffff"
             },
             {
-              "_$id": "r18nv4jo",
-              "_$type": "HBox",
+              "_$id": "uslg19rv",
+              "_$type": "Sprite",
               "name": "playerCards0",
               "x": 100,
               "y": 159,
               "width": 880,
               "height": 70,
-              "left": 100,
-              "right": 100,
-              "bgColor": "rgba(242, 201, 82, 1)",
-              "space": 0,
-              "align": "middle"
+              "_$child": [
+                {
+                  "_$id": "cxm0irz8",
+                  "_$type": "HBox",
+                  "name": "HBox",
+                  "width": 880,
+                  "height": 70,
+                  "left": 0,
+                  "right": 0,
+                  "top": 0,
+                  "bottom": 0,
+                  "bgColor": "rgba(248, 174, 75, 1)",
+                  "space": 0
+                },
+                {
+                  "_$id": "idmxcy54",
+                  "_$type": "Text",
+                  "name": "score",
+                  "x": 808,
+                  "y": 21,
+                  "width": 55,
+                  "height": 30,
+                  "text": "Text",
+                  "fontSize": 20,
+                  "color": "#FFFFFF",
+                  "leading": 2
+                }
+              ]
             },
             {
-              "_$id": "kkbp4t1t",
-              "_$type": "HBox",
+              "_$id": "81huwths",
+              "_$type": "Sprite",
               "name": "playerCards1",
               "x": 100,
               "y": 253,
               "width": 880,
               "height": 70,
-              "left": 100,
-              "right": 100,
-              "bgColor": "rgba(242, 201, 82, 1)",
-              "space": 0,
-              "align": "middle"
+              "_$child": [
+                {
+                  "_$id": "v4n5s9gz",
+                  "_$type": "HBox",
+                  "name": "HBox",
+                  "width": 880,
+                  "height": 70,
+                  "left": 0,
+                  "right": 0,
+                  "top": 0,
+                  "bottom": 0,
+                  "bgColor": "rgba(248, 174, 75, 1)",
+                  "space": 0
+                },
+                {
+                  "_$id": "xud3rww0",
+                  "_$type": "Text",
+                  "name": "score",
+                  "x": 808.9999999999998,
+                  "y": 24.999999999999886,
+                  "width": 55,
+                  "height": 30,
+                  "text": "Text",
+                  "fontSize": 20,
+                  "color": "#FFFFFF",
+                  "leading": 2
+                }
+              ]
             },
             {
-              "_$id": "2ypbb5sm",
-              "_$type": "HBox",
+              "_$id": "xdavdao4",
+              "_$type": "Sprite",
               "name": "playerCards2",
               "x": 100,
               "y": 354,
               "width": 880,
               "height": 70,
-              "left": 100,
-              "right": 100,
-              "bgColor": "rgba(242, 201, 82, 1)",
-              "space": 0,
-              "align": "middle"
+              "_$child": [
+                {
+                  "_$id": "ad2vhfm0",
+                  "_$type": "HBox",
+                  "name": "HBox",
+                  "width": 880,
+                  "height": 70,
+                  "left": 0,
+                  "right": 0,
+                  "top": 0,
+                  "bottom": 0,
+                  "bgColor": "rgba(248, 174, 75, 1)",
+                  "space": 0
+                },
+                {
+                  "_$id": "g0fpgcqq",
+                  "_$type": "Text",
+                  "name": "score",
+                  "x": 807.9999999999998,
+                  "y": 25.999999999999886,
+                  "width": 55,
+                  "height": 30,
+                  "text": "Text",
+                  "fontSize": 20,
+                  "color": "#FFFFFF",
+                  "leading": 2
+                }
+              ]
             },
             {
-              "_$id": "y886ys1q",
-              "_$type": "HBox",
+              "_$id": "cug0t3t0",
+              "_$type": "Sprite",
               "name": "playerCards3",
               "x": 100,
               "y": 454,
               "width": 880,
               "height": 70,
-              "left": 100,
-              "right": 100,
-              "bgColor": "rgba(242, 201, 82, 1)",
-              "space": 0,
-              "align": "middle"
+              "_$child": [
+                {
+                  "_$id": "1zx3ejso",
+                  "_$type": "HBox",
+                  "name": "HBox",
+                  "width": 880,
+                  "height": 70,
+                  "left": 0,
+                  "right": 0,
+                  "top": 0,
+                  "bottom": 0,
+                  "bgColor": "rgba(248, 174, 75, 1)",
+                  "space": 0
+                },
+                {
+                  "_$id": "8gasos0x",
+                  "_$type": "Text",
+                  "name": "score",
+                  "x": 809.9999999999998,
+                  "y": 20.999999999999943,
+                  "width": 55,
+                  "height": 30,
+                  "text": "Text",
+                  "fontSize": 20,
+                  "color": "#FFFFFF",
+                  "leading": 2
+                }
+              ]
             },
             {
               "_$id": "gkh6hk7c",
