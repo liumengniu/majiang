@@ -509,9 +509,15 @@ export default class Main extends Laya.Script {
 	
 	/**
 	 * 服务器下发一张牌（摸一张新牌）
+	 * @param cardNum
+	 * @param playerId
 	 */
-	deliverCard(): void{
-		this.activeCardNum = null
+	deliverCard(cardNum: number, playerId: string): void{
+		if(typeof cardNum === 'number'){
+			this.activeCardNum = cardNum
+		} else {
+			this.activeCardNum = null
+		}
 	}
 	
 	/**
@@ -592,7 +598,7 @@ export default class Main extends Laya.Script {
 				gangArr.push(m)
 			}
 		})
-		this._socket.sendMessage(JSON.stringify({type: "peng", data: {roomId, gangArr, userId: userInfo?.id}}))
+		this._socket.sendMessage(JSON.stringify({type: "gang", data: {roomId, gangArr, userId: userInfo?.id}}))
 		this.gangBtn.visible = false
 		this.passBtn.visible = false;
 	}

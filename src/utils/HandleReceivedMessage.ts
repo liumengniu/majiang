@@ -81,6 +81,7 @@ class HandleReceivedMessage{
 			const cardNum = data?.data?.cardNum;
 			const keys = Object.keys(roomInfo);
 			const idx = keys?.findIndex(o => o === playerId);
+			MainRT.getInstance().deliverCard(cardNum, playerId)
 			MainRT.getInstance().renderHandCards(idx, roomInfo[playerId].handCards);
 		}
 	}

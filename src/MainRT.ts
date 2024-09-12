@@ -71,8 +71,8 @@ export default class MainRT extends Laya.Scene {
 	/**
 	 * 服务器下发一张牌
 	 */
-	public deliverCard(){
-		this._control.deliverCard()
+	public deliverCard(cardNum: number, playerId: string){
+		this._control.deliverCard(cardNum, playerId)
 	}
 	
 	/**
