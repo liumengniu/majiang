@@ -379,6 +379,7 @@
       "y": 247,
       "width": 120,
       "height": 40,
+      "visible": false,
       "_mouseState": 2,
       "skin": "res://d4cfd6a8-0d0a-475b-ac93-d85eaa646936",
       "label": "测试胡牌",

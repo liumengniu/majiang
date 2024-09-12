@@ -628,7 +628,7 @@ export default class Main extends Laya.Script {
 			cards.map((c: any, cardIdx: number) => {
 				let imgUrl = this.getPlayedCardsImageUrl(c, 0);
 				const img = new Image(imgUrl);
-				img.scale(0.4,0.4);
+				img.scale(0.6,0.6);
 				// @ts-ignore
 				this[`playerCards${idx}`].addChild(img)
 			})
