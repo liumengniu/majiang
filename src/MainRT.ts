@@ -69,6 +69,13 @@ export default class MainRT extends Laya.Scene {
 	}
 	
 	/**
+	 * 服务器下发一张牌
+	 */
+	public deliverCard(){
+		this._control.deliverCard()
+	}
+	
+	/**
 	 * 绘制操作人指示图标
 	 */
 	renderTimeStatus(): void{
@@ -85,8 +92,8 @@ export default class MainRT extends Laya.Scene {
 	/**
 	 * 胡牌结算
 	 */
-	public winning(): void{
-		this._control.winning();
+	public winning(result: any): void{
+		this._control.winning(result);
 	}
 	
 	/**

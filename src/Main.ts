@@ -1,5 +1,6 @@
 import mapManager from "./configs/mapManager";
 import SocketHelper from "./utils/SocketHelper";
+import Sprite = Laya.Sprite;
 
 const Stage = Laya.Stage;
 const Event = Laya.Event;
@@ -12,6 +13,10 @@ const dataManager = new mapManager();
 
 @regClass()
 export default class Main extends Laya.Script {
+	/**游戏区域**/
+	@property({type: Sprite})
+	public gameLayout: Sprite;
+	
 	@property({type: Laya.Button})
 	public startBtn: Laya.Button;
 	@property({type: Laya.Sprite})
@@ -47,14 +52,16 @@ export default class Main extends Laya.Script {
 	/** 结算相关 **/
 	@property({type: Laya.Dialog})
 	public settlementDialog: Laya.Dialog;
+	@property({type: Laya.Image})
+	public status: Laya.Image;
+	@property({type: Laya.HBox})
+	public playerCards0: Laya.HBox;
 	@property({type: Laya.HBox})
 	public playerCards1: Laya.HBox;
 	@property({type: Laya.HBox})
 	public playerCards2: Laya.HBox;
 	@property({type: Laya.HBox})
 	public playerCards3: Laya.HBox;
-	@property({type: Laya.HBox})
-	public playerCards4: Laya.HBox;
 	
 	// declare owner : Laya.Sprite;
 	//ws实例
@@ -71,7 +78,6 @@ export default class Main extends Laya.Script {
 	
 	private cardIdx: number;
 	private tableCards: number[] = [];
-	private playedCards: any;   //出在桌上的牌（这里需要分用户绘制，还是用 map结构）
 	
 	private activeCard: Laya.Image;    //用户当前操作的牌
 	private activeCardNum: number;
@@ -103,6 +109,11 @@ export default class Main extends Laya.Script {
 		this.passBtn.on(Event.CLICK, this, this.pass)
 		this.bumpBtn.on(Event.CLICK, this, this.peng)
 		this.gangBtn.on(Event.CLICK, this, this.gang)
+		this.winningBtn.on(Event.CLICK, this, this.win)
+		
+		// 测试按钮
+		const testBtn = this.owner.getChildByName("testBtn")
+		testBtn.on(Event.CLICK, this, this.winning, [null])
 	}
 	
 	/**
@@ -500,14 +511,8 @@ export default class Main extends Laya.Script {
 	/**
 	 * 服务器下发一张牌（摸一张新牌）
 	 */
-	deliverCard(cardNum: number): void{
-		const userInfo = dataManager.getData("userInfo");
-		const roomInfo = dataManager.getData("roomInfo");
-		const keys = Object.keys(roomInfo);
-		this.activeCardNum = cardNum;
-		keys.map((o, idx) => {
-			this.renderHandCards(idx, roomInfo[o]?.handCards)
-		})
+	deliverCard(): void{
+		this.activeCardNum = null
 	}
 	
 	/**
@@ -596,15 +601,38 @@ export default class Main extends Laya.Script {
 	 * 【告诉服务端，玩家选择胡牌操作】
 	 */
 	private win(): void {
-		// this.settlementDialog.visible = true;
+		const userInfo = dataManager.getData("userInfo");
+		const roomInfo = dataManager.getData("roomInfo");
+		const roomId = roomInfo[userInfo?.id].roomId;
+		this._socket.sendMessage(JSON.stringify({type: "win", data: {roomId, cardNum: this.activeCardNum, userId: userInfo?.id}}))
 	}
 	
 	/**
 	 * 胡牌之后的结算
 	 * 服务端统一计算
 	 */
-	public winning(): void {
+	public winning(result: any): void {
+		if (!result) return
 		this.settlementDialog.visible = true;
+		this.settlementDialog.zOrder = 1000;
+		const userInfo = dataManager.getData("userInfo");
+		if(result[userInfo?.id].isWinner) {
+			this.status.skin = `resources/apes/settlement/win.png`
+		} else {
+			this.status.skin = `resources/apes/settlement/lost.png`
+		}
+		const keys: Array<string> = Object.keys(result);
+		keys.map((o: string, idx: number) => {
+			const info = result[o];
+			const cards = info?.cards || [];
+			cards.map((c: any, cardIdx: number) => {
+				let imgUrl = this.getPlayedCardsImageUrl(c, 0);
+				const img = new Image(imgUrl);
+				img.scale(0.4,0.4);
+				// @ts-ignore
+				this[`playerCards${idx}`].addChild(img)
+			})
+		})
 	}
 	
 	
