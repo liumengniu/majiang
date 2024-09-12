@@ -47,6 +47,21 @@
       },
       "countdown1": {
         "_$ref": "siibza38"
+      },
+      "settlementDialog": {
+        "_$ref": "2uu16eqe"
+      },
+      "playerCards1": {
+        "_$ref": "r18nv4jo"
+      },
+      "playerCards2": {
+        "_$ref": "kkbp4t1t"
+      },
+      "playerCards3": {
+        "_$ref": "2ypbb5sm"
+      },
+      "playerCards4": {
+        "_$ref": "y886ys1q"
       }
     }
   ],
@@ -231,6 +246,112 @@
           "labelColors": "#ffffff,#32cc6b,#ff0000",
           "labelAlign": "center",
           "labelVAlign": "middle"
+        },
+        {
+          "_$id": "2uu16eqe",
+          "_$type": "Dialog",
+          "name": "settlement",
+          "x": 127,
+          "y": 80,
+          "width": 1080,
+          "height": 590,
+          "_mouseState": 2,
+          "centerX": 0,
+          "centerY": 0,
+          "_$child": [
+            {
+              "_$id": "3ltelhzr",
+              "_$type": "Image",
+              "name": "bg",
+              "width": 1080,
+              "height": 590,
+              "_mouseState": 2,
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0,
+              "skin": "res://d19eb173-a63e-40b2-921e-62b9883bc025",
+              "color": "#ffffff",
+              "_$child": [
+                {
+                  "_$id": "5xqpbv1p",
+                  "_$type": "Image",
+                  "name": "status",
+                  "x": 406,
+                  "y": 24.505009112436014,
+                  "width": 269,
+                  "height": 107,
+                  "centerX": 0,
+                  "skin": "res://916e9c6b-80a4-42b7-888b-e75772658db2",
+                  "useSourceSize": true,
+                  "color": "#ffffff"
+                },
+                {
+                  "_$id": "r18nv4jo",
+                  "_$type": "HBox",
+                  "name": "playerCards0",
+                  "x": 100,
+                  "y": 155,
+                  "width": 880,
+                  "height": 70,
+                  "left": 100,
+                  "right": 100,
+                  "space": 0
+                },
+                {
+                  "_$id": "kkbp4t1t",
+                  "_$type": "HBox",
+                  "name": "playerCards1",
+                  "x": 100,
+                  "y": 233,
+                  "width": 880,
+                  "height": 70,
+                  "left": 100,
+                  "right": 100,
+                  "space": 0
+                },
+                {
+                  "_$id": "2ypbb5sm",
+                  "_$type": "HBox",
+                  "name": "playerCards2",
+                  "x": 100,
+                  "y": 350,
+                  "width": 880,
+                  "height": 70,
+                  "left": 100,
+                  "right": 100,
+                  "space": 0
+                },
+                {
+                  "_$id": "y886ys1q",
+                  "_$type": "HBox",
+                  "name": "playerCards3",
+                  "x": 100,
+                  "y": 458,
+                  "width": 880,
+                  "height": 70,
+                  "left": 100,
+                  "right": 100,
+                  "space": 0
+                },
+                {
+                  "_$id": "gkh6hk7c",
+                  "_$type": "Button",
+                  "name": "closeBtn",
+                  "x": 1019.1336576210967,
+                  "y": -7.207765485129698,
+                  "width": 60,
+                  "height": 60,
+                  "_mouseState": 2,
+                  "skin": "res://60a9086c-a9c2-4e01-a563-355c117b509e",
+                  "label": "",
+                  "labelSize": 20,
+                  "labelAlign": "center",
+                  "labelVAlign": "middle"
+                }
+              ]
+            }
+          ]
         }
       ]
     }

@@ -44,6 +44,18 @@ export default class Main extends Laya.Script {
 	// 每次打牌后最多20秒倒计时
 	private countdownNum: number = 20;
 	
+	/** 结算相关 **/
+	@property({type: Laya.Dialog})
+	public settlementDialog: Laya.Dialog;
+	@property({type: Laya.HBox})
+	public playerCards1: Laya.HBox;
+	@property({type: Laya.HBox})
+	public playerCards2: Laya.HBox;
+	@property({type: Laya.HBox})
+	public playerCards3: Laya.HBox;
+	@property({type: Laya.HBox})
+	public playerCards4: Laya.HBox;
+	
 	// declare owner : Laya.Sprite;
 	//ws实例
 	public _socket: SocketHelper;
@@ -580,10 +592,19 @@ export default class Main extends Laya.Script {
 	}
 	
 	/**
-	 * 胡牌 -> 结算
+	 * 点击选择胡牌
+	 * 【告诉服务端，玩家选择胡牌操作】
 	 */
-	win(): void{
+	private win(): void {
+		// this.settlementDialog.visible = true;
+	}
 	
+	/**
+	 * 胡牌之后的结算
+	 * 服务端统一计算
+	 */
+	public winning(): void {
+		this.settlementDialog.visible = true;
 	}
 	
 	

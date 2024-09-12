@@ -71,11 +71,9 @@ class HandleReceivedMessage{
 			MainRT.getInstance().renderPlayedCards(null, playerId, roomInfo);
 			MainRT.getInstance().renderHandCards(idx, roomInfo[playerId].handCards);
 			MainRT.getInstance().renderTimeStatus();
-		} else if (type === "win")  {   //  胡牌了
-			// todo 结算画面
+		} else if (type === "winning")  {   //  胡牌了，服务端结算完毕
+			MainRT.getInstance().winning()
 			MainRT.getInstance().stopGame()
-		} else if (type === "nextHandCard") {  //轮到下家摸牌
-		
 		} else if (type === "deliverCard") {  // 服务器发给下家一张新牌
 			const roomInfo = data?.data?.roomInfo;
 			const playerId = data?.data?.playerId;

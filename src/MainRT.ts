@@ -83,6 +83,13 @@ export default class MainRT extends Laya.Scene {
 	}
 	
 	/**
+	 * 胡牌结算
+	 */
+	public winning(): void{
+		this._control.winning();
+	}
+	
+	/**
 	 * 进入游戏场景
 	 */
 	enterGameScene() :void{
