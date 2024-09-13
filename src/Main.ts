@@ -371,6 +371,22 @@ export default class Main extends Laya.Script {
 	}
 	
 	/**
+	 * 20秒倒计时之后，玩家仍未出牌，则系统AI直接辅助出牌
+	 */
+	public handleCardPlayByAI(): void {
+		// todo 先随机出一张牌，后期增加AI托管功能
+		const roomInfo = dataManager.getData("roomInfo");
+		const userInfo = dataManager.getData("userInfo");
+		const roomId = roomInfo[userInfo?.id].roomId;
+		const handCards = roomInfo[userInfo?.id].handCards;
+		const len = handCards.length;
+		const randomIdx = Math.floor(Math.random() * len);
+		const cardNum = handCards[randomIdx]
+		this._socket.sendMessage(JSON.stringify({type: "playCard", data: {roomId, cardNum, userId: userInfo?.id}}))
+		this.activeCardNum = cardNum;
+	}
+	
+	/**
 	 * 绘制打出去的牌
 	 */
 	public renderPlayedCards(cardNum: number, playerId: string, roomInfo: any): void {
@@ -498,7 +514,8 @@ export default class Main extends Laya.Script {
 		this.countdown0.visible = true;
 		this.countdown1.visible = true;
 		this.countdownNum--;
-		if (this.countdownNum <= 0) {
+		if (remainingTime <= 0) {
+			this.handleCardPlayByAI();
 			Laya.timer.clear(this, this.renderCountdown)
 			this.countdown0.visible = false;
 			this.countdown1.visible = false;
@@ -523,10 +540,9 @@ export default class Main extends Laya.Script {
 		const keys = Object.keys(roomInfo);
 		this.playerNum = keys?.length;
 		const meIdx: number = keys.findIndex(o => o == userInfo?.id);
-		const viewPos: Array<number> = this.viewPos = this.getPlayerViewPos(meIdx, keys)
+		this.viewPos = this.getPlayerViewPos(meIdx, keys)
 		this.renderTimeStatus()
 		keys.map((o, idx) => {
-			console.log(roomInfo,'--------------------------------', roomInfo[o]?.handCards)
 			this.renderHandCards(idx, roomInfo[o]?.handCards)
 		})
 		// 绘制全部玩家头像

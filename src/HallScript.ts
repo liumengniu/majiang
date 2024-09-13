@@ -95,7 +95,7 @@ export default class HallScript extends Laya.Script {
 	handleReconnectDialogClose(): void{
 		const userInfo = dataManager.getData('userInfo');
 		let http = new HttpHelper();
-		http.post("/room/quitRoom", {userId: userInfo?.id}, this.onQuitRoomCallback)
+		http.post("/room/quitRoom", {userId: userInfo?.id, roomId: userInfo?.roomId}, this.onQuitRoomCallback)
 	}
 	
 	/**
@@ -103,7 +103,7 @@ export default class HallScript extends Laya.Script {
 	 * @param data
 	 * @private
 	 */
-	private onQuitRoomCallback(data:any): void{
+	onQuitRoomCallback(data:any): void{
 		console.log(data)
 	}
 	

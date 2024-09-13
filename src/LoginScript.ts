@@ -47,9 +47,7 @@ export class Script extends Laya.Script {
 			dataManager.setData('gameServerInfo', data?.result?.gameServerInfo);
 			dataManager.setData('userInfo',data?.result?.userInfo);
 			dataManager.setData('playerInfo',playerInfo);
-			console.log(playerInfo, '11111111111111111111111111111111111111111111111111')
-			if(playerInfo && playerInfo?.isLogin) { // 判断玩家是否在游戏中，如果在游戏中，则直接回到牌桌
-				console.log(playerInfo, '2222222222222222222222222222222222222222222222222222222222')
+			if(playerInfo && playerInfo?.playerStatus >= 2) { // 判断玩家是否在房间中，如果在游戏中，则直接回到牌桌
 				Laya.Scene.open("Hall.ls", false, "oldPlayer");
 			} else { // 玩家不在游戏中，进入游戏大厅
 				Laya.Scene.open("Hall.ls");
