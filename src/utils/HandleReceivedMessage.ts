@@ -29,14 +29,14 @@ class HandleReceivedMessage{
 			data = JSON.parse(message);
 		}
 		const type = data?.type;
-		console.log(data,'-----------------------------------------------------')
 		if (type === "create") { //创建房间成功
-			// todo 是否 1、再加个房间场景，做准备使用，全部准备开始再进游戏场景 ？？？  2、还是进房就是进游戏场景
-			// 1、进入游戏场景
-			MainRT.getInstance().enterGameScene();
+			const roomInfo = data?.data?.roomInfo;
+			if(roomInfo && typeof roomInfo === 'object' && JSON.stringify(roomInfo) !== "{}"){
+				MainRT.getInstance().enterGameScene();
+			}
 			// 2、绘制头像
 		} else if (type === "join") {  //加入房间成功
-			dataManager.setData("roomInfo", data?.data);
+			dataManager.setData("roomInfo", data?.data?.roomInfo);
 		} else if (type === "startGame"){
 			dataManager.setData("roomInfo", data?.data?.roomInfo);
 			dataManager.setData("gameInfo", data?.data?.gameInfo);

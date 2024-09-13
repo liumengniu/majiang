@@ -142,7 +142,7 @@ export default class Main extends Laya.Script {
 			avatar.skin = this.avatarImg4
 		} else if(viewPos[idx] === 3){
 			x = 30;
-			y = Laya.stage.designHeight/2 - avatar.height/2;
+			y = 70;
 		}
 		avatar.pos(x, y);
 		this.owner.addChild(avatar);
@@ -328,7 +328,7 @@ export default class Main extends Laya.Script {
 				this.owner.addChild(img);
 			})
 		} else if (this.viewPos[idx] === 3) {
-			let firstX = 100 + 30 + 30, firstY = 200;
+			let firstX = 30 + 30, firstY = 200;
 			handCards.map((h: number, childIdx: number) => {
 				img = new Image(this.leftInHand);
 				img.pos(firstX, firstY + 22 * childIdx);
@@ -381,6 +381,8 @@ export default class Main extends Laya.Script {
 	 * 20秒倒计时之后，玩家仍未出牌，则系统AI直接辅助出牌
 	 */
 	public handleCardPlayByAI(): void {
+		let permission = this.checkCanOperate()
+		if(!permission) return
 		// todo 先随机出一张牌，后期增加AI托管功能
 		const roomInfo = dataManager.getData("roomInfo");
 		const userInfo = dataManager.getData("userInfo");
@@ -391,6 +393,9 @@ export default class Main extends Laya.Script {
 		const cardNum = handCards[randomIdx]
 		this._socket.sendMessage(JSON.stringify({type: "playCard", data: {roomId, cardNum, userId: userInfo?.id}}))
 		this.activeCardNum = cardNum;
+		if(this.passBtn.visible)this.passBtn.visible=false
+		if(this.bumpBtn.visible)this.bumpBtn.visible=false
+		if(this.gangBtn.visible)this.gangBtn.visible=false
 	}
 	
 	/**
@@ -404,38 +409,56 @@ export default class Main extends Laya.Script {
 		const idx = keys?.findIndex(o=> o === playerId);
 		if (this.viewPos[idx] === 0) {
 			const hCount: number = 12;
+			let rowNum: number = 1; //行数
+			let colNum: number = 1; //列数
 			playerCards?.map((k: number, childIdx: number) => {
 				let imgUrl = this.getPlayedCardsImageUrl(k, this.viewPos[idx]);
 				let img = new Image(imgUrl);
 				img.name = `playedCard${childIdx}`;
-				img.pos(400 + (childIdx % (hCount-1) ) * 65, Laya.stage.designHeight - 99 - 40 - 160 + Math.floor((childIdx + 1) / hCount) * 79)
+				// 牌桌空间足够放置打出36张牌（3排12列，一副麻将牌108张，每人最多摸36张）
+				// PS:如果是其他地方麻将，为兼容极端情况（比如含有东南西北风之类），36张牌后依然没人胡牌，超过36张牌，可以叠放在之前的牌上（不过这种情况就算是其他地方麻将也极少概率出现）
+				rowNum = (Math.floor(childIdx/hCount)) % 3;
+				colNum = childIdx % hCount;
+				img.pos(380 + colNum * 44, Laya.stage.designHeight - 300 + rowNum * 56)
 				this.owner.addChild(img)
 			})
 		} else if (this.viewPos[idx] === 1) {
-			const vCount: number = 8;
+			const vCount: number = 9;
+			let rowNum: number = 1; //行数
+			let colNum: number = 1; //列数
 			playerCards?.map((k: number, childIdx: number) => {
 				let imgUrl = this.getPlayedCardsImageUrl(k, this.viewPos[idx]);
 				let img = new Image(imgUrl);
 				img.name = `playedCard${childIdx}`;
-				img.pos(Laya.stage.designWidth/2 + 200 + Math.floor((childIdx + 1) / vCount) * 59, Laya.stage.designHeight /2 - 200 + (childIdx % (vCount-1) * 36))
+				rowNum = childIdx % vCount;
+				colNum = (Math.floor(childIdx/vCount)) % 4;
+				img.pos(Laya.stage.designWidth/2 + 242 + colNum * 59, Laya.stage.designHeight /2 - 180 + rowNum*36)
 				this.owner.addChild(img)
 			})
 		} else if (this.viewPos[idx] === 2) {
-			const hCount: number = 8;
+			const hCount: number = 12;
+			let rowNum: number = 1; //行数
+			let colNum: number = 1; //列数
 			playerCards?.map((k: number, childIdx: number) => {
 				let imgUrl = this.getPlayedCardsImageUrl(k, this.viewPos[idx]);
 				let img = new Image(imgUrl);
 				img.name = `playedCard${childIdx}`;
-				img.pos(400 + (childIdx % (hCount-1) ) * 42,  220 - Math.floor((childIdx + 1) / hCount) * 60)
+				rowNum = (Math.floor(childIdx/hCount)) % 3;
+				colNum = childIdx % hCount;
+				img.pos(380 + colNum * 42,  260 - rowNum * 56)
 				this.owner.addChild(img)
 			})
 		} else if (this.viewPos[idx] === 3) {
-			const vCount: number = 8;
+			const vCount: number = 9;
+			let rowNum: number = 1; //行数
+			let colNum: number = 1; //列数
 			playerCards?.map((k: number, childIdx: number) => {
 				let imgUrl = this.getPlayedCardsImageUrl(k, this.viewPos[idx]);
 				let img = new Image(imgUrl);
 				img.name = `playedCard${childIdx}`;
-				img.pos( 300 - Math.floor((childIdx + 1) / vCount) * 59, Laya.stage.designHeight /2 - 200 + (childIdx % (vCount-1) * 36))
+				rowNum = childIdx % vCount;
+				colNum = (Math.floor(childIdx/vCount)) % 4;
+				img.pos( 300 - colNum * 59, Laya.stage.designHeight /2 - 180 + rowNum * 36)
 				this.owner.addChild(img)
 			})
 		}
@@ -507,7 +530,7 @@ export default class Main extends Laya.Script {
 		// 计算已经过去的时间（毫秒）
 		const elapsedMillis = currentTime - countdownStartTime;
 		// 剩余时间（秒）
-		let remainingTime = 20 - Math.floor(elapsedMillis / 1000);
+		let remainingTime = 1 - Math.floor(elapsedMillis / 1000);
 		if (remainingTime < 0) {
 			remainingTime = 0; // 防止剩余时间变成负数
 		}
