@@ -33,12 +33,14 @@ export default class MainRT extends Laya.Scene {
 	onOpened(params: any): void{
 		if(params && params === "oldPlayer"){
 			//重新加入游戏,重新绘制界面
-			const roomInfo = dataManager.getData("roomInfo");
-			const userInfo = dataManager.getData("userInfo");
-			if(!roomInfo || !userInfo) return
-			const playedCards = roomInfo[userInfo?.id].playedCards;
-			this.readyGameStart();
-			this.renderPlayedCards(null, userInfo?.id, playedCards)
+			this._control.getDataByPlayerId();
+			console.log(this._control, '==========this._control============this._control')
+			// const roomInfo = dataManager.getData("roomInfo");
+			// const userInfo = dataManager.getData("userInfo");
+			// if(!roomInfo || !userInfo) return
+			// const playedCards = roomInfo[userInfo?.id].playedCards;
+			// this.readyGameStart();
+			// this.renderPlayedCards(null, userInfo?.id, playedCards)
 		}
 	}
 	
@@ -54,6 +56,16 @@ export default class MainRT extends Laya.Scene {
 		this._control = this.getComponent(GameControl);
 	}
 	
+	/**
+	 * 初始化玩家视角位置
+	 */
+	initViewPos(): void{
+		this._control.initViewPos()
+	}
+	
+	/**
+	 * 开始游戏
+	 */
 	startGame(): void{
 		this._control.startGame()
 	}

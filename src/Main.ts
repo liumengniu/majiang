@@ -237,6 +237,25 @@ export default class Main extends Laya.Script {
 		this.startBtn.visible = false;
 	}
 	
+	/**
+	 * 断线重连，获取全部数据
+	 */
+	getDataByPlayerId(): void{
+		const userInfo = dataManager.getData("userInfo");
+		this._socket.sendMessage(JSON.stringify({type: "reconnect", data: {userId: userInfo?.id}}))
+	}
+	
+	/**
+	 * 初始化玩家视角位置
+	 */
+	initViewPos(): void{
+		const userInfo = dataManager.getData("userInfo");
+		const roomInfo = dataManager.getData("roomInfo");
+		const keys = Object.keys(roomInfo);
+		this.playerNum = keys?.length;
+		const meIdx: number = keys.findIndex(o => o == userInfo?.id);
+		const viewPos: Array<number> = this.viewPos = this.getPlayerViewPos(meIdx, keys)
+	}
 	
 	/**
 	 * 获取手牌的图片资源
@@ -265,7 +284,7 @@ export default class Main extends Laya.Script {
 	 * 绘制手牌
 	 */
 	renderHandCards(idx: number, handCards: number[]): void{
-		console.log(handCards, '====================================')
+		console.log(handCards, '==============开始绘制全部手牌======================', this)
 		this.myCardImgs = [];
 		let img: Laya.Image;
 		// 按客户端玩家视角绘制手牌
@@ -312,6 +331,7 @@ export default class Main extends Laya.Script {
 				this.owner.addChild(img);
 			})
 		}
+		console.log(this.owner, '==============绘制全部手牌完成======================')
 	}
 	
 	/**
@@ -357,8 +377,8 @@ export default class Main extends Laya.Script {
 	 * 绘制打出去的牌
 	 */
 	public renderPlayedCards(cardNum: number, playerId: string, roomInfo: any): void {
-		console.log(cardNum, playerId, '========')
-		if (Number.isInteger(cardNum)) this.activeCardNum = cardNum;
+		console.log(cardNum, playerId, '==============开始绘制全部已出的牌======================')
+		if (typeof cardNum === "number") this.activeCardNum = cardNum;
 		const playerCards = roomInfo[playerId]?.playedCards;
 		const keys = Object.keys(roomInfo);
 		const idx = keys?.findIndex(o=> o === playerId);
@@ -399,6 +419,7 @@ export default class Main extends Laya.Script {
 				this.owner.addChild(img)
 			})
 		}
+		console.log(this.owner, '==============绘制全部已出的牌完成======================')
 	}
 	
 	/**
