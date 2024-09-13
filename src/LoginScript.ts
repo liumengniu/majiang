@@ -43,30 +43,20 @@ export class Script extends Laya.Script {
 		console.log(data, '=====================data')
 		if(data.errCode === 0){
 			const dataManager = new mapManager();
-			dataManager.setData('GameServerInfo', data?.result?.GameServerInfo);
+			const playerInfo = data?.result?.playerInfo;
+			dataManager.setData('gameServerInfo', data?.result?.gameServerInfo);
 			dataManager.setData('userInfo',data?.result?.userInfo);
-			Laya.Scene.open("Hall.ls");
+			dataManager.setData('playerInfo',playerInfo);
+			console.log(playerInfo, '11111111111111111111111111111111111111111111111111')
+			if(playerInfo && playerInfo?.isLogin) { // 判断玩家是否在游戏中，如果在游戏中，则直接回到牌桌
+				console.log(playerInfo, '2222222222222222222222222222222222222222222222222222222222')
+				Laya.Scene.open("Hall.ls", false, "oldPlayer");
+			} else { // 玩家不在游戏中，进入游戏大厅
+				Laya.Scene.open("Hall.ls");
+			}
 		}
 	}
 	
-	//组件被启用后执行，例如节点被添加到舞台后
-	//onEnable(): void {}
-	
-	//组件被禁用时执行，例如从节点从舞台移除后
-	//onDisable(): void {}
-	
-	//第一次执行update之前执行，只会执行一次
-	//onStart(): void {}
-	
-	//手动调用节点销毁时执行
-	//onDestroy(): void {}
-	
 	//每帧更新时执行，尽量不要在这里写大循环逻辑或者使用getComponent方法
 	onUpdate(): void {}
-	
-	//每帧更新时执行，在update之后执行，尽量不要在这里写大循环逻辑或者使用getComponent方法
-	//onLateUpdate(): void {}
-	
-	//鼠标点击后执行。与交互相关的还有onMouseDown等十多个函数，具体请参阅文档。
-	//onMouseClick(): void {}
 }

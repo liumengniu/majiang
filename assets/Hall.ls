@@ -1,6 +1,7 @@
 {
   "_$ver": 1,
   "_$id": "mkhg9sc7",
+  "_$runtime": "res://20bbf52b-3aa9-482d-9cc9-aeec28e18fc7",
   "_$type": "Scene",
   "left": 0,
   "right": 0,
@@ -28,6 +29,12 @@
       },
       "joinBtn": {
         "_$ref": "jp9shfoz"
+      },
+      "reconnectDialog": {
+        "_$ref": "v241a0m2"
+      },
+      "enterRoomBtn": {
+        "_$ref": "4xmfmrop"
       }
     }
   ],
@@ -168,13 +175,94 @@
                   "_$id": "jp9shfoz",
                   "_$type": "Image",
                   "name": "joinBtn",
-                  "x": 230,
+                  "x": 212,
                   "y": 361.99999999999994,
-                  "width": 325,
-                  "height": 95,
+                  "width": 362,
+                  "height": 134,
                   "centerX": 0,
-                  "skin": "res://44188222-3639-4bed-b56d-d86b415fe589",
+                  "skin": "res://a1ef9556-2ee8-47c9-9c36-aa33f09bd456",
                   "useSourceSize": true,
+                  "color": "#ffffff"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "_$id": "v241a0m2",
+          "_$var": true,
+          "_$type": "Dialog",
+          "name": "reconnect",
+          "x": 197,
+          "y": 94,
+          "width": 941,
+          "height": 562,
+          "visible": false,
+          "_mouseState": 2,
+          "centerX": 0,
+          "centerY": 0,
+          "isModal": true,
+          "_$child": [
+            {
+              "_$id": "22h50d4e",
+              "_$type": "Image",
+              "name": "bg",
+              "width": 941,
+              "height": 562,
+              "_mouseState": 2,
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0,
+              "skin": "res://d19eb173-a63e-40b2-921e-62b9883bc025",
+              "color": "#ffffff",
+              "_$child": [
+                {
+                  "_$id": "a0s3iy9r",
+                  "_$type": "Button",
+                  "name": "close",
+                  "x": 881,
+                  "width": 60,
+                  "height": 60,
+                  "_mouseState": 2,
+                  "right": 0,
+                  "top": 0,
+                  "skin": "res://60a9086c-a9c2-4e01-a563-355c117b509e",
+                  "label": "",
+                  "labelSize": 20,
+                  "labelAlign": "center",
+                  "labelVAlign": "middle"
+                },
+                {
+                  "_$id": "i1usy0wv",
+                  "_$type": "Label",
+                  "name": "Label",
+                  "x": 256,
+                  "y": 219,
+                  "width": 421,
+                  "height": 28,
+                  "centerX": -4,
+                  "centerY": -48,
+                  "text": "检测到您的牌局还未结束，是否继续牌局，点击右上角则关闭",
+                  "font": "KaiTi",
+                  "fontSize": 40,
+                  "color": "#FFFFFF",
+                  "bold": true,
+                  "align": "center",
+                  "valign": "middle",
+                  "wordWrap": true,
+                  "padding": "0,0,0,0"
+                },
+                {
+                  "_$id": "4xmfmrop",
+                  "_$type": "Image",
+                  "name": "yes",
+                  "x": 755,
+                  "y": 417.51589305160786,
+                  "width": 86,
+                  "height": 42,
+                  "right": 100,
+                  "skin": "res://baa8f372-a537-4672-b852-53ee19b23d7b",
                   "color": "#ffffff"
                 }
               ]

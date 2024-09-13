@@ -316,7 +316,8 @@
                   "top": 0,
                   "bottom": 0,
                   "bgColor": "rgba(248, 174, 75, 1)",
-                  "space": 0
+                  "space": 0,
+                  "align": "middle"
                 },
                 {
                   "_$id": "idmxcy54",
@@ -326,7 +327,6 @@
                   "y": 21,
                   "width": 55,
                   "height": 30,
-                  "text": "Text",
                   "fontSize": 20,
                   "color": "#FFFFFF",
                   "leading": 2
@@ -353,7 +353,8 @@
                   "top": 0,
                   "bottom": 0,
                   "bgColor": "rgba(248, 174, 75, 1)",
-                  "space": 0
+                  "space": 0,
+                  "align": "middle"
                 },
                 {
                   "_$id": "xud3rww0",
@@ -363,7 +364,6 @@
                   "y": 24.999999999999886,
                   "width": 55,
                   "height": 30,
-                  "text": "Text",
                   "fontSize": 20,
                   "color": "#FFFFFF",
                   "leading": 2
@@ -390,7 +390,8 @@
                   "top": 0,
                   "bottom": 0,
                   "bgColor": "rgba(248, 174, 75, 1)",
-                  "space": 0
+                  "space": 0,
+                  "align": "middle"
                 },
                 {
                   "_$id": "g0fpgcqq",
@@ -400,7 +401,6 @@
                   "y": 25.999999999999886,
                   "width": 55,
                   "height": 30,
-                  "text": "Text",
                   "fontSize": 20,
                   "color": "#FFFFFF",
                   "leading": 2
@@ -427,7 +427,8 @@
                   "top": 0,
                   "bottom": 0,
                   "bgColor": "rgba(248, 174, 75, 1)",
-                  "space": 0
+                  "space": 0,
+                  "align": "middle"
                 },
                 {
                   "_$id": "8gasos0x",
@@ -437,7 +438,6 @@
                   "y": 20.999999999999943,
                   "width": 55,
                   "height": 30,
-                  "text": "Text",
                   "fontSize": 20,
                   "color": "#FFFFFF",
                   "leading": 2

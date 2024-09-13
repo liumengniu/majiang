@@ -1,4 +1,6 @@
 import GameControl from "./Main"
+import mapManager from "./configs/mapManager";
+const dataManager = new mapManager();
 
 const {regClass, property} = Laya;
 
@@ -22,6 +24,22 @@ export default class MainRT extends Laya.Scene {
 			MainRT.instance = new MainRT();
 		}
 		return MainRT.instance
+	}
+	
+	/**
+	 * 上个场景的参数
+	 * @param params
+	 */
+	onOpened(params: any): void{
+		if(params && params === "oldPlayer"){
+			//重新加入游戏,重新绘制界面
+			const roomInfo = dataManager.getData("roomInfo");
+			const userInfo = dataManager.getData("userInfo");
+			if(!roomInfo || !userInfo) return
+			const playedCards = roomInfo[userInfo?.id].playedCards;
+			this.readyGameStart();
+			this.renderPlayedCards(null, userInfo?.id, playedCards)
+		}
 	}
 	
 	/**

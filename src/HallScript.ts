@@ -9,7 +9,7 @@ const {regClass, property} = Laya;
 const dataManager = new mapManager();
 
 @regClass()
-export class HallScript extends Laya.Script {
+export default class HallScript extends Laya.Script {
 	declare owner : Laya.Sprite;
 	//ws实例
 	public _socket: SocketHelper;
@@ -33,6 +33,13 @@ export class HallScript extends Laya.Script {
 	@property({type: Laya.Image})
 	public joinBtn: Laya.Image;
 	
+	/** 断线，重连进房弹框 **/
+	@property({type: Laya.Dialog})
+	public reconnectDialog: Laya.Dialog;
+	/** 断线，确定重新进房按钮 **/
+	@property({type: Laya.Image})
+	public enterRoomBtn: Laya.Image;
+	
 	
 	//组件被激活后执行，此时所有节点和组件均已创建完毕，此方法只执行一次
 	onEnable(): void {
@@ -49,14 +56,8 @@ export class HallScript extends Laya.Script {
 		this.joinRoomBtn.on(Event.CLICK, this, this.handleJoinRoomDialog)
 		this.joinRoomDialogClose.on(Event.CLICK, this, this.handleJoinRoomDialogClose)
 		this.joinBtn.on(Event.CLICK, this, this.handleJoinRoom)
-	}
-	
-	/***
-	 * websocket连接成功后的回调
-	 * @private
-	 */
-	public onSocketOpen(): void {
-
+		
+		this.enterRoomBtn.on(Event.CLICK, this, this.enterRoom)
 	}
 	
 	/**
@@ -123,5 +124,13 @@ export class HallScript extends Laya.Script {
 			dataManager.setData("roomInfo", data?.result);
 			MainRT.getInstance().enterGameScene()
 		}
+	}
+	
+	/**
+	 * 断线之后，重连且重新进房
+	 * @private
+	 */
+	private enterRoom(): void{
+		Laya.Scene.open("Game.ls", true, "oldPlayer");
 	}
 }
