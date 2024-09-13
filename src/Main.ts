@@ -86,10 +86,7 @@ export default class Main extends Laya.Script {
 	private myCardImgs: Array<Laya.Image> =[];
 	private allUiCards: Array<Laya.Image> =[];   // 存储所有牌的UI节点，方便特殊操作
 	
-	onStart() {
-		// this.renderAvatar()
-		// this.bumpBtn.visible = true
-	}
+	onStart() {}
 	
 	/**
 	 * 场景启动
@@ -479,12 +476,21 @@ export default class Main extends Laya.Script {
 	 * 渲染牌桌中间的倒计时
 	 * 每次出牌自定义20秒杠碰胡考虑时间
 	 */
-	public renderCountdown(timestamp: number): void {
-		const differenceInMillis: number = Date.now() - timestamp;
-		// let leaveTime = Math.floor(differenceInMillis / 1000);
-		let leaveTime = this.countdownNum;
-		let firstDigit = Math.floor(leaveTime / 10);
-		let secondDigit = leaveTime % 10;
+	public renderCountdown(): void {
+		const gameInfo = dataManager.getData("gameInfo");
+		const optionTime = gameInfo?.optionTime;
+		const currentTime = Date.now(); // 当前时间
+		const countdownStartTime = optionTime; // 计时开始时间
+		// 计算已经过去的时间（毫秒）
+		const elapsedMillis = currentTime - countdownStartTime;
+		// 剩余时间（秒）
+		let remainingTime = 20 - Math.floor(elapsedMillis / 1000);
+		if (remainingTime < 0) {
+			remainingTime = 0; // 防止剩余时间变成负数
+		}
+		// 计算倒计时的十位和个位
+		let firstDigit = Math.floor(remainingTime / 10);
+		let secondDigit = remainingTime % 10;
 		const imgUrl1 = `resources/apes/number/${firstDigit}.png`
 		const imgUrl2 = `resources/apes/number/${secondDigit}.png`
 		this.countdown0.skin = imgUrl1;
