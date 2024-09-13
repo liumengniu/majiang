@@ -24,9 +24,6 @@
       "joinRoomDialog": {
         "_$ref": "bvm4t3md"
       },
-      "joinRoomDialogClose": {
-        "_$ref": "0yvrxc7k"
-      },
       "joinBtn": {
         "_$ref": "jp9shfoz"
       },
@@ -35,6 +32,9 @@
       },
       "enterRoomBtn": {
         "_$ref": "4xmfmrop"
+      },
+      "reconnectDialogClose": {
+        "_$ref": "a0s3iy9r"
       }
     }
   ],
@@ -107,7 +107,7 @@
                 {
                   "_$id": "0yvrxc7k",
                   "_$type": "Button",
-                  "name": "closeBtn",
+                  "name": "close",
                   "x": 725,
                   "width": 60,
                   "height": 60,

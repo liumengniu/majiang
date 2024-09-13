@@ -26,9 +26,6 @@ export default class HallScript extends Laya.Script {
 	/** 加入房间弹框 **/
 	@property({type: Laya.Dialog})
 	public joinRoomDialog: Laya.Dialog;
-	/** 加入房间弹框关闭按钮 **/
-	@property({type: Laya.Button})
-	public joinRoomDialogClose: Laya.Button;
 	/** 加入房间按钮 **/
 	@property({type: Laya.Image})
 	public joinBtn: Laya.Image;
@@ -39,6 +36,9 @@ export default class HallScript extends Laya.Script {
 	/** 断线，确定重新进房按钮 **/
 	@property({type: Laya.Image})
 	public enterRoomBtn: Laya.Image;
+	/** 断线，重连进房弹框关闭按钮 **/
+	@property({type: Laya.Button})
+	public reconnectDialogClose: Laya.Button;
 	
 	
 	//组件被激活后执行，此时所有节点和组件均已创建完毕，此方法只执行一次
@@ -54,10 +54,10 @@ export default class HallScript extends Laya.Script {
 		// 2、UI挂载事件
 		this.createRoomBtn.on(Event.CLICK, this, this.handleCreateRoom)
 		this.joinRoomBtn.on(Event.CLICK, this, this.handleJoinRoomDialog)
-		this.joinRoomDialogClose.on(Event.CLICK, this, this.handleJoinRoomDialogClose)
 		this.joinBtn.on(Event.CLICK, this, this.handleJoinRoom)
 		
 		this.enterRoomBtn.on(Event.CLICK, this, this.enterRoom)
+		this.reconnectDialogClose.on(Event.CLICK, this, this.handleReconnectDialogClose)
 	}
 	
 	/**
@@ -79,10 +79,7 @@ export default class HallScript extends Laya.Script {
 		if(!data || JSON.stringify(data) === "{}"){
 			return
 		}
-		// const keys = Object.keys(data);
-		// dataManager.setData("roomInfo", data[keys[0]])
 		dataManager.setData("roomInfo", data?.result)
-		console.log(data, '2222222222222222222222222222222222222222222')
 	}
 	
 	/**
@@ -95,8 +92,19 @@ export default class HallScript extends Laya.Script {
 	/**
 	 * 关闭加入房间弹框
 	 */
-	handleJoinRoomDialogClose(): void{
-		this.joinRoomDialog.visible = false
+	handleReconnectDialogClose(): void{
+		const userInfo = dataManager.getData('userInfo');
+		let http = new HttpHelper();
+		http.post("/room/quitRoom", {userId: userInfo?.id}, this.onQuitRoomCallback)
+	}
+	
+	/**
+	 * 退出房间回调方法
+	 * @param data
+	 * @private
+	 */
+	private onQuitRoomCallback(data:any): void{
+		console.log(data)
 	}
 	
 	
