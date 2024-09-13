@@ -86,6 +86,9 @@ export default class Main extends Laya.Script {
 	private myCardImgs: Array<Laya.Image> =[];
 	private allUiCards: Array<Laya.Image> =[];   // 存储所有牌的UI节点，方便特殊操作
 	
+	// 一局允许的玩家数量
+	private allowPlayerCount:number = 1;
+	
 	onStart() {}
 	
 	/**
@@ -221,11 +224,15 @@ export default class Main extends Laya.Script {
 	startGame(): void {
 		const roomInfo = dataManager.getData("roomInfo");
 		const userInfo = dataManager.getData("userInfo");
+		const keys = Object.keys(roomInfo)
 		const room = roomInfo[userInfo?.id];
+		// todo 玩家数量检测，开发时可以注销
+		if (keys.length < this.allowPlayerCount){
+			return;
+		}
 		if (!room?.isHomeOwner) { // 仅有房主能开始游戏
 			return
 		}
-		const keys = Object.keys(roomInfo);
 		this.playerNum = keys?.length;
 		const meIdx: number = keys.findIndex(o => o == userInfo?.id);
 		const viewPos: Array<number> = this.viewPos = this.getPlayerViewPos(meIdx, keys)
@@ -693,11 +700,5 @@ export default class Main extends Laya.Script {
 	
 	
 	//每帧更新时执行，尽量不要在这里写大循环逻辑或者使用getComponent方法
-	onUpdate(): void {
-		// const roomInfo = dataManager.getData("roomInfo");
-		// todo 这里似乎放在4个玩家进房之后，websocket的回调里更好， onUpdate逻辑更适合做其他逻辑
-		// if (Object.keys(roomInfo).length > this.playerNum) { //玩家数量更新
-		// 	this.renderAllPlayer(roomInfo);
-		// }
-	}
+	onUpdate(): void {}
 }
