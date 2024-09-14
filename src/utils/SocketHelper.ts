@@ -13,6 +13,8 @@ class SocketHelper {
 	private output: Laya.Byte;
 	private wsUrl: string = `${appConfig?.ws}`
 	private url: string;
+	private heartbeatMsg: string = 'ping'; // 心跳消息，可以根据需要修改
+	private heartbeatInterval: number | null = null; // 定时器ID
 	
 	private constructor(url: string) {
 		//创建Socket对象
@@ -58,6 +60,33 @@ class SocketHelper {
 	public onSocketOpen(e: any = null): void {
 		console.log("ws连接服务端成功");
 		this.onSocketOpenCallback();
+		this.startHeartbeat();
+	}
+	
+	/**
+	 * 启动心跳定时器
+	 */
+	private startHeartbeat(): void {
+		this.heartbeatInterval = setInterval(() => {
+			this.sendHeartbeat();
+		}, 30000); // 每30秒发送一次心跳
+	}
+	
+	/**
+	 * 停止心跳定时器
+	 */
+	private stopHeartbeat(): void {
+		if (this.heartbeatInterval) {
+			clearInterval(this.heartbeatInterval);
+			this.heartbeatInterval = null;
+		}
+	}
+	
+	/**
+	 * 客户端发送心跳消息
+	 */
+	private sendHeartbeat(): void {
+		this.sendMessage(this.heartbeatMsg);
 	}
 	
 	/**
@@ -93,6 +122,7 @@ class SocketHelper {
 	 */
 	private onSocketClose(e: any = null): void {
 		console.log("Socket closed");
+		this.stopHeartbeat();
 	}
 	
 	/**
