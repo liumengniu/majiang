@@ -106,12 +106,14 @@ export default class Main extends Laya.Script {
 	onAwake(): void {
 		const userInfo = dataManager.getData("userInfo");
 		const roomInfo = dataManager.getData("roomInfo");
+		const gameInfo = dataManager.getData("gameInfo");
+		const tableIds = gameInfo?.tableIds;
 		this._socket = SocketHelper.getInstance("");
 		Laya.stage.on(Event.FOCUS, this, () => {
 			// this.optionsSpe.visible = false;
 		})
 		
-		if(roomInfo && userInfo?.id === Object.keys(roomInfo)[0]){ //我是房主，可以开始游戏
+		if(roomInfo && userInfo?.id === tableIds[0]){ //我是房主，可以开始游戏
 			this.startBtn.visible = true;
 		}
 		this.startBtn.on(Event.CLICK, this, this.startGame)
@@ -209,14 +211,16 @@ export default class Main extends Laya.Script {
 	 */
 	private renderAllPlayer(roomInfo: any): void {
 		const userInfo = dataManager.getData("userInfo");
+		const gameInfo = dataManager.getData("gameInfo");
+		const tableIds = gameInfo?.tableIds;
 		if (!roomInfo || JSON.stringify(roomInfo) === "{}") return
-		const keys = Object.keys(roomInfo);
-		this.playerNum = keys?.length;
-		const meIdx: number = keys.findIndex(o => o == userInfo?.id);
+		// const keys = Object.keys(roomInfo);
+		this.playerNum = tableIds?.length;
+		const meIdx: number = tableIds.findIndex((o: string) => o == userInfo?.id);
 		
-		const viewPos: Array<number> = this.viewPos = this.getPlayerViewPos(meIdx, keys)
+		const viewPos: Array<number> = this.viewPos = this.getPlayerViewPos(meIdx, tableIds)
 		
-		keys.map((o, idx)=>{
+		tableIds.map((o: string, idx: number)=>{
 			this.renderAvatar(viewPos, idx)
 		})
 		
@@ -233,18 +237,21 @@ export default class Main extends Laya.Script {
 	startGame(): void {
 		const roomInfo = dataManager.getData("roomInfo");
 		const userInfo = dataManager.getData("userInfo");
-		const keys = Object.keys(roomInfo)
+		const gameInfo = dataManager.getData("gameInfo");
+		const tableIds = gameInfo?.tableIds;
+		// const keys = Object.keys(roomInfo)
+		
 		const room = roomInfo[userInfo?.id];
 		// todo 玩家数量检测，开发时可以注销
-		if (keys.length < this.allowPlayerCount){
+		if (tableIds.length < this.allowPlayerCount){
 			return;
 		}
 		if (!room?.isHomeOwner) { // 仅有房主能开始游戏
 			return
 		}
-		this.playerNum = keys?.length;
-		const meIdx: number = keys.findIndex(o => o == userInfo?.id);
-		const viewPos: Array<number> = this.viewPos = this.getPlayerViewPos(meIdx, keys)
+		this.playerNum = tableIds?.length;
+		const meIdx: number = tableIds.findIndex((o: string) => o == userInfo?.id);
+		const viewPos: Array<number> = this.viewPos = this.getPlayerViewPos(meIdx, tableIds)
 		const roomId = roomInfo[userInfo?.id]?.roomId;
 		this._socket.sendMessage(JSON.stringify({type: "startGame", roomId}))
 		this.startBtn.visible = false;
@@ -261,13 +268,15 @@ export default class Main extends Laya.Script {
 	/**
 	 * 初始化玩家视角位置
 	 */
-	initViewPos(): void{
+	initViewPos(): void {
 		const userInfo = dataManager.getData("userInfo");
 		const roomInfo = dataManager.getData("roomInfo");
-		const keys = Object.keys(roomInfo);
-		this.playerNum = keys?.length;
-		const meIdx: number = keys.findIndex(o => o == userInfo?.id);
-		const viewPos: Array<number> = this.viewPos = this.getPlayerViewPos(meIdx, keys)
+		const gameInfo = dataManager.getData("gameInfo");
+		const tableIds = gameInfo?.tableIds;
+		// const keys = Object.keys(roomInfo);
+		this.playerNum = tableIds?.length;
+		const meIdx: number = tableIds.findIndex((o: string) => o == userInfo?.id);
+		const viewPos: Array<number> = this.viewPos = this.getPlayerViewPos(meIdx, tableIds)
 	}
 	
 	/**
@@ -428,12 +437,13 @@ export default class Main extends Laya.Script {
 	/**
 	 * 绘制打出去的牌
 	 */
-	public renderPlayedCards(cardNum: number, playerId: string, roomInfo: any): void {
+	public renderPlayedCards(cardNum: number, playerId: string, roomInfo: any, gameInfo: any): void {
 		console.log(cardNum, playerId, '==============开始绘制全部已出的牌======================')
 		if (typeof cardNum === "number") this.activeCardNum = cardNum;
+		const tableIds = gameInfo?.tableIds;
 		const playerCards = roomInfo[playerId]?.playedCards;
-		const keys = Object.keys(roomInfo);
-		const idx = keys?.findIndex(o=> o === playerId);
+		// const keys = Object.keys(roomInfo);
+		const idx = tableIds?.findIndex((o: string)=> o === playerId);
 		if (this.viewPos[idx] === 0) {
 			const hCount: number = 12;
 			let rowNum: number = 1; //行数
@@ -520,9 +530,10 @@ export default class Main extends Laya.Script {
 		const userInfo = dataManager.getData("userInfo");
 		const roomInfo = dataManager.getData("roomInfo");
 		const gameInfo = dataManager.getData("gameInfo");
-		const keys = Object.keys(roomInfo);
-		this.playerNum = keys?.length;
-		const move: number = keys.findIndex(o => o == userInfo?.id);
+		const tableIds = gameInfo?.tableIds;
+		// const keys = Object.keys(roomInfo);
+		this.playerNum = tableIds?.length;
+		const move: number = tableIds.findIndex((o: string) => o == userInfo?.id);
 		const optionPos = gameInfo?.optionPos;
 		let optionIdx: number = 0;
 		optionIdx = optionPos - move >= 0 ? optionPos - move : optionPos - move + this.viewPos.length;
@@ -537,7 +548,7 @@ export default class Main extends Laya.Script {
 		})
 		// 开始倒计时
 		// this.renderCountdownInterval()
-		this._started = true
+		this.startTime = Date.now();
 	}
 	
 	/**
@@ -586,16 +597,18 @@ export default class Main extends Laya.Script {
 	public readyGameStart(): void {
 		const userInfo = dataManager.getData("userInfo");
 		const roomInfo = dataManager.getData("roomInfo");
-		const keys = Object.keys(roomInfo);
-		this.playerNum = keys?.length;
-		const meIdx: number = keys.findIndex(o => o == userInfo?.id);
-		this.viewPos = this.getPlayerViewPos(meIdx, keys)
+		const gameInfo = dataManager.getData("gameInfo");
+		const tableIds = gameInfo?.tableIds;
+		this.playerNum = tableIds?.length;
+		const meIdx: number = tableIds.findIndex((o: string) => o == userInfo?.id);
+		this.viewPos = this.getPlayerViewPos(meIdx, tableIds)
 		this.renderTimeStatus()
-		keys.map((o, idx) => {
+		tableIds.map((o: string, idx: number) => {
 			this.renderHandCards(idx, roomInfo[o]?.handCards)
 		})
 		// 绘制全部玩家头像
 		this.renderAllPlayer(roomInfo);
+		this._started = true;
 	}
 	
 	
@@ -605,10 +618,9 @@ export default class Main extends Laya.Script {
 	 * @param playerId
 	 */
 	deliverCard(cardNum: number, playerId: string): void{
-		if(typeof cardNum === 'number'){
+		const userInfo = dataManager.getData("userInfo");
+		if(userInfo?.id === playerId){  //服务器下发新牌的玩家，需要更新检测，其他人不需要
 			this.activeCardNum = cardNum
-		} else {
-			this.activeCardNum = null
 		}
 	}
 	
@@ -617,12 +629,10 @@ export default class Main extends Laya.Script {
 	 */
 	public checkCanOperate(): boolean {
 		const userInfo = dataManager.getData("userInfo");
-		const roomInfo = dataManager.getData("roomInfo");
 		const gameInfo = dataManager.getData("gameInfo");
-		const optionTime = gameInfo?.optionTime;
 		const optionPos = gameInfo?.optionPos;
-		const keys = Object.keys(roomInfo);
-		if (keys[optionPos] === userInfo?.id) {
+		const tableIds = gameInfo?.tableIds;
+		if (tableIds[optionPos] === userInfo?.id) {
 			return true
 		} else {
 			return false
@@ -633,13 +643,15 @@ export default class Main extends Laya.Script {
 	 * 检测道可以执行操作（碰杠胡）
 	 */
 	public checkOperate(operateType: string, playerId: string): void{
-		if(operateType ==="peng") {
+		const userInfo = dataManager.getData("userInfo");
+		if (userInfo?.id !== playerId) return
+		if (operateType === "peng") {
 			this.bumpBtn.visible = true;
 			this.passBtn.visible = true;
-		} else if(operateType ==="gang"){
+		} else if (operateType === "gang") {
 			this.gangBtn.visible = true;
 			this.passBtn.visible = true;
-		} else if(operateType ==="win"){
+		} else if (operateType === "win") {
 			this.winningBtn.visible = true;
 		} else {
 		
@@ -670,6 +682,7 @@ export default class Main extends Laya.Script {
 				pengArr.push(m)
 			}
 		})
+		console.log(this.activeCardNum, '00000000000000000000000000000000000',pengArr, handCards)
 		this._socket.sendMessage(JSON.stringify({type: "peng", data: {roomId, pengArr, userId: userInfo?.id}}))
 		this.bumpBtn.visible = false;
 		this.passBtn.visible = false;
@@ -685,6 +698,7 @@ export default class Main extends Laya.Script {
 		const handCards = roomInfo[userInfo?.id].handCards;
 		const roomId = roomInfo[userInfo?.id].roomId;
 		let gangArr: number[] = []
+		console.log(this.activeCardNum, '111111111111111111111111111111')
 		handCards.map((m: number)=>{
 			if(m%50 === this.activeCardNum%50){
 				gangArr.push(m)
@@ -715,6 +729,8 @@ export default class Main extends Laya.Script {
 		this.settlementDialog.visible = true;
 		this.settlementDialog.zOrder = 1000;
 		const userInfo = dataManager.getData("userInfo");
+		const gameInfo = dataManager.getData("gameInfo");
+		const tableIds = gameInfo?.tableIds;
 		if (result[userInfo?.id].isFlow) {
 			this.status.skin = `resources/apes/settlement/draw.png`
 		} else if (result[userInfo?.id].isWinner) {
@@ -722,8 +738,8 @@ export default class Main extends Laya.Script {
 		} else {
 			this.status.skin = `resources/apes/settlement/lost.png`
 		}
-		const keys: Array<string> = Object.keys(result);
-		keys.map((o: string, idx: number) => {
+		// const keys: Array<string> = Object.keys(result);
+		tableIds.map((o: string, idx: number) => {
 			const info = result[o];
 			const cards = info?.cards || [];
 			cards.map((c: any, cardIdx: number) => {

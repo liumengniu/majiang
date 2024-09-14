@@ -87,8 +87,8 @@ export default class MainRT extends Laya.Scene {
 	/**
 	 * 绘制打出去的牌
 	 */
-	renderPlayedCards(cardNum: number, playerId: string,roomInfo: any): void{
-		this._control.renderPlayedCards(cardNum, playerId,roomInfo);
+	renderPlayedCards(cardNum: number|null, playerId: string,roomInfo: any, gameInfo: any): void{
+		this._control.renderPlayedCards(cardNum, playerId,roomInfo, gameInfo);
 	}
 	
 	/**

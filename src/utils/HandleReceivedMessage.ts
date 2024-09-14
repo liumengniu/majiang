@@ -18,6 +18,19 @@ class HandleReceivedMessage{
 			return false;
 		}
 	}
+	
+	/**
+	 * Object.fromEntries 的兼容替代（Object.fromEntries是ES2019的语法）
+	 * @param entries
+	 */
+	fromEntries<K extends string | number | symbol, V>(entries: [K, V][]): Record<K, V> {
+		return entries.reduce((accumulator, [key, value]) => {
+			accumulator[key] = value;
+			return accumulator;
+		}, {} as Record<K, V>);
+	}
+	
+	
 	/**
 	 * websocket接收服务端消息后 - 回调操作
 	 */
@@ -28,15 +41,18 @@ class HandleReceivedMessage{
 		} else {
 			data = JSON.parse(message);
 		}
+		console.log("处理来自服务端的消息:", data);
 		const type = data?.type;
 		if (type === "create") { //创建房间成功
 			const roomInfo = data?.data?.roomInfo;
+			dataManager.setData("gameInfo", data?.data?.gameInfo);
 			if(roomInfo && typeof roomInfo === 'object' && JSON.stringify(roomInfo) !== "{}"){
 				MainRT.getInstance().enterGameScene();
 			}
 			// 2、绘制头像
 		} else if (type === "join") {  //加入房间成功
 			dataManager.setData("roomInfo", data?.data?.roomInfo);
+			dataManager.setData("gameInfo", data?.data?.gameInfo);
 		} else if (type === "startGame"){
 			dataManager.setData("roomInfo", data?.data?.roomInfo);
 			dataManager.setData("gameInfo", data?.data?.gameInfo);
@@ -54,7 +70,7 @@ class HandleReceivedMessage{
 			MainRT.getInstance().renderTimeStatus();
 			keys.map((o, idx) => {
 				MainRT.getInstance().renderHandCards(idx, roomInfo[o]?.handCards);
-				MainRT.getInstance().renderPlayedCards(null, o, roomInfo);
+				MainRT.getInstance().renderPlayedCards(null, o, roomInfo, gameInfo);
 			})
 		}else if(type === "playCard"){
 			const roomInfo = data?.data?.roomInfo;
@@ -63,27 +79,35 @@ class HandleReceivedMessage{
 			const cardNum = data?.data?.cardNum;
 			dataManager.setData("roomInfo", roomInfo);
 			dataManager.setData("gameInfo", gameInfo);
-			MainRT.getInstance().renderPlayedCards(cardNum, playerId, roomInfo);
+			MainRT.getInstance().renderPlayedCards(cardNum, playerId, roomInfo, gameInfo);
 			const keys = Object.keys(roomInfo);
 			const idx = keys?.findIndex(o=> o === playerId);
 			MainRT.getInstance().renderHandCards(idx, roomInfo[playerId].handCards);
 			MainRT.getInstance().renderTimeStatus();
 		} else if (type === "operate") { // 服务器检测到可以操作（杠、碰、胡）
 			const playerId = data?.data?.playerId;
-			const operateType = data?.data?.operateType
+			const operateType = data?.data?.operateType;
+			const gameInfo = data?.data?.gameInfo;
+			dataManager.setData("gameInfo", gameInfo);
 			if(operateType === 4){
 				MainRT.getInstance().checkOperate("win", playerId);
+				MainRT.getInstance().renderTimeStatus();
 			} else if(operateType === 3) {
 				MainRT.getInstance().checkOperate("gang", playerId);
+				MainRT.getInstance().renderTimeStatus();
 			} else if(operateType === 2){
 				MainRT.getInstance().checkOperate("peng", playerId);
+				MainRT.getInstance().renderTimeStatus();
 			}
 		} else if (type === "peng" || type === "gang") {  // 碰 or 杠
 			const roomInfo = data?.data?.roomInfo;
+			const gameInfo = data?.data?.gameInfo;
 			const playerId = data?.data?.playerId;
 			const keys = Object.keys(roomInfo);
+			dataManager.setData("roomInfo", roomInfo);
+			dataManager.setData("gameInfo", gameInfo);
 			const idx = keys?.findIndex(o=> o === playerId);
-			MainRT.getInstance().renderPlayedCards(null, playerId, roomInfo);
+			MainRT.getInstance().renderPlayedCards(null, playerId, roomInfo, gameInfo);
 			MainRT.getInstance().renderHandCards(idx, roomInfo[playerId].handCards);
 			MainRT.getInstance().renderTimeStatus();
 		} else if (type === "winning")  {   //  胡牌了，服务端结算完毕

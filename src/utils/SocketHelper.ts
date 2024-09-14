@@ -87,6 +87,7 @@ class SocketHelper {
 	
 	/**
 	 * 连接断开后的事件回调
+	 * PS:服务器主动断开链接
 	 * @param e
 	 * @private
 	 */
@@ -100,7 +101,7 @@ class SocketHelper {
 	 * @private
 	 */
 	private onMessageReceived(message: any = null): void {
-		console.log("从服务端接收websocket消息:", message);
+		// console.log("从服务端接收websocket消息:", message);
 		if (typeof (message) == 'string') {
 			HandleReceivedMessage.onMessageReceived(message);
 		} else if (message instanceof ArrayBuffer) {
