@@ -311,7 +311,7 @@ export default class Main extends Laya.Script {
 				hbox = new HBox()
 			}
 			let firstX = 250, firstY = Laya.stage.designHeight - 99 - 30;
-			let imgs: Laya.Image[] = handCards.map((h: number, childIdx: number) => {
+			let imgs: Laya.Image[] = handCards?.map((h: number, childIdx: number) => {
 				let imgUrl = this.getHandCardImageUrl(h);
 				let img = new Image(imgUrl);
 				hbox.name = `hbox${idx}`;
@@ -325,21 +325,21 @@ export default class Main extends Laya.Script {
 			this.owner.addChild(hbox);
 		} else if (this.viewPos[idx] === 1) {
 			let firstX = Laya.stage.designWidth - 100 - 30 - 26 - 30, firstY = 200;
-			handCards.map((h: number, childIdx: number) => {
+			handCards?.map((h: number, childIdx: number) => {
 				img = new Image(this.rightInHand);
 				img.pos(firstX, firstY + 22 * childIdx);
 				this.owner.addChild(img);
 			})
 		} else if (this.viewPos[idx] === 2) {
 			let firstX = 370, firstY = 30 + 30;
-			handCards.map((h: number, childIdx: number) => {
+			handCards?.map((h: number, childIdx: number) => {
 				img = new Image(this.oppositeInHand);
 				img.pos(firstX + childIdx * 44, firstY);
 				this.owner.addChild(img);
 			})
 		} else if (this.viewPos[idx] === 3) {
 			let firstX = 30 + 30, firstY = 200;
-			handCards.map((h: number, childIdx: number) => {
+			handCards?.map((h: number, childIdx: number) => {
 				img = new Image(this.leftInHand);
 				img.pos(firstX, firstY + 22 * childIdx);
 				this.owner.addChild(img);
