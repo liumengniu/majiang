@@ -35,4 +35,4 @@
 <br>
 
 
-[![Star History Chart](https://github.com/liumengniu/majiang&type=Timeline)](https://github.com/liumengniu/majiang&Timeline)
+[![Star History Chart](https://api.star-history.com/svg?repos=liumengniu/majiang&type=Timeline)](https://api.star-history.com/svg?repos=liumengniu/majiang&type=Timeline)
