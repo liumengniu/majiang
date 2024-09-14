@@ -15,7 +15,7 @@
 ## 🎨 项目结构
 
 ```
-├── AirplaneWar            # 麻将
+├── majiang                # 麻将
 ├── assets                 # 静态资源目录
 ├── bin                    # 测试运行的index.html首页的入口，以及IDE内置的代码入口（如html/bundle.js） - 开发不要动
 ├── engine                 # 引擎库的声名文件 - 开发不要动
