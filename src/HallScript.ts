@@ -127,7 +127,6 @@ export default class HallScript extends Laya.Script {
 	 */
 	private onJoinRoomCallback(data: any): void{
 		if(data?.errCode === 0){
-			console.log(data, '--------------------------')
 			dataManager.setData("roomInfo", data?.result);
 			MainRT.getInstance().enterGameScene()
 		}

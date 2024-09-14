@@ -112,7 +112,6 @@ export default class Main extends Laya.Script {
 		Laya.stage.on(Event.FOCUS, this, () => {
 			// this.optionsSpe.visible = false;
 		})
-		
 		if(roomInfo && userInfo?.id === tableIds[0]){ //我是房主，可以开始游戏
 			this.startBtn.visible = true;
 		}
@@ -214,7 +213,6 @@ export default class Main extends Laya.Script {
 		const gameInfo = dataManager.getData("gameInfo");
 		const tableIds = gameInfo?.tableIds;
 		if (!roomInfo || JSON.stringify(roomInfo) === "{}") return
-		// const keys = Object.keys(roomInfo);
 		this.playerNum = tableIds?.length;
 		const meIdx: number = tableIds.findIndex((o: string) => o == userInfo?.id);
 		
@@ -239,8 +237,6 @@ export default class Main extends Laya.Script {
 		const userInfo = dataManager.getData("userInfo");
 		const gameInfo = dataManager.getData("gameInfo");
 		const tableIds = gameInfo?.tableIds;
-		// const keys = Object.keys(roomInfo)
-		
 		const room = roomInfo[userInfo?.id];
 		// todo 玩家数量检测，开发时可以注销
 		if (tableIds.length < this.allowPlayerCount){
@@ -270,10 +266,8 @@ export default class Main extends Laya.Script {
 	 */
 	initViewPos(): void {
 		const userInfo = dataManager.getData("userInfo");
-		const roomInfo = dataManager.getData("roomInfo");
 		const gameInfo = dataManager.getData("gameInfo");
 		const tableIds = gameInfo?.tableIds;
-		// const keys = Object.keys(roomInfo);
 		this.playerNum = tableIds?.length;
 		const meIdx: number = tableIds.findIndex((o: string) => o == userInfo?.id);
 		const viewPos: Array<number> = this.viewPos = this.getPlayerViewPos(meIdx, tableIds)
@@ -294,7 +288,6 @@ export default class Main extends Laya.Script {
 	 * @param viewPosNum
 	 */
 	getPlayedCardsImageUrl(num: number, viewPosNum: number): string{
-		console.log(num, '===============', viewPosNum)
 		const unit = num % 50 > 30 ? "b" : num % 50 > 20 ? 't' : num % 50 > 10 ? "w" : '';
 		const unitNum = (num % 50)%10;
 		const posFolder = viewPosNum === 0 ? 'first' : viewPosNum === 1 ? 'second' : viewPosNum === 2 ? 'third' : viewPosNum === 3 ? 'fourth' : "";
@@ -306,7 +299,6 @@ export default class Main extends Laya.Script {
 	 * 绘制手牌
 	 */
 	renderHandCards(idx: number, handCards: number[]): void{
-		console.log(handCards, '==============开始绘制全部手牌======================', this)
 		this.myCardImgs = [];
 		let img: Laya.Image;
 		// 按客户端玩家视角绘制手牌
@@ -353,7 +345,6 @@ export default class Main extends Laya.Script {
 				this.owner.addChild(img);
 			})
 		}
-		console.log(this.owner, '==============绘制全部手牌完成======================')
 	}
 	
 	/**
@@ -438,11 +429,9 @@ export default class Main extends Laya.Script {
 	 * 绘制打出去的牌
 	 */
 	public renderPlayedCards(cardNum: number, playerId: string, roomInfo: any, gameInfo: any): void {
-		console.log(cardNum, playerId, '==============开始绘制全部已出的牌======================')
 		if (typeof cardNum === "number") this.activeCardNum = cardNum;
 		const tableIds = gameInfo?.tableIds;
 		const playerCards = roomInfo[playerId]?.playedCards;
-		// const keys = Object.keys(roomInfo);
 		const idx = tableIds?.findIndex((o: string)=> o === playerId);
 		if (this.viewPos[idx] === 0) {
 			const hCount: number = 12;
@@ -499,7 +488,6 @@ export default class Main extends Laya.Script {
 				this.owner.addChild(img)
 			})
 		}
-		console.log(this.owner, '==============绘制全部已出的牌完成======================')
 	}
 	
 	/**
@@ -531,7 +519,6 @@ export default class Main extends Laya.Script {
 		const roomInfo = dataManager.getData("roomInfo");
 		const gameInfo = dataManager.getData("gameInfo");
 		const tableIds = gameInfo?.tableIds;
-		// const keys = Object.keys(roomInfo);
 		this.playerNum = tableIds?.length;
 		const move: number = tableIds.findIndex((o: string) => o == userInfo?.id);
 		const optionPos = gameInfo?.optionPos;
@@ -682,7 +669,6 @@ export default class Main extends Laya.Script {
 				pengArr.push(m)
 			}
 		})
-		console.log(this.activeCardNum, '00000000000000000000000000000000000',pengArr, handCards)
 		this._socket.sendMessage(JSON.stringify({type: "peng", data: {roomId, pengArr, userId: userInfo?.id}}))
 		this.bumpBtn.visible = false;
 		this.passBtn.visible = false;
@@ -698,7 +684,6 @@ export default class Main extends Laya.Script {
 		const handCards = roomInfo[userInfo?.id].handCards;
 		const roomId = roomInfo[userInfo?.id].roomId;
 		let gangArr: number[] = []
-		console.log(this.activeCardNum, '111111111111111111111111111111')
 		handCards.map((m: number)=>{
 			if(m%50 === this.activeCardNum%50){
 				gangArr.push(m)
@@ -738,7 +723,6 @@ export default class Main extends Laya.Script {
 		} else {
 			this.status.skin = `resources/apes/settlement/lost.png`
 		}
-		// const keys: Array<string> = Object.keys(result);
 		tableIds.map((o: string, idx: number) => {
 			const info = result[o];
 			const cards = info?.cards || [];

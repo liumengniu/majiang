@@ -32,7 +32,6 @@ export class Script extends Laya.Script {
 		const password = this.passwordTextInput?.text;
 		let http = new HttpHelper();
 		http.post("/user/login", {account, password}, this.loginCallback)
-		console.log(this.accountTextInput, '--------------')
 	}
 	
 	/**
@@ -40,7 +39,6 @@ export class Script extends Laya.Script {
 	 * @private
 	 */
 	public loginCallback(data: any): any{
-		console.log(data, '=====================data')
 		if(data.errCode === 0){
 			const dataManager = new mapManager();
 			const playerInfo = data?.result?.playerInfo;
