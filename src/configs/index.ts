@@ -1,3 +1,7 @@
+/**
+ * 开发and生产配置
+ */
+
 const Applets = {
 	dev: "dev",
 	test: "test",

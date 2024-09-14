@@ -13,6 +13,8 @@ const dataManager = new mapManager();
 
 @regClass()
 export default class Main extends Laya.Script {
+	/** 游戏开始状态**/
+	private _started: boolean = false
 	/**游戏区域**/
 	@property({type: Sprite})
 	public gameLayout: Sprite;
@@ -88,6 +90,13 @@ export default class Main extends Laya.Script {
 	
 	// 一局允许的玩家数量
 	private allowPlayerCount:number = 1;
+	
+	// layaAir 引擎会在场景或网页失焦和最小化时，timer会置为0帧，timer.frameloop 会停止
+	// 兼容方案： 1、用JS的setInterval  2、使用 onUpdate 生命周期
+	// 一般来说也无需兼容，laya默认推荐开发者场景失焦就降为0帧，这个视情况而定
+	private timeInterval:number = 1000;
+	/** 开始时间 **/
+	private startTime: number = 0;
 	
 	onStart() {}
 	
@@ -381,6 +390,24 @@ export default class Main extends Laya.Script {
 	 * 20秒倒计时之后，玩家仍未出牌，则系统AI直接辅助出牌
 	 */
 	public handleCardPlayByAI(): void {
+		if (this.winningBtn.visible) { //直接胡牌
+			this.win()
+			this.winningBtn.visible = false
+			this.passBtn.visible = false
+			return;
+		}
+		if (this.gangBtn.visible) { //直接杠
+			this.gang()
+			this.gangBtn.visible = false
+			this.passBtn.visible = false
+			return;
+		}
+		if (this.bumpBtn.visible) { //直接碰
+			this.peng()
+			this.bumpBtn.visible = false
+			this.passBtn.visible = false
+			return;
+		}
 		let permission = this.checkCanOperate()
 		if(!permission) return
 		// todo 先随机出一张牌，后期增加AI托管功能
@@ -466,30 +493,24 @@ export default class Main extends Laya.Script {
 	}
 	
 	/**
-	 * 绘制桌上未开的牌
+	 * todo 绘制桌上未开的牌
 	 */
-	renderTableCards(): void{
-	
-	}
+	renderTableCards(): void{}
 	
 	/**
 	 * 暂停游戏
 	 */
-	private pauseGame(): void{}
-	
-	
+	private pauseGame(): void{
+		Laya.timer.pause()
+	}
 	/**
 	 * 停止游戏
 	 */
 	public stopGame(): void {
-		// 1.销毁所有定时器
-		// Laya.timer.pause();
-		
-		// 2.推到展开全部的牌
-		
-		// 3.计算画面
-		
-		// 4.退出房间，回到大厅
+		// 1.状态置为结束
+		this._started = false;
+		// 2.销毁所有定时器
+		Laya.timer.clearAll(this);
 	}
 	
 	/**
@@ -515,7 +536,8 @@ export default class Main extends Laya.Script {
 			}
 		})
 		// 开始倒计时
-		this.renderCountdownInterval()
+		// this.renderCountdownInterval()
+		this._started = true
 	}
 	
 	/**
@@ -526,11 +548,10 @@ export default class Main extends Laya.Script {
 		const gameInfo = dataManager.getData("gameInfo");
 		const optionTime = gameInfo?.optionTime;
 		const currentTime = Date.now(); // 当前时间
-		const countdownStartTime = optionTime; // 计时开始时间
 		// 计算已经过去的时间（毫秒）
-		const elapsedMillis = currentTime - countdownStartTime;
+		const elapsedMillis = currentTime - optionTime;
 		// 剩余时间（秒）
-		let remainingTime = 1 - Math.floor(elapsedMillis / 1000);
+		let remainingTime = this.countdownNum - Math.floor(elapsedMillis / 1000);
 		if (remainingTime < 0) {
 			remainingTime = 0; // 防止剩余时间变成负数
 		}
@@ -543,7 +564,6 @@ export default class Main extends Laya.Script {
 		this.countdown1.skin = imgUrl2;
 		this.countdown0.visible = true;
 		this.countdown1.visible = true;
-		this.countdownNum--;
 		if (remainingTime <= 0) {
 			this.handleCardPlayByAI();
 			Laya.timer.clear(this, this.renderCountdown)
@@ -556,7 +576,6 @@ export default class Main extends Laya.Script {
 	 * 倒计时定时器方法
 	 */
 	public renderCountdownInterval(): void{
-		this.countdownNum = 20;
 		Laya.timer.clear(this, this.renderCountdown);
 		Laya.timer.frameLoop(60, this, this.renderCountdown);
 	}
@@ -696,7 +715,9 @@ export default class Main extends Laya.Script {
 		this.settlementDialog.visible = true;
 		this.settlementDialog.zOrder = 1000;
 		const userInfo = dataManager.getData("userInfo");
-		if(result[userInfo?.id].isWinner) {
+		if (result[userInfo?.id].isFlow) {
+			this.status.skin = `resources/apes/settlement/draw.png`
+		} else if (result[userInfo?.id].isWinner) {
 			this.status.skin = `resources/apes/settlement/win.png`
 		} else {
 			this.status.skin = `resources/apes/settlement/lost.png`
@@ -723,5 +744,11 @@ export default class Main extends Laya.Script {
 	
 	
 	//每帧更新时执行，尽量不要在这里写大循环逻辑或者使用getComponent方法
-	onUpdate(): void {}
+	onUpdate(): void {
+		let now = Date.now();
+		if (now - this.startTime > this.timeInterval && this._started) {
+			this.startTime = now;
+			this.renderCountdown()
+		}
+	}
 }
