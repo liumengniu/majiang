@@ -1,4 +1,4 @@
-# <p align="center">使用Laya引擎开发的麻将游戏</p>
+# <p align="center">使用Laya引擎开发的联网麻将游戏</p>
 
 ## 🔥 [服务端仓库地址](https://github.com/liumengniu/majiang-server)
 
