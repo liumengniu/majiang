@@ -69,9 +69,7 @@
       "playerCards3": {
         "_$ref": "cug0t3t0"
       },
-      "winAni": {
-        "_$ref": "6674zp9x"
-      }
+      "winAni": null
     }
   ],
   "_$child": [
@@ -467,20 +465,17 @@
       ]
     },
     {
-      "_$id": "vc40sqja",
-      "_$type": "Button",
-      "name": "testBtn",
-      "x": 898,
-      "y": 247,
-      "width": 120,
-      "height": 40,
-      "visible": false,
-      "_mouseState": 2,
-      "skin": "res://d4cfd6a8-0d0a-475b-ac93-d85eaa646936",
-      "label": "测试胡牌",
-      "labelSize": 20,
-      "labelAlign": "center",
-      "labelVAlign": "middle"
+      "_$id": "137l1azu",
+      "_$type": "SoundNode",
+      "name": "bgSound",
+      "x": 619,
+      "y": 324,
+      "width": 100,
+      "height": 100,
+      "source": "res://403ec115-eb50-453b-9263-2dcce60855c4",
+      "isMusic": true,
+      "loop": 0,
+      "autoPlay": true
     }
   ]
 }

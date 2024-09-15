@@ -1,6 +1,7 @@
 import mapManager from "./configs/mapManager";
 import SocketHelper from "./utils/SocketHelper";
 import Sprite = Laya.Sprite;
+import Handler = Laya.Handler;
 
 const Stage = Laya.Stage;
 const Event = Laya.Event;
@@ -124,8 +125,8 @@ export default class Main extends Laya.Script {
 		this.winningBtn.on(Event.CLICK, this, this.win)
 		
 		// 测试按钮
-		const testBtn = this.owner.getChildByName("testBtn")
-		testBtn.on(Event.CLICK, this, this.winning, [null])
+		// const testBtn = this.owner.getChildByName("testBtn")
+		// testBtn.on(Event.CLICK, this, this.winning, [null])
 	}
 	
 	/**
@@ -368,9 +369,10 @@ export default class Main extends Laya.Script {
 			hbox?._children.map((node: Laya.Image, idx: number)=>{
 				if(childIdx !== idx) node.y = 0
 			})
+			this.playAudio("牌点击");
 		} else {
 			this.activeCard = cardNode;
-			this.handleCardPlay(cardNum)
+			this.handleCardPlay(cardNum);
 		}
 	}
 	
@@ -383,9 +385,10 @@ export default class Main extends Laya.Script {
 		const roomId = roomInfo[userInfo?.id]?.roomId;
 		this._socket.sendMessage(JSON.stringify({type: "playCard", data: {roomId, cardNum, userId: userInfo?.id}}))
 		this.activeCardNum = cardNum;
-		if(this.bumpBtn.visible) this.bumpBtn.visible = false
-		if(this.gangBtn.visible) this.gangBtn.visible = false
-		if(this.winningBtn.visible) this.winningBtn.visible = false
+		if(this.bumpBtn.visible) this.bumpBtn.visible = false;
+		if(this.gangBtn.visible) this.gangBtn.visible = false;
+		if(this.winningBtn.visible) this.winningBtn.visible = false;
+		this.playAudio("出牌");
 	}
 	
 	/**
@@ -755,10 +758,47 @@ export default class Main extends Laya.Script {
 		ani.pos(590, 230);
 		ani.source = "resources/animations/win.atlas";
 		ani.play(0, false);
-		this.owner.addChild(ani) //添加节点
+		this.owner.addChild(ani); //添加节点
 		ani.on(Event.COMPLETE, this, () => {
 			ani.destroy();
 		})
+	}
+	
+	/**
+	 * 播放音频
+	 */
+	playAudio(type: string): void {
+		let sound = new Laya.SoundNode();
+		// 添加到舞台
+		sound.source = this.getAudioRes(type);
+		sound.loop = 0;
+		sound.autoPlay = true;
+		sound.isMusic = false;
+		sound.play(1, Handler.create(this, this.playAudioCb, [sound]))
+		this.owner.addChild(sound);
+		sound.on(Event.COMPLETE, this, () => {
+			sound.destroy();
+		})
+	}
+	
+	/**
+	 * 获取音效资源
+	 */
+	getAudioRes(type: string): string {
+		let audioUrl: string;
+		if (type === "牌点击") {
+			audioUrl = `resources/sound/牌点击音效.mp3`;
+		} else if (type === "出牌") {
+			audioUrl = `resources/sound/出牌音效.mp3`;
+		}
+		return audioUrl
+	}
+	/**
+	 * 播放音频handle回调
+	 * @param sound
+	 */
+	playAudioCb(sound: Laya.SoundNode): void {
+		sound.destroy();
 	}
 	
 	
