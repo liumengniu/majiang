@@ -95,7 +95,7 @@ class HandleReceivedMessage{
 			MainRT.getInstance().renderTimeStatus();
 		} else if (type === "winning")  {   //  胡牌了，服务端结算完毕
 			const result = data.data?.result;
-			MainRT.getInstance().winning(result)
+			MainRT.getInstance().winning(result, type)
 			MainRT.getInstance().stopGame()
 		} else if (type === "deliverCard") {  // 服务器发给下家一张新牌
 			const playerId = data?.data?.playerId;
@@ -106,7 +106,7 @@ class HandleReceivedMessage{
 			MainRT.getInstance().renderHandCards(idx, roomInfo[playerId].handCards);
 		} else if(type === "flow"){ //流局，无人胜出，平局结算
 			const result = data.data?.result;
-			MainRT.getInstance().winning(result)
+			MainRT.getInstance().winning(result, type)
 			MainRT.getInstance().stopGame()
 		}
 	}

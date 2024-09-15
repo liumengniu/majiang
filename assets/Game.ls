@@ -68,6 +68,9 @@
       },
       "playerCards3": {
         "_$ref": "cug0t3t0"
+      },
+      "winAni": {
+        "_$ref": "6674zp9x"
       }
     }
   ],

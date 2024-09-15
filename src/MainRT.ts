@@ -114,8 +114,8 @@ export default class MainRT extends Laya.Scene {
 	/**
 	 * 胡牌结算
 	 */
-	public winning(result: any): void{
-		this._control.winning(result);
+	public winning(result: any, type: string): void{
+		this._control.winning(result, type);
 	}
 	
 	/**

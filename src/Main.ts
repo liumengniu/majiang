@@ -64,6 +64,8 @@ export default class Main extends Laya.Script {
 	public playerCards2: Laya.Sprite;
 	@property({type: Laya.Sprite})
 	public playerCards3: Laya.Sprite;
+	@property({type: Laya.Animation})
+	public winAni: Laya.Animation;
 	
 	// declare owner : Laya.Sprite;
 	//ws实例
@@ -709,8 +711,11 @@ export default class Main extends Laya.Script {
 	 * 胡牌之后的结算
 	 * 服务端统一计算
 	 */
-	public winning(result: any): void {
+	public winning(result: any, type: string): void {
 		if (!result) return
+		if(type === "winning"){
+			this.playAnimation();  // 播放胡牌动画
+		}
 		this.settlementDialog.visible = true;
 		this.settlementDialog.zOrder = 1000;
 		const userInfo = dataManager.getData("userInfo");
@@ -740,6 +745,20 @@ export default class Main extends Laya.Script {
 		})
 		this.winningBtn.visible = false
 		this.passBtn.visible = false
+	}
+	
+	/**
+	 * 播放动画
+	 */
+	playAnimation(): void{
+		let ani: Laya.Animation = new Laya.Animation();
+		ani.pos(590, 230);
+		ani.source = "resources/animations/win.atlas";
+		ani.play(0, false);
+		this.owner.addChild(ani) //添加节点
+		ani.on(Event.COMPLETE, this, () => {
+			ani.destroy();
+		})
 	}
 	
 	
