@@ -90,7 +90,7 @@ class SocketHelper {
 	 */
 	private sendHeartbeat(): void {
 		this.sendMessage(this.heartbeatMsg);
-		this.resetHeartbeatTimeout();
+		// this.resetHeartbeatTimeout();
 	}
 	
 	/**
@@ -198,9 +198,7 @@ class SocketHelper {
 	 */
 	private onMessageReceived(message: any = null): void {
 		console.log("从服务端接收websocket消息:", message);
-		if(message === "pong"){
-			this.resetHeartbeatTimeout();
-		} else if (typeof (message) == 'string') {
+		if (typeof (message) == 'string') {
 			HandleReceivedMessage.onMessageReceived(message);
 		} else if (message instanceof ArrayBuffer) {
 			console.log(new Laya.Byte(message).readUTFBytes());
@@ -208,7 +206,7 @@ class SocketHelper {
 		// 清理缓存的服务端发来的数据
 		this.websocket.input.clear();
 		// 收到消息时重置心跳超时定时器
-		this.resetHeartbeatTimeout();
+		// this.resetHeartbeatTimeout();
 	}
 	
 	/**
