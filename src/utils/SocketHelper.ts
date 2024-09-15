@@ -216,6 +216,7 @@ class SocketHelper {
 	 */
 	private onConnectError(e: Event = null): void {
 		console.log("error");
+		this.reconnect();
 	}
 }
 
