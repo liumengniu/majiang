@@ -82,6 +82,7 @@ class SocketHelper {
 		console.log("ws连接服务端成功");
 		this.onSocketOpenCallback();
 		this.startHeartbeat();
+		this.reconnectAttempts = 0;
 	}
 	
 	/**
@@ -187,6 +188,7 @@ class SocketHelper {
 	private onSocketClose(e: any = null): void {
 		console.log("Socket closed");
 		this.stopHeartbeat();
+		this.reconnect();
 	}
 	
 	/**
