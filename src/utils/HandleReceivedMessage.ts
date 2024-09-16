@@ -57,7 +57,7 @@ class HandleReceivedMessage{
 			}
 			// 2、绘制头像
 		} else if (type === "join") {  //加入房间成功
-
+			MainRT.getInstance().joinRoom(roomInfo);
 		} else if (type === "startGame"){
 			MainRT.getInstance().readyGameStart();
 		} else if(type === "reconnect"){

@@ -232,6 +232,15 @@ export default class Main extends Laya.Script {
 	}
 	
 	/**
+	 * 有玩家进入房间
+	 */
+	joinRoom(roomInfo: any): void{
+		if(!roomInfo){
+			roomInfo = dataManager.getData("roomInfo");
+		}
+		this.renderAllPlayer(roomInfo)
+	}
+	/**
 	 * 开始游戏
 	 * @private
 	 */
@@ -254,7 +263,6 @@ export default class Main extends Laya.Script {
 		const roomId = roomInfo[userInfo?.id]?.roomId;
 		this._socket.sendMessage(JSON.stringify({type: "startGame", roomId}))
 		this.startBtn.visible = false;
-		this.playAudio("背景音乐")
 	}
 	
 	/**
@@ -602,6 +610,7 @@ export default class Main extends Laya.Script {
 		// 绘制全部玩家头像
 		this.renderAllPlayer(roomInfo);
 		this._started = true;
+		this.playAudio("背景音乐")
 	}
 	
 	

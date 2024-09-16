@@ -34,6 +34,8 @@ export default class MainRT extends Laya.Scene {
 		if(params && params === "oldPlayer"){
 			//重新加入游戏,重新绘制界面
 			this._control.getDataByPlayerId();
+		} else {
+			this._control?.joinRoom(null)
 		}
 	}
 	
@@ -67,6 +69,13 @@ export default class MainRT extends Laya.Scene {
 	 */
 	stopGame(): void{
 		this._control.stopGame()
+	}
+	
+	/**
+	 * 有玩家加入了房间
+	 */
+	joinRoom(roomInfo: any): void{
+		this._control?.joinRoom(roomInfo)
 	}
 	
 	/**
