@@ -21,7 +21,7 @@ export class Script extends Laya.Script {
 	//组件被激活后执行，此时所有节点和组件均已创建完毕，此方法只执行一次
 	onAwake(): void {
 		this.btn.on(Event.CLICK,this, this.handleLogin);
-		this.preloadRes()
+		// this.preloadRes()
 	}
 	
 	/**
@@ -29,7 +29,7 @@ export class Script extends Laya.Script {
 	 */
 	preloadRes(): void{
 		let resArr: Array<string> = [
-			`resources/sound/background.mp3`,
+			`resources/sound/背景音乐.mp3`,
 			`resources/sound/牌点击音效.mp3`,
 			`resources/sound/出牌音效.mp3`
 		];

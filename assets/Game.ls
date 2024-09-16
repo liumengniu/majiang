@@ -463,19 +463,6 @@
           ]
         }
       ]
-    },
-    {
-      "_$id": "137l1azu",
-      "_$type": "SoundNode",
-      "name": "bgSound",
-      "x": 619,
-      "y": 324,
-      "width": 100,
-      "height": 100,
-      "source": "res://403ec115-eb50-453b-9263-2dcce60855c4",
-      "isMusic": true,
-      "loop": 0,
-      "autoPlay": true
     }
   ]
 }

@@ -254,6 +254,7 @@ export default class Main extends Laya.Script {
 		const roomId = roomInfo[userInfo?.id]?.roomId;
 		this._socket.sendMessage(JSON.stringify({type: "startGame", roomId}))
 		this.startBtn.visible = false;
+		this.playAudio("背景音乐")
 	}
 	
 	/**
@@ -677,6 +678,7 @@ export default class Main extends Laya.Script {
 		this._socket.sendMessage(JSON.stringify({type: "peng", data: {roomId, pengArr, userId: userInfo?.id}}))
 		this.bumpBtn.visible = false;
 		this.passBtn.visible = false;
+		this.playAudio("碰")
 	}
 	
 	/**
@@ -697,6 +699,7 @@ export default class Main extends Laya.Script {
 		this._socket.sendMessage(JSON.stringify({type: "gang", data: {roomId, gangArr, userId: userInfo?.id}}))
 		this.gangBtn.visible = false
 		this.passBtn.visible = false;
+		this.playAudio("杠")
 	}
 	
 	/**
@@ -708,6 +711,7 @@ export default class Main extends Laya.Script {
 		const roomInfo = dataManager.getData("roomInfo");
 		const roomId = roomInfo[userInfo?.id].roomId;
 		this._socket.sendMessage(JSON.stringify({type: "win", data: {roomId, cardNum: this.activeCardNum, userId: userInfo?.id}}))
+		this.playAudio("胡")
 	}
 	
 	/**
@@ -773,12 +777,9 @@ export default class Main extends Laya.Script {
 		sound.source = this.getAudioRes(type);
 		sound.loop = 0;
 		sound.autoPlay = true;
-		sound.isMusic = false;
-		sound.play(1, Handler.create(this, this.playAudioCb, [sound]))
+		sound.isMusic = type === "背景音乐";
+		sound.play(type === "背景音乐" ? 0 : 1, Handler.create(this, this.playAudioCb, [sound]))
 		this.owner.addChild(sound);
-		sound.on(Event.COMPLETE, this, () => {
-			sound.destroy();
-		})
 	}
 	
 	/**
@@ -786,10 +787,18 @@ export default class Main extends Laya.Script {
 	 */
 	getAudioRes(type: string): string {
 		let audioUrl: string;
-		if (type === "牌点击") {
+		if (type === "背景音乐") {
+			audioUrl = `resources/sound/背景音乐.mp3`;
+		} else if (type === "牌点击") {
 			audioUrl = `resources/sound/牌点击音效.mp3`;
 		} else if (type === "出牌") {
 			audioUrl = `resources/sound/出牌音效.mp3`;
+		} else if (type === "碰") {
+			audioUrl = `resources/sound/碰音效.mp3`;
+		} else if (type === "杠") {
+			audioUrl = `resources/sound/杠音效.mp3`;
+		} else if (type === "胡") {
+			audioUrl = `resources/sound/胡音效.mp3`;
 		}
 		return audioUrl
 	}
