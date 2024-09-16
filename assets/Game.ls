@@ -69,7 +69,9 @@
       "playerCards3": {
         "_$ref": "cug0t3t0"
       },
-      "winAni": null
+      "backHall": {
+        "_$ref": "e6wo5qwt"
+      }
     }
   ],
   "_$child": [
@@ -253,6 +255,21 @@
           "labelColors": "#ffffff,#32cc6b,#ff0000",
           "labelAlign": "center",
           "labelVAlign": "middle"
+        },
+        {
+          "_$id": "e6wo5qwt",
+          "_$type": "Image",
+          "name": "backHall",
+          "x": 1116,
+          "y": 651,
+          "width": 158,
+          "height": 39,
+          "visible": false,
+          "right": 60,
+          "bottom": 60,
+          "skin": "res://5d6fb62f-3208-45ee-b16b-cb6c04e09d99",
+          "useSourceSize": true,
+          "color": "#ffffff"
         }
       ]
     },

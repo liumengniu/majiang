@@ -2,6 +2,7 @@ import mapManager from "./configs/mapManager";
 import SocketHelper from "./utils/SocketHelper";
 import Sprite = Laya.Sprite;
 import Handler = Laya.Handler;
+import HttpHelper from "./utils/HttpHelper";
 
 const Stage = Laya.Stage;
 const Event = Laya.Event;
@@ -65,8 +66,8 @@ export default class Main extends Laya.Script {
 	public playerCards2: Laya.Sprite;
 	@property({type: Laya.Sprite})
 	public playerCards3: Laya.Sprite;
-	@property({type: Laya.Animation})
-	public winAni: Laya.Animation;
+	@property({type: Laya.Image})
+	public backHall: Laya.Image;
 	
 	// declare owner : Laya.Sprite;
 	//ws实例
@@ -123,6 +124,8 @@ export default class Main extends Laya.Script {
 		this.bumpBtn.on(Event.CLICK, this, this.peng)
 		this.gangBtn.on(Event.CLICK, this, this.gang)
 		this.winningBtn.on(Event.CLICK, this, this.win)
+		// 返回大厅
+		this.backHall.on(Event.CLICK, this, this.backToHall)
 		
 		// 测试按钮
 		// const testBtn = this.owner.getChildByName("testBtn")
@@ -427,11 +430,11 @@ export default class Main extends Laya.Script {
 		// todo 先随机出一张牌，后期增加AI托管功能
 		const roomInfo = dataManager.getData("roomInfo");
 		const userInfo = dataManager.getData("userInfo");
-		const roomId = roomInfo[userInfo?.id].roomId;
-		const handCards = roomInfo[userInfo?.id].handCards;
-		const len = handCards.length;
+		const roomId = roomInfo[userInfo?.id]?.roomId;
+		const handCards = roomInfo[userInfo?.id]?.handCards;
+		const len = handCards?.length;
 		const randomIdx = Math.floor(Math.random() * len);
-		const cardNum = handCards[randomIdx]
+		const cardNum = handCards[randomIdx];
 		this._socket.sendMessage(JSON.stringify({type: "playCard", data: {roomId, cardNum, userId: userInfo?.id}}))
 		this.activeCardNum = cardNum;
 		if(this.passBtn.visible)this.passBtn.visible=false
@@ -676,8 +679,8 @@ export default class Main extends Laya.Script {
 	private peng(): void{
 		const userInfo = dataManager.getData("userInfo");
 		const roomInfo = dataManager.getData("roomInfo");
-		const handCards = roomInfo[userInfo?.id].handCards;
-		const roomId = roomInfo[userInfo?.id].roomId;
+		const handCards = roomInfo[userInfo?.id]?.handCards;
+		const roomId = roomInfo[userInfo?.id]?.roomId;
 		let pengArr: number[] = []
 		handCards.map((m: number)=>{
 			if(m%50 === this.activeCardNum%50){
@@ -697,8 +700,8 @@ export default class Main extends Laya.Script {
 	private gang(): void{
 		const userInfo = dataManager.getData("userInfo");
 		const roomInfo = dataManager.getData("roomInfo");
-		const handCards = roomInfo[userInfo?.id].handCards;
-		const roomId = roomInfo[userInfo?.id].roomId;
+		const handCards = roomInfo[userInfo?.id]?.handCards;
+		const roomId = roomInfo[userInfo?.id]?.roomId;
 		let gangArr: number[] = []
 		handCards.map((m: number)=>{
 			if(m%50 === this.activeCardNum%50){
@@ -761,6 +764,19 @@ export default class Main extends Laya.Script {
 		})
 		this.winningBtn.visible = false
 		this.passBtn.visible = false
+		this.backHall.visible = true
+	}
+	
+	/**
+	 * 返回大厅
+	 */
+	backToHall(): void{
+		// 打开场景
+		Laya.Scene.open("Hall.ls");
+		// 调用服务端
+		const userInfo = dataManager.getData('userInfo');
+		let http = new HttpHelper();
+		http.post("/room/quitRoom", {userId: userInfo?.id, roomId: userInfo?.roomId}, ()=>{})
 	}
 	
 	/**

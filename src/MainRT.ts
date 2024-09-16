@@ -131,6 +131,7 @@ export default class MainRT extends Laya.Scene {
 	 * 进入游戏场景
 	 */
 	enterGameScene() :void{
+		console.log("加入游戏")
 		Laya.Scene.open("Game.ls")
 	}
 }
