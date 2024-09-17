@@ -64,7 +64,7 @@ class HandleReceivedMessage{
 			MainRT.getInstance().initViewPos()
 			MainRT.getInstance().renderTimeStatus();
 			gameInfo?.tableIds?.map((o: string, idx: number) => {
-				MainRT.getInstance().renderHandCards(idx, roomInfo[o]?.handCards);
+				MainRT.getInstance().renderHandCards(idx, roomInfo[o]?.handCards, roomInfo[o].pengCards, roomInfo[o].gangCards);
 				MainRT.getInstance().renderPlayedCards(null, o, roomInfo, gameInfo);
 			})
 		}else if(type === "playCard"){
@@ -72,7 +72,7 @@ class HandleReceivedMessage{
 			const cardNum = data?.data?.cardNum;
 			MainRT.getInstance().renderPlayedCards(cardNum, playerId, roomInfo, gameInfo);
 			const idx = gameInfo?.tableIds?.findIndex((o: string)=> o === playerId);
-			MainRT.getInstance().renderHandCards(idx, roomInfo[playerId].handCards);
+			MainRT.getInstance().renderHandCards(idx, roomInfo[playerId].handCards, roomInfo[playerId].pengCards, roomInfo[playerId].gangCards);
 			MainRT.getInstance().renderTimeStatus();
 		} else if (type === "operate") { // 服务器检测到可以操作（杠、碰、胡）
 			const playerId = data?.data?.playerId;
@@ -91,7 +91,7 @@ class HandleReceivedMessage{
 			const playerId = data?.data?.playerId;
 			const idx = gameInfo?.tableIds?.findIndex((o: string)=> o === playerId);
 			MainRT.getInstance().renderPlayedCards(null, playerId, roomInfo, gameInfo);
-			MainRT.getInstance().renderHandCards(idx, roomInfo[playerId].handCards);
+			MainRT.getInstance().renderHandCards(idx, roomInfo[playerId].handCards, roomInfo[playerId].pengCards, roomInfo[playerId].gangCards);
 			MainRT.getInstance().renderTimeStatus();
 		} else if (type === "winning")  {   //  胡牌了，服务端结算完毕
 			const result = data.data?.result;
@@ -103,7 +103,7 @@ class HandleReceivedMessage{
 			const tableIds = gameInfo?.tableIds;
 			const idx = tableIds?.findIndex((o: string) => o === playerId);
 			MainRT.getInstance().deliverCard(cardNum, playerId)
-			MainRT.getInstance().renderHandCards(idx, roomInfo[playerId].handCards);
+			MainRT.getInstance().renderHandCards(idx, roomInfo[playerId].handCards, roomInfo[playerId].pengCards, roomInfo[playerId].gangCards);
 		} else if(type === "flow"){ //流局，无人胜出，平局结算
 			const result = data.data?.result;
 			MainRT.getInstance().winning(result, type)

@@ -95,8 +95,8 @@ export default class MainRT extends Laya.Scene {
 	/**
 	 * 绘制手牌
 	 */
-	renderHandCards(idx: number, handCards:any): void{
-		this._control.renderHandCards(idx, handCards)
+	renderHandCards(idx: number, handCards:Array<number>, pengCards: Array<number>, gangCards: Array<number>): void{
+		this._control.renderHandCards(idx, handCards, pengCards, gangCards)
 	}
 	
 	/**

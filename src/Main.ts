@@ -145,15 +145,15 @@ export default class Main extends Laya.Script {
 		avatar.height = 100;
 		let x: number, y: number = 0;
 		if (viewPos[idx] === 0) { // 玩家本人位置
-			x = 100;
+			x = 40;
 			y = Laya.stage.designHeight - avatar.height - 30
 			avatar.skin = this.avatarImg2
 		} else if(viewPos[idx] === 1) {
 			x = Laya.stage.designWidth - avatar.width - 30;
-			y = Laya.stage.designHeight/2 - avatar.height/2;
+			y = 90;
 			avatar.skin = this.avatarImg3
 		} else if(viewPos[idx] === 2){
-			x = Laya.stage.designWidth - 340;
+			x = 240;
 			y = 30;
 			avatar.skin = this.avatarImg4
 		} else if(viewPos[idx] === 3){
@@ -313,7 +313,7 @@ export default class Main extends Laya.Script {
 	/**
 	 * 绘制手牌
 	 */
-	renderHandCards(idx: number, handCards: number[]): void{
+	renderHandCards(idx: number, handCards: number[], pengCards: number[] = [], gangCards: number[] = []): void{
 		this.myCardImgs = [];
 		let img: Laya.Image;
 		// 按客户端玩家视角绘制手牌
@@ -325,21 +325,39 @@ export default class Main extends Laya.Script {
 			} else {
 				hbox = new HBox()
 			}
-			let firstX = 250, firstY = Laya.stage.designHeight - 99 - 30;
-			let imgs: Laya.Image[] = handCards?.map((h: number, childIdx: number) => {
+			let firstX = (Laya.stage.designWidth - handCards.length * 65) / 2 + (pengCards.length/3 + gangCards.length/4) * 46,
+				firstY = Laya.stage.designHeight - 99 - 30;
+			const operateCards = pengCards.concat(gangCards);
+			operateCards?.map((p: number, childIdx: number)=>{
+				let imgUrl = this.getPlayedCardsImageUrl(p, this.viewPos[idx])
+				let img = new Image(imgUrl);
+				img.pos(146 + childIdx * 42, firstY + 20);
+				img.name = `pengCard`;
+				this.owner.addChild(img);
+			})
+			handCards?.map((h: number, childIdx: number) => {
 				let imgUrl = this.getHandCardImageUrl(h);
 				let img = new Image(imgUrl);
 				hbox.name = `hbox${idx}`;
 				img.name = `myCard`;
 				this.myCardImgs.push(img);
 				img.on(Event.CLICK, this, this.handleCardClick, [firstY, `hbox${idx}`, childIdx, h])
-				hbox.pos((Laya.stage.designWidth - handCards.length * 65) / 2, firstY);
+				hbox.pos(firstX, firstY);
+				hbox.size(handCards.length * 65, 99);
 				hbox.addChild(img)
 				return img;
 			})
 			this.owner.addChild(hbox);
 		} else if (this.viewPos[idx] === 1) {
-			let firstX = Laya.stage.designWidth - 100 - 30 - 26 - 30, firstY = 200;
+			let firstX = Laya.stage.designWidth - 30 - 30 - 26, firstY = 200;
+			const operateCards = pengCards.concat(gangCards);
+			operateCards?.map((p: number, childIdx: number) => {
+				let imgUrl = this.getPlayedCardsImageUrl(p, this.viewPos[idx])
+				let img = new Image(imgUrl);
+				img.pos(firstX - 59 - 30, firstY + 42 * childIdx);
+				img.name = `pengCard`;
+				this.owner.addChild(img);
+			})
 			handCards?.map((h: number, childIdx: number) => {
 				img = new Image(this.rightInHand);
 				img.pos(firstX, firstY + 22 * childIdx);
@@ -347,6 +365,14 @@ export default class Main extends Laya.Script {
 			})
 		} else if (this.viewPos[idx] === 2) {
 			let firstX = 370, firstY = 30 + 30;
+			const operateCards = pengCards.concat(gangCards);
+			operateCards?.map((p: number, childIdx: number) => {
+				let imgUrl = this.getPlayedCardsImageUrl(p, this.viewPos[idx])
+				let img = new Image(imgUrl);
+				img.pos(Laya.stage.designWidth - 200 - childIdx * 42, firstY);
+				img.name = `pengCard`;
+				this.owner.addChild(img);
+			})
 			handCards?.map((h: number, childIdx: number) => {
 				img = new Image(this.oppositeInHand);
 				img.pos(firstX + childIdx * 44, firstY);
@@ -354,6 +380,14 @@ export default class Main extends Laya.Script {
 			})
 		} else if (this.viewPos[idx] === 3) {
 			let firstX = 30 + 30, firstY = 200;
+			const operateCards = pengCards.concat(gangCards);
+			operateCards?.map((p: number, childIdx: number) => {
+				let imgUrl = this.getPlayedCardsImageUrl(p, this.viewPos[idx])
+				let img = new Image(imgUrl);
+				img.pos(firstX + 20, firstY + 42 * childIdx);
+				img.name = `pengCard`;
+				this.owner.addChild(img);
+			})
 			handCards?.map((h: number, childIdx: number) => {
 				img = new Image(this.leftInHand);
 				img.pos(firstX, firstY + 22 * childIdx);
@@ -462,7 +496,7 @@ export default class Main extends Laya.Script {
 				// PS:如果是其他地方麻将，为兼容极端情况（比如含有东南西北风之类），36张牌后依然没人胡牌，超过36张牌，可以叠放在之前的牌上（不过这种情况就算是其他地方麻将也极少概率出现）
 				rowNum = (Math.floor(childIdx/hCount)) % 3;
 				colNum = childIdx % hCount;
-				img.pos(380 + colNum * 44, Laya.stage.designHeight - 300 + rowNum * 56)
+				img.pos(380 + colNum * 44, Laya.stage.designHeight - 300 + rowNum * 58)
 				this.owner.addChild(img)
 			})
 		} else if (this.viewPos[idx] === 1) {
@@ -687,7 +721,7 @@ export default class Main extends Laya.Script {
 				pengArr.push(m)
 			}
 		})
-		this._socket.sendMessage(JSON.stringify({type: "peng", data: {roomId, pengArr, userId: userInfo?.id}}))
+		this._socket.sendMessage(JSON.stringify({type: "peng", data: {roomId, pengArr, userId: userInfo?.id, cardNum: this.activeCardNum}}))
 		this.bumpBtn.visible = false;
 		this.passBtn.visible = false;
 		this.playAudio("碰")
@@ -708,7 +742,7 @@ export default class Main extends Laya.Script {
 				gangArr.push(m)
 			}
 		})
-		this._socket.sendMessage(JSON.stringify({type: "gang", data: {roomId, gangArr, userId: userInfo?.id}}))
+		this._socket.sendMessage(JSON.stringify({type: "gang", data: {roomId, gangArr, userId: userInfo?.id, cardNum: this.activeCardNum}}))
 		this.gangBtn.visible = false
 		this.passBtn.visible = false;
 		this.playAudio("杠")
