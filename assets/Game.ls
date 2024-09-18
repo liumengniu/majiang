@@ -51,6 +51,18 @@
       "countdown1": {
         "_$ref": "siibza38"
       },
+      "playedCards0": {
+        "_$ref": "u2y1yagb"
+      },
+      "playedCards1": {
+        "_$ref": "9527mv4g"
+      },
+      "playedCards2": {
+        "_$ref": "0gsuxczc"
+      },
+      "playedCards3": {
+        "_$ref": "v6nayp4q"
+      },
       "settlementDialog": {
         "_$ref": "2uu16eqe"
       },
@@ -178,67 +190,6 @@
           "color": "#ffffff"
         },
         {
-          "_$id": "ajigaid2",
-          "_$type": "Sprite",
-          "name": "optionsSpe",
-          "x": 1121,
-          "y": 529,
-          "width": 189,
-          "height": 186,
-          "_mouseState": 2,
-          "_$child": [
-            {
-              "_$id": "poapgr96",
-              "_$type": "Image",
-              "name": "guo",
-              "x": 13.16074249575513,
-              "y": 38.18969506163813,
-              "width": 71,
-              "height": 67,
-              "visible": false,
-              "skin": "res://7d39e1c8-02c8-4a9f-ad8f-973a41e9abf2",
-              "useSourceSize": true,
-              "color": "#ffffff"
-            },
-            {
-              "_$id": "iz5ly6ci",
-              "_$type": "Image",
-              "name": "peng",
-              "x": 94.99999999999966,
-              "y": 37.99999999999994,
-              "width": 71,
-              "height": 67,
-              "visible": false,
-              "skin": "res://90a36c7e-2df8-4984-9296-40a24007ebd3",
-              "color": "#ffffff"
-            },
-            {
-              "_$id": "fhij90hi",
-              "_$type": "Image",
-              "name": "gang",
-              "x": 11,
-              "y": 116,
-              "width": 71,
-              "height": 67,
-              "visible": false,
-              "skin": "res://6be844ce-d35b-4923-b51f-fbd9402eeaad",
-              "color": "#ffffff"
-            },
-            {
-              "_$id": "h8jepkrx",
-              "_$type": "Image",
-              "name": "hu",
-              "x": 100,
-              "y": 115,
-              "width": 71,
-              "height": 67,
-              "visible": false,
-              "skin": "res://1651d9db-8f9f-4675-9198-716b0bdc62e4",
-              "color": "#ffffff"
-            }
-          ]
-        },
-        {
           "_$id": "o6a9cexi",
           "_$type": "Button",
           "name": "startBtn",
@@ -270,6 +221,42 @@
           "skin": "res://5d6fb62f-3208-45ee-b16b-cb6c04e09d99",
           "useSourceSize": true,
           "color": "#ffffff"
+        },
+        {
+          "_$id": "u2y1yagb",
+          "_$type": "Sprite",
+          "name": "playedCards0",
+          "x": 380,
+          "y": 452,
+          "width": 552,
+          "height": 174
+        },
+        {
+          "_$id": "9527mv4g",
+          "_$type": "Sprite",
+          "name": "playedCards1",
+          "x": 910,
+          "y": 187,
+          "width": 227,
+          "height": 362
+        },
+        {
+          "_$id": "0gsuxczc",
+          "_$type": "Sprite",
+          "name": "playedCards2",
+          "x": 380,
+          "y": 135,
+          "width": 504,
+          "height": 156
+        },
+        {
+          "_$id": "v6nayp4q",
+          "_$type": "Sprite",
+          "name": "playedCards3",
+          "x": 140,
+          "y": 200,
+          "width": 236,
+          "height": 324
         }
       ]
     },
@@ -478,6 +465,67 @@
               "labelVAlign": "middle"
             }
           ]
+        }
+      ]
+    },
+    {
+      "_$id": "ajigaid2",
+      "_$type": "Sprite",
+      "name": "optionsSpe",
+      "x": 1121,
+      "y": 529,
+      "width": 189,
+      "height": 186,
+      "_mouseState": 2,
+      "_$child": [
+        {
+          "_$id": "poapgr96",
+          "_$type": "Image",
+          "name": "guo",
+          "x": 13.16074249575513,
+          "y": 38.18969506163813,
+          "width": 71,
+          "height": 67,
+          "visible": false,
+          "skin": "res://7d39e1c8-02c8-4a9f-ad8f-973a41e9abf2",
+          "useSourceSize": true,
+          "color": "#ffffff"
+        },
+        {
+          "_$id": "iz5ly6ci",
+          "_$type": "Image",
+          "name": "peng",
+          "x": 94.99999999999966,
+          "y": 37.99999999999994,
+          "width": 71,
+          "height": 67,
+          "visible": false,
+          "skin": "res://90a36c7e-2df8-4984-9296-40a24007ebd3",
+          "color": "#ffffff"
+        },
+        {
+          "_$id": "fhij90hi",
+          "_$type": "Image",
+          "name": "gang",
+          "x": 11,
+          "y": 116,
+          "width": 71,
+          "height": 67,
+          "visible": false,
+          "skin": "res://6be844ce-d35b-4923-b51f-fbd9402eeaad",
+          "color": "#ffffff"
+        },
+        {
+          "_$id": "h8jepkrx",
+          "_$type": "Image",
+          "name": "hu",
+          "x": 100,
+          "y": 115,
+          "width": 71,
+          "height": 67,
+          "visible": false,
+          "skin": "res://1651d9db-8f9f-4675-9198-716b0bdc62e4",
+          "color": "#ffffff"
         }
       ]
     }

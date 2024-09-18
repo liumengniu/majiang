@@ -3,6 +3,7 @@ import SocketHelper from "./utils/SocketHelper";
 import Sprite = Laya.Sprite;
 import Handler = Laya.Handler;
 import HttpHelper from "./utils/HttpHelper";
+import VBox = Laya.VBox;
 
 const Stage = Laya.Stage;
 const Event = Laya.Event;
@@ -21,11 +22,11 @@ export default class Main extends Laya.Script {
 	@property({type: Sprite})
 	public gameLayout: Sprite;
 	
+	/**桌面操作**/
 	@property({type: Laya.Button})
 	public startBtn: Laya.Button;
 	@property({type: Laya.Sprite})
 	public optionsSpe: Laya.Button;
-	
 	@property({type: Laya.Image})
 	public passBtn: Laya.Image;
 	@property({type: Laya.Image})
@@ -35,6 +36,7 @@ export default class Main extends Laya.Script {
 	@property({type: Laya.Image})
 	public winningBtn: Laya.Image;
 	
+	/**桌面状态UI相关**/
 	@property({type: Laya.Image})
 	public time0: Laya.Image;
 	@property({type: Laya.Image})
@@ -45,13 +47,22 @@ export default class Main extends Laya.Script {
 	public time3: Laya.Image;
 	// 指示灯资源数组
 	public timesArr: Array<number> = [0,1,2,3]
-	
 	@property({type: Laya.Image})
 	public countdown0: Laya.Image;
 	@property({type: Laya.Image})
 	public countdown1: Laya.Image;
 	// 每次打牌后最多20秒倒计时
 	private countdownNum: number = 20;
+	
+	/** 打出的牌容器 **/
+	@property({type: Sprite})
+	public playedCards0: Sprite;
+	@property({type: Sprite})
+	public playedCards1: Sprite;
+	@property({type: Sprite})
+	public playedCards2: Sprite;
+	@property({type: Sprite})
+	public playedCards3: Sprite;
 	
 	/** 结算相关 **/
 	@property({type: Laya.Dialog})
@@ -360,12 +371,21 @@ export default class Main extends Laya.Script {
 			})
 			handCards?.map((h: number, childIdx: number) => {
 				img = new Image(this.rightInHand);
+				img.name = `rightInHand${childIdx}`;
+				img = new Image(this.rightInHand);
 				img.pos(firstX, firstY + 22 * childIdx);
 				this.owner.addChild(img);
 			})
 		} else if (this.viewPos[idx] === 2) {
-			let firstX = 370, firstY = 30 + 30;
+			let firstX = 370, firstY = 30;
 			const operateCards = pengCards.concat(gangCards);
+			let hbox:any = this.owner.getChildByName(`oppositeInHand`);
+			if (hbox) {
+				hbox?.destroy(true);
+				hbox = new HBox()
+			} else {
+				hbox = new HBox()
+			}
 			operateCards?.map((p: number, childIdx: number) => {
 				let imgUrl = this.getPlayedCardsImageUrl(p, this.viewPos[idx])
 				let img = new Image(imgUrl);
@@ -375,16 +395,21 @@ export default class Main extends Laya.Script {
 			})
 			handCards?.map((h: number, childIdx: number) => {
 				img = new Image(this.oppositeInHand);
-				img.pos(firstX + childIdx * 44, firstY);
-				this.owner.addChild(img);
+				img.pos(childIdx * 44, 0);
+				img.name = `handCard-${idx}-${childIdx}`
+				hbox.name = `oppositeInHand`
+				hbox.pos(firstX, firstY);
+				hbox.size(handCards?.length * 44, 72);
+				hbox.addChild(img)
 			})
+			this.owner.addChild(hbox)
 		} else if (this.viewPos[idx] === 3) {
-			let firstX = 30 + 30, firstY = 200;
+			let firstX = 30 + 20, firstY = 200;
 			const operateCards = pengCards.concat(gangCards);
 			operateCards?.map((p: number, childIdx: number) => {
 				let imgUrl = this.getPlayedCardsImageUrl(p, this.viewPos[idx])
 				let img = new Image(imgUrl);
-				img.pos(firstX + 20, firstY + 42 * childIdx);
+				img.pos(firstX + 40, firstY + 42 * childIdx);
 				img.name = `pengCard`;
 				this.owner.addChild(img);
 			})
@@ -488,56 +513,70 @@ export default class Main extends Laya.Script {
 			const hCount: number = 12;
 			let rowNum: number = 1; //行数
 			let colNum: number = 1; //列数
+			this.playedCards0.removeChildren();
 			playerCards?.map((k: number, childIdx: number) => {
 				let imgUrl = this.getPlayedCardsImageUrl(k, this.viewPos[idx]);
 				let img = new Image(imgUrl);
-				img.name = `playedCard${childIdx}`;
+				img.name = `playedCard-${idx}-${childIdx}`;
 				// 牌桌空间足够放置打出36张牌（3排12列，一副麻将牌108张，每人最多摸36张）
 				// PS:如果是其他地方麻将，为兼容极端情况（比如含有东南西北风之类），36张牌后依然没人胡牌，超过36张牌，可以叠放在之前的牌上（不过这种情况就算是其他地方麻将也极少概率出现）
 				rowNum = (Math.floor(childIdx/hCount)) % 3;
 				colNum = childIdx % hCount;
-				img.pos(380 + colNum * 44, Laya.stage.designHeight - 300 + rowNum * 58)
-				this.owner.addChild(img)
+				img.pos(colNum * 44, rowNum * 52)
+				this.playedCards0.addChild(img)
 			})
+			this.owner.addChild(this.playedCards0)
 		} else if (this.viewPos[idx] === 1) {
 			const vCount: number = 9;
 			let rowNum: number = 1; //行数
 			let colNum: number = 1; //列数
+			this.playedCards1.removeChildren();
 			playerCards?.map((k: number, childIdx: number) => {
+				let oldImg = this.owner.getChildByName(`playedCard-${idx}-${childIdx}`);
+				if(oldImg) oldImg.removeSelf()
 				let imgUrl = this.getPlayedCardsImageUrl(k, this.viewPos[idx]);
 				let img = new Image(imgUrl);
-				img.name = `playedCard${childIdx}`;
+				img.name = `playedCard-${idx}-${childIdx}`;
 				rowNum = childIdx % vCount;
 				colNum = (Math.floor(childIdx/vCount)) % 4;
-				img.pos(Laya.stage.designWidth/2 + 242 + colNum * 59, Laya.stage.designHeight /2 - 180 + rowNum*36)
-				this.owner.addChild(img)
+				img.pos(colNum * 59, rowNum * 36)
+				this.playedCards1.addChild(img)
 			})
+			this.owner.addChild(this.playedCards1)
 		} else if (this.viewPos[idx] === 2) {
 			const hCount: number = 12;
 			let rowNum: number = 1; //行数
 			let colNum: number = 1; //列数
+			this.playedCards2.removeChildren();
 			playerCards?.map((k: number, childIdx: number) => {
+				let oldImg = this.owner.getChildByName(`playedCard-${idx}-${childIdx}`);
+				if(oldImg) oldImg.removeSelf()
 				let imgUrl = this.getPlayedCardsImageUrl(k, this.viewPos[idx]);
 				let img = new Image(imgUrl);
-				img.name = `playedCard${childIdx}`;
+				img.name = `playedCard-${idx}-${childIdx}`;
 				rowNum = (Math.floor(childIdx/hCount)) % 3;
 				colNum = childIdx % hCount;
-				img.pos(380 + colNum * 42,  260 - rowNum * 56)
-				this.owner.addChild(img)
+				img.pos(colNum * 42, (2-rowNum) * 54);
+				this.playedCards2.addChild(img)
 			})
+			this.owner.addChild(this.playedCards2)
 		} else if (this.viewPos[idx] === 3) {
 			const vCount: number = 9;
 			let rowNum: number = 1; //行数
 			let colNum: number = 1; //列数
+			this.playedCards3.removeChildren();
 			playerCards?.map((k: number, childIdx: number) => {
+				let oldImg = this.owner.getChildByName(`playedCard-${idx}-${childIdx}`);
+				if(oldImg) oldImg.removeSelf()
 				let imgUrl = this.getPlayedCardsImageUrl(k, this.viewPos[idx]);
 				let img = new Image(imgUrl);
-				img.name = `playedCard${childIdx}`;
+				img.name = `playedCard-${idx}-${childIdx}`;
 				rowNum = childIdx % vCount;
 				colNum = (Math.floor(childIdx/vCount)) % 4;
-				img.pos( 300 - colNum * 59, Laya.stage.designHeight /2 - 180 + rowNum * 36)
-				this.owner.addChild(img)
+				img.pos((3-colNum) * 59, rowNum * 36)
+				this.playedCards3.addChild(img)
 			})
+			this.owner.addChild(this.playedCards3)
 		}
 	}
 	

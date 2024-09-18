@@ -90,9 +90,14 @@ class HandleReceivedMessage{
 		} else if (type === "peng" || type === "gang") {  // 碰 or 杠
 			const playerId = data?.data?.playerId;
 			const idx = gameInfo?.tableIds?.findIndex((o: string)=> o === playerId);
-			MainRT.getInstance().renderPlayedCards(null, playerId, roomInfo, gameInfo);
-			MainRT.getInstance().renderHandCards(idx, roomInfo[playerId].handCards, roomInfo[playerId].pengCards, roomInfo[playerId].gangCards);
-			MainRT.getInstance().renderTimeStatus();
+			gameInfo?.tableIds?.map((o: string, idx: number) => {
+				MainRT.getInstance().renderPlayedCards(null, o, roomInfo, gameInfo);
+				MainRT.getInstance().renderHandCards(idx, roomInfo[o].handCards, roomInfo[o].pengCards, roomInfo[o].gangCards);
+				MainRT.getInstance().renderTimeStatus();
+			})
+			// MainRT.getInstance().renderPlayedCards(null, playerId, roomInfo, gameInfo);
+			// MainRT.getInstance().renderHandCards(idx, roomInfo[playerId].handCards, roomInfo[playerId].pengCards, roomInfo[playerId].gangCards);
+			// MainRT.getInstance().renderTimeStatus();
 		} else if (type === "winning")  {   //  胡牌了，服务端结算完毕
 			const result = data.data?.result;
 			MainRT.getInstance().winning(result, type)
