@@ -52,7 +52,7 @@ export default class Main extends Laya.Script {
 	@property({type: Laya.Image})
 	public countdown1: Laya.Image;
 	// 每次打牌后最多20秒倒计时
-	private countdownNum: number = 20;
+	private countdownNum: number = 2;
 	
 	/** 打出的牌容器 **/
 	@property({type: Sprite})
@@ -373,7 +373,7 @@ export default class Main extends Laya.Script {
 				img = new Image(this.rightInHand);
 				img.name = `rightInHand${childIdx}`;
 				img = new Image(this.rightInHand);
-				img.pos(firstX, firstY + 22 * childIdx);
+				img.pos(firstX, firstY + 20 * childIdx);
 				this.owner.addChild(img);
 			})
 		} else if (this.viewPos[idx] === 2) {
@@ -409,7 +409,7 @@ export default class Main extends Laya.Script {
 			operateCards?.map((p: number, childIdx: number) => {
 				let imgUrl = this.getPlayedCardsImageUrl(p, this.viewPos[idx])
 				let img = new Image(imgUrl);
-				img.pos(firstX + 40, firstY + 42 * childIdx);
+				img.pos(firstX + 40, firstY + 32 * childIdx);
 				img.name = `pengCard`;
 				this.owner.addChild(img);
 			})
@@ -539,7 +539,7 @@ export default class Main extends Laya.Script {
 				img.name = `playedCard-${idx}-${childIdx}`;
 				rowNum = childIdx % vCount;
 				colNum = (Math.floor(childIdx/vCount)) % 4;
-				img.pos(colNum * 59, rowNum * 36)
+				img.pos(colNum * 54, rowNum * 36)
 				this.playedCards1.addChild(img)
 			})
 			this.owner.addChild(this.playedCards1)
@@ -556,7 +556,7 @@ export default class Main extends Laya.Script {
 				img.name = `playedCard-${idx}-${childIdx}`;
 				rowNum = (Math.floor(childIdx/hCount)) % 3;
 				colNum = childIdx % hCount;
-				img.pos(colNum * 42, (2-rowNum) * 54);
+				img.pos(colNum * 40, (2-rowNum) * 54);
 				this.playedCards2.addChild(img)
 			})
 			this.owner.addChild(this.playedCards2)
@@ -573,7 +573,7 @@ export default class Main extends Laya.Script {
 				img.name = `playedCard-${idx}-${childIdx}`;
 				rowNum = childIdx % vCount;
 				colNum = (Math.floor(childIdx/vCount)) % 4;
-				img.pos((3-colNum) * 59, rowNum * 36)
+				img.pos((3-colNum) * 54, rowNum * 32)
 				this.playedCards3.addChild(img)
 			})
 			this.owner.addChild(this.playedCards3)
