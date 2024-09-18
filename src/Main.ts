@@ -23,8 +23,8 @@ export default class Main extends Laya.Script {
 	public gameLayout: Sprite;
 	
 	/**桌面操作**/
-	@property({type: Laya.Button})
-	public startBtn: Laya.Button;
+	@property({type: Laya.Image})
+	public startBtn: Laya.Image;
 	@property({type: Laya.Sprite})
 	public optionsSpe: Laya.Button;
 	@property({type: Laya.Image})
@@ -124,9 +124,6 @@ export default class Main extends Laya.Script {
 		const gameInfo = dataManager.getData("gameInfo");
 		const tableIds = gameInfo?.tableIds;
 		this._socket = SocketHelper.getInstance("");
-		Laya.stage.on(Event.FOCUS, this, () => {
-			// this.optionsSpe.visible = false;
-		})
 		if(roomInfo && userInfo?.id === tableIds[0]){ //我是房主，可以开始游戏
 			this.startBtn.visible = true;
 		}
@@ -238,11 +235,6 @@ export default class Main extends Laya.Script {
 		tableIds.map((o: string, idx: number)=>{
 			this.renderAvatar(viewPos, idx)
 		})
-		
-		// todo 此处自动判断4个人到房间开始，实际场景可能需要4人准备，房主点击开始，后期找到UI再优化
-		// if(keys.length === 2){
-		// 	this.startGame();
-		// }
 	}
 	
 	/**

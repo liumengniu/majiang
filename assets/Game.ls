@@ -16,7 +16,7 @@
         "_$ref": "53gnma78"
       },
       "startBtn": {
-        "_$ref": "o6a9cexi"
+        "_$ref": "ma3m3k1q"
       },
       "optionsSpe": {
         "_$ref": "ajigaid2"
@@ -190,22 +190,18 @@
           "color": "#ffffff"
         },
         {
-          "_$id": "o6a9cexi",
-          "_$type": "Button",
+          "_$id": "ma3m3k1q",
+          "_$type": "Image",
           "name": "startBtn",
-          "x": 612,
-          "y": 494,
-          "width": 120,
-          "height": 40,
-          "visible": false,
-          "_mouseState": 2,
-          "skin": "res://d4cfd6a8-0d0a-475b-ac93-d85eaa646936",
-          "label": "开始游戏",
-          "labelSize": 20,
-          "labelBold": true,
-          "labelColors": "#ffffff,#32cc6b,#ff0000",
-          "labelAlign": "center",
-          "labelVAlign": "middle"
+          "x": 582.2121168755192,
+          "y": 459.14752901013577,
+          "width": 362,
+          "height": 134,
+          "scaleX": 0.5,
+          "scaleY": 0.5,
+          "skin": "res://a1ef9556-2ee8-47c9-9c36-aa33f09bd456",
+          "useSourceSize": true,
+          "color": "#ffffff"
         },
         {
           "_$id": "e6wo5qwt",

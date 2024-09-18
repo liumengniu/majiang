@@ -2,7 +2,7 @@
   "resolution": {
     "designWidth": 1334,
     "designHeight": 750,
-    "scaleMode": "fixedwidth",
+    "scaleMode": "exactfit",
     "screenMode": "horizontal"
   },
   "modules": {
