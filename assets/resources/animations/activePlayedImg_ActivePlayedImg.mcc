@@ -1,0 +1,51 @@
+{
+  "_$type": "Animator2D",
+  "enabled": true,
+  "controllerLayers": [
+    {
+      "name": "Base Layer",
+      "defaultStateName": "ActivePlayedImg",
+      "playOnWake": true,
+      "blendingMode": 0,
+      "states": [
+        {
+          "name": "ActivePlayedImg",
+          "clip": {
+            "_$uuid": "3bb2e85d-3e37-4e11-92a6-e6afb28ffa87"
+          },
+          "loop": -1,
+          "speed": 1,
+          "clipEnd": 1,
+          "x": 206.98755244122015,
+          "y": 170.4105219574961,
+          "id": "0"
+        },
+        {
+          "x": 10,
+          "y": 100,
+          "_isLooping": 0,
+          "id": "-1",
+          "name": "进入",
+          "speed": 1,
+          "clipEnd": 1,
+          "soloTransitions": [
+            {
+              "id": "0"
+            }
+          ]
+        },
+        {
+          "x": 550,
+          "y": 100,
+          "_isLooping": 0,
+          "id": "-2",
+          "name": "任何状态",
+          "speed": 1,
+          "clipEnd": 1
+        }
+      ],
+      "defaultWeight": 1
+    }
+  ],
+  "layerW": 150
+}

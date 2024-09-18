@@ -4,11 +4,11 @@ import Sprite = Laya.Sprite;
 import Handler = Laya.Handler;
 import HttpHelper from "./utils/HttpHelper";
 import VBox = Laya.VBox;
-
 const Stage = Laya.Stage;
 const Event = Laya.Event;
 const Image = Laya.Image;
 const HBox = Laya.HBox;
+import Tween = Laya.Tween;
 
 
 const {regClass, property} = Laya;
@@ -52,7 +52,7 @@ export default class Main extends Laya.Script {
 	@property({type: Laya.Image})
 	public countdown1: Laya.Image;
 	// 每次打牌后最多20秒倒计时
-	private countdownNum: number = 2;
+	private countdownNum: number = 20;
 	
 	/** 打出的牌容器 **/
 	@property({type: Sprite})
@@ -63,6 +63,8 @@ export default class Main extends Laya.Script {
 	public playedCards2: Sprite;
 	@property({type: Sprite})
 	public playedCards3: Sprite;
+	@property({type: Laya.Image})
+	public activePlayedImg: Laya.Image;
 	
 	/** 结算相关 **/
 	@property({type: Laya.Dialog})
@@ -516,8 +518,12 @@ export default class Main extends Laya.Script {
 				colNum = childIdx % hCount;
 				img.pos(colNum * 44, rowNum * 52)
 				this.playedCards0.addChild(img)
+				if(k === cardNum){ // 出的牌指示图标
+					this.activePlayedImg.visible = true;
+					this.activePlayedImg.pos(this.playedCards0.x + colNum * 44 + 15, this.playedCards0.y + rowNum * 52 - 35);
+					this.createTween(this.playedCards0.y + rowNum * 52 - 35);
+				}
 			})
-			this.owner.addChild(this.playedCards0)
 		} else if (this.viewPos[idx] === 1) {
 			const vCount: number = 9;
 			let rowNum: number = 1; //行数
@@ -533,8 +539,12 @@ export default class Main extends Laya.Script {
 				colNum = (Math.floor(childIdx/vCount)) % 4;
 				img.pos(colNum * 54, rowNum * 36)
 				this.playedCards1.addChild(img)
+				if(k === cardNum){ // 出的牌指示图标
+					this.activePlayedImg.visible = true;
+					this.activePlayedImg.pos(this.playedCards1.x + colNum * 54 + 22, this.playedCards1.y + rowNum * 36 - 30);
+					this.createTween(this.playedCards1.y + rowNum * 36 - 30);
+				}
 			})
-			this.owner.addChild(this.playedCards1)
 		} else if (this.viewPos[idx] === 2) {
 			const hCount: number = 12;
 			let rowNum: number = 1; //行数
@@ -550,8 +560,12 @@ export default class Main extends Laya.Script {
 				colNum = childIdx % hCount;
 				img.pos(colNum * 40, (2-rowNum) * 54);
 				this.playedCards2.addChild(img)
+				if(k === cardNum){ // 出的牌指示图标
+					this.activePlayedImg.visible = true;
+					this.activePlayedImg.pos(this.playedCards2.x + colNum * 40 + 12, this.playedCards2.y + (2-rowNum) * 54 - 30);
+					this.createTween(this.playedCards2.y + (2-rowNum) * 54 - 30);
+				}
 			})
-			this.owner.addChild(this.playedCards2)
 		} else if (this.viewPos[idx] === 3) {
 			const vCount: number = 9;
 			let rowNum: number = 1; //行数
@@ -567,9 +581,32 @@ export default class Main extends Laya.Script {
 				colNum = (Math.floor(childIdx/vCount)) % 4;
 				img.pos((3-colNum) * 54, rowNum * 32)
 				this.playedCards3.addChild(img)
+				if(k === cardNum){ // 出的牌指示图标
+					this.activePlayedImg.visible = true;
+					this.activePlayedImg.pos(this.playedCards3.x + (3-colNum) * 54 + 20, this.playedCards3.y + rowNum * 32 - 35);
+					this.createTween(this.playedCards3.y + rowNum * 32 - 35);
+				}
 			})
-			this.owner.addChild(this.playedCards3)
 		}
+	}
+	
+	/**
+	 * 创建指示logo漂浮动画
+	 * @private
+	 */
+	private createTween(y: number): void {
+		Laya.timer.frameLoop(1, this, this.createTweenFn, [y]);
+	}
+	
+	/**
+	 * 创建指示logo漂浮动画函数
+	 * @param y
+	 * @private
+	 */
+	private createTweenFn(y: number): void{
+		Tween.to(this.activePlayedImg, {"y": y - 10}, 400, Laya.Ease.sineInOut, Laya.Handler.create(this, () => {
+			Tween.to(this.activePlayedImg, {"y": y + 10}, 400, Laya.Ease.sineInOut)
+		}));
 	}
 	
 	/**

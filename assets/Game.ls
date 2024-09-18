@@ -63,6 +63,9 @@
       "playedCards3": {
         "_$ref": "v6nayp4q"
       },
+      "activePlayedImg": {
+        "_$ref": "9b76limq"
+      },
       "settlementDialog": {
         "_$ref": "2uu16eqe"
       },
@@ -98,6 +101,12 @@
         "_$type": "Texture"
       },
       "_mouseState": 2,
+      "_$comp": [
+        {
+          "_$type": "Animator2D",
+          "controllerLayers": []
+        }
+      ],
       "_$child": [
         {
           "_$id": "o8o91qnt",
@@ -199,6 +208,7 @@
           "height": 134,
           "scaleX": 0.5,
           "scaleY": 0.5,
+          "visible": false,
           "skin": "res://a1ef9556-2ee8-47c9-9c36-aa33f09bd456",
           "useSourceSize": true,
           "color": "#ffffff"
@@ -253,6 +263,47 @@
           "y": 200,
           "width": 236,
           "height": 324
+        },
+        {
+          "_$id": "9b76limq",
+          "_$type": "Image",
+          "name": "activePlayedImg",
+          "width": 18,
+          "height": 41,
+          "visible": false,
+          "left": 0,
+          "top": 0,
+          "skin": "res://0df38f19-11ef-410a-a0d9-c612b16c806c",
+          "useSourceSize": true,
+          "color": "#ffffff",
+          "_$comp": [
+            {
+              "_$type": "Animator2D",
+              "controller": {
+                "_$uuid": "8f100957-9f89-4e14-bc7b-bbfdc270d5eb",
+                "_$type": "AnimationController2D"
+              },
+              "controllerLayers": [
+                {
+                  "_$type": "AnimatorControllerLayer2D",
+                  "name": "Base Layer",
+                  "states": [
+                    {
+                      "_$type": "AnimatorState2D",
+                      "name": "ActivePlayedImg",
+                      "clipStart": 0,
+                      "clip": {
+                        "_$uuid": "3bb2e85d-3e37-4e11-92a6-e6afb28ffa87",
+                        "_$type": "AnimationClip2D"
+                      },
+                      "soloTransitions": []
+                    }
+                  ],
+                  "defaultStateName": "ActivePlayedImg"
+                }
+              ]
+            }
+          ]
         }
       ]
     },
