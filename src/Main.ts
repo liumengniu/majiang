@@ -22,6 +22,9 @@ export default class Main extends Laya.Script {
 	@property({type: Sprite})
 	public gameLayout: Sprite;
 	
+	@property({type: Laya.Label})
+	public roomNum: Laya.Label;
+	
 	/**桌面操作**/
 	@property({type: Laya.Image})
 	public startBtn: Laya.Image;
@@ -129,6 +132,8 @@ export default class Main extends Laya.Script {
 		if(roomInfo && userInfo?.id === tableIds[0]){ //我是房主，可以开始游戏
 			this.startBtn.visible = true;
 		}
+		this.roomNum.visible = true;
+		this.roomNum.text = roomInfo[userInfo?.id]?.roomId;
 		this.startBtn.on(Event.CLICK, this, this.startGame)
 		this.passBtn.on(Event.CLICK, this, this.pass)
 		this.bumpBtn.on(Event.CLICK, this, this.peng)
@@ -559,7 +564,7 @@ export default class Main extends Laya.Script {
 				rowNum = (Math.floor(childIdx/hCount)) % 3;
 				colNum = childIdx % hCount;
 				img.zOrder = 2 - rowNum;
-				img.pos(colNum * 40, (2-rowNum) * 42);
+				img.pos(colNum * 40, (2-rowNum) * 44);
 				this.playedCards2.addChild(img)
 				if(k === cardNum){ // 出的牌指示图标
 					this.activePlayedImg.visible = true;

@@ -15,6 +15,9 @@
       "gameLayout": {
         "_$ref": "53gnma78"
       },
+      "roomNum": {
+        "_$ref": "ga000bxe"
+      },
       "startBtn": {
         "_$ref": "ma3m3k1q"
       },
@@ -279,10 +282,6 @@
           "_$comp": [
             {
               "_$type": "Animator2D",
-              "controller": {
-                "_$uuid": "8f100957-9f89-4e14-bc7b-bbfdc270d5eb",
-                "_$type": "AnimationController2D"
-              },
               "controllerLayers": [
                 {
                   "_$type": "AnimatorControllerLayer2D",
@@ -292,10 +291,6 @@
                       "_$type": "AnimatorState2D",
                       "name": "ActivePlayedImg",
                       "clipStart": 0,
-                      "clip": {
-                        "_$uuid": "3bb2e85d-3e37-4e11-92a6-e6afb28ffa87",
-                        "_$type": "AnimationClip2D"
-                      },
                       "soloTransitions": []
                     }
                   ],
@@ -573,6 +568,37 @@
           "visible": false,
           "skin": "res://1651d9db-8f9f-4675-9198-716b0bdc62e4",
           "color": "#ffffff"
+        }
+      ]
+    },
+    {
+      "_$id": "74v4qx28",
+      "_$type": "Image",
+      "name": "roomIdBg",
+      "width": 100,
+      "height": 50,
+      "left": 0,
+      "top": 0,
+      "skin": "res://296fe058-12b4-4611-b489-c3e0b5200a9d",
+      "color": "#ffffff",
+      "_$child": [
+        {
+          "_$id": "ga000bxe",
+          "_$type": "Label",
+          "name": "Label",
+          "width": 100,
+          "height": 50,
+          "visible": false,
+          "centerX": 0,
+          "centerY": 0,
+          "text": "",
+          "font": "KaiTi",
+          "fontSize": 30,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "center",
+          "valign": "middle",
+          "padding": "0,0,0,0"
         }
       ]
     }
