@@ -52,7 +52,7 @@ export default class Main extends Laya.Script {
 	@property({type: Laya.Image})
 	public countdown1: Laya.Image;
 	// 每次打牌后最多20秒倒计时
-	private countdownNum: number = 20;
+	private countdownNum: number = 2;
 	
 	/** 打出的牌容器 **/
 	@property({type: Sprite})
@@ -359,7 +359,7 @@ export default class Main extends Laya.Script {
 			operateCards?.map((p: number, childIdx: number) => {
 				let imgUrl = this.getPlayedCardsImageUrl(p, this.viewPos[idx])
 				let img = new Image(imgUrl);
-				img.pos(firstX - 59 - 30, firstY + 42 * childIdx);
+				img.pos(firstX - 59 - 30, firstY + 36 * childIdx);
 				img.name = `pengCard`;
 				this.owner.addChild(img);
 			})
@@ -516,7 +516,7 @@ export default class Main extends Laya.Script {
 				// PS:如果是其他地方麻将，为兼容极端情况（比如含有东南西北风之类），36张牌后依然没人胡牌，超过36张牌，可以叠放在之前的牌上（不过这种情况就算是其他地方麻将也极少概率出现）
 				rowNum = (Math.floor(childIdx/hCount)) % 3;
 				colNum = childIdx % hCount;
-				img.pos(colNum * 44, rowNum * 52)
+				img.pos(colNum * 44, rowNum * 46)
 				this.playedCards0.addChild(img)
 				if(k === cardNum){ // 出的牌指示图标
 					this.activePlayedImg.visible = true;
@@ -558,7 +558,8 @@ export default class Main extends Laya.Script {
 				img.name = `playedCard-${idx}-${childIdx}`;
 				rowNum = (Math.floor(childIdx/hCount)) % 3;
 				colNum = childIdx % hCount;
-				img.pos(colNum * 40, (2-rowNum) * 54);
+				img.zOrder = 2 - rowNum;
+				img.pos(colNum * 40, (2-rowNum) * 42);
 				this.playedCards2.addChild(img)
 				if(k === cardNum){ // 出的牌指示图标
 					this.activePlayedImg.visible = true;
@@ -837,6 +838,7 @@ export default class Main extends Laya.Script {
 		if(type === "winning"){
 			this.playAnimation();  // 播放胡牌动画
 		}
+		this.activePlayedImg.visible = false;
 		this.settlementDialog.visible = true;
 		this.settlementDialog.zOrder = 1000;
 		const userInfo = dataManager.getData("userInfo");
@@ -855,7 +857,7 @@ export default class Main extends Laya.Script {
 			cards.map((c: any, cardIdx: number) => {
 				let imgUrl = this.getPlayedCardsImageUrl(c, 0);
 				const img = new Image(imgUrl);
-				img.scale(0.7,0.7);
+				img.scale(0.8,0.8);
 				// @ts-ignore
 				const hBox = this[`playerCards${idx}`].getChildByName("HBox")
 				hBox.addChild(img)
