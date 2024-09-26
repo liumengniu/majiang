@@ -55,7 +55,7 @@ export default class Main extends Laya.Script {
 	@property({type: Laya.Image})
 	public countdown1: Laya.Image;
 	// 每次打牌后最多20秒倒计时
-	private countdownNum: number = 2;
+	private countdownNum: number = 20;
 	
 	/** 打出的牌容器 **/
 	@property({type: Sprite})

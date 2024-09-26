@@ -100,7 +100,7 @@
       "width": 1334,
       "height": 750,
       "texture": {
-        "_$uuid": "97d4337a-aebd-4d8f-9686-b22756a5d14f",
+        "_$uuid": "26f79afb-bf2f-4135-9d6a-becbc0e1e0ca",
         "_$type": "Texture"
       },
       "_mouseState": 2,
