@@ -133,7 +133,7 @@ export default class Main extends Laya.Script {
 			this.startBtn.visible = true;
 		}
 		this.roomNum.visible = true;
-		this.roomNum.text = roomInfo[userInfo?.id]?.roomId;
+		this.roomNum.text = "房号:" + roomInfo[userInfo?.id]?.roomId;
 		this.startBtn.on(Event.CLICK, this, this.startGame)
 		this.passBtn.on(Event.CLICK, this, this.pass)
 		this.bumpBtn.on(Event.CLICK, this, this.peng)
