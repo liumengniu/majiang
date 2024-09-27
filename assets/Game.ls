@@ -100,7 +100,7 @@
       "width": 1334,
       "height": 750,
       "texture": {
-        "_$uuid": "26f79afb-bf2f-4135-9d6a-becbc0e1e0ca",
+        "_$uuid": "154e0fa2-f4a2-4f35-b7e4-d01d61f63f1b",
         "_$type": "Texture"
       },
       "_mouseState": 2,
@@ -576,11 +576,11 @@
       "_$type": "Image",
       "name": "roomIdBg",
       "x": 9,
-      "y": 31,
+      "y": 27,
       "width": 180,
       "height": 45,
       "left": 9,
-      "top": 31,
+      "top": 27,
       "skin": "res://51f0b25a-4764-484c-a569-06ba528ad09f",
       "useSourceSize": true,
       "color": "#ffffff",
