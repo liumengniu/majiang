@@ -90,6 +90,7 @@ export default class Main extends Laya.Script {
 	public _socket: SocketHelper;
 	private avatarBg: string = "resources/apes/avatar/avatarBg.png";
 	private avatarCommon: string = "resources/apes/avatar/avatarCommon.png";
+	private bankerImg: string = "resources/apes/avatar/banker.png";
 	private avatarImg: string = "resources/apes/avatar/avatar.png";
 	private avatarImg2: string = "resources/apes/avatar/avatar2.png";
 	private avatarImg3: string = "resources/apes/avatar/avatar3.png";
@@ -156,10 +157,13 @@ export default class Main extends Laya.Script {
 	 * @private
 	 */
 	private renderAvatar(viewPos: number[], idx: number): void {
-		const userInfo = dataManager.getData("userInfo");
 		let avatarBg: Laya.Image = new Image(this.avatarBg);
 		let avatarCommon: Laya.Image = new Image(this.avatarCommon);
 		let avatar: Laya.Image = new Image(this.avatarImg);
+		let bankerImg: Laya.Image = new Image(this.bankerImg);
+		bankerImg.name = "banker"
+		avatarCommon.zOrder = 1;
+		bankerImg.zOrder = 2;
 		avatarBg.width = 108;
 		avatarBg.height = 108;
 		avatar.width = 100;
@@ -186,9 +190,13 @@ export default class Main extends Laya.Script {
 		avatarBg.pos(x -1, y-1);
 		avatar.pos(x, y);
 		avatarCommon.pos(x, y)
+		bankerImg.pos(x + 100 - 25, y + 100 - 25);
 		// this.owner.addChild(avatarBg);
 		// this.owner.addChild(avatar);
 		this.owner.addChild(avatarCommon)
+		if(idx === 0){ // 庄家
+			this.owner.addChild(bankerImg)
+		}
 	}
 	
 	
@@ -250,6 +258,10 @@ export default class Main extends Laya.Script {
 		const meIdx: number = tableIds.findIndex((o: string) => o == userInfo?.id);
 		
 		const viewPos: Array<number> = this.viewPos = this.getPlayerViewPos(meIdx, tableIds)
+		
+
+		const banker = this.owner.getChildByName("banker")
+		banker?.removeSelf()
 		
 		tableIds.map((o: string, idx: number)=>{
 			this.renderAvatar(viewPos, idx)
