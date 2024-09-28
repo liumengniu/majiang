@@ -54,6 +54,9 @@
       "countdown1": {
         "_$ref": "siibza38"
       },
+      "remainingLabel": {
+        "_$ref": "buknf47g"
+      },
       "playedCards0": {
         "_$ref": "u2y1yagb"
       },
@@ -230,6 +233,96 @@
           "skin": "res://5d6fb62f-3208-45ee-b16b-cb6c04e09d99",
           "useSourceSize": true,
           "color": "#ffffff"
+        },
+        {
+          "_$id": "s5tjk4h4",
+          "_$type": "Image",
+          "name": "remainingBg",
+          "x": 413.88927861274857,
+          "y": 355,
+          "width": 161,
+          "height": 41,
+          "centerY": 0,
+          "skin": "res://712c4e72-f7e5-44c3-86b3-87ac4794eb9b",
+          "useSourceSize": true,
+          "color": "#ffffff",
+          "_$child": [
+            {
+              "_$id": "v9dk5cqh",
+              "_$type": "Image",
+              "name": "Image",
+              "x": 19,
+              "y": 8,
+              "width": 124,
+              "height": 25,
+              "centerX": 0,
+              "centerY": 0,
+              "skin": "res://15a00703-681e-4f06-a09c-b557b3a485f4",
+              "useSourceSize": true,
+              "color": "#ffffff"
+            },
+            {
+              "_$id": "buknf47g",
+              "_$type": "Label",
+              "name": "remainingLabel",
+              "x": 61,
+              "y": 4,
+              "width": 65,
+              "height": 40,
+              "text": "55",
+              "font": "MicrosoftYaHei",
+              "fontSize": 26,
+              "color": "rgba(181, 254, 80, 1)",
+              "align": "center",
+              "valign": "middle",
+              "padding": "0,0,0,0"
+            }
+          ]
+        },
+        {
+          "_$id": "l0z9wxl3",
+          "_$type": "Image",
+          "name": "remainingBg2",
+          "x": 752.3013589139199,
+          "y": 355,
+          "width": 161,
+          "height": 41,
+          "centerY": 0,
+          "skin": "res://712c4e72-f7e5-44c3-86b3-87ac4794eb9b",
+          "useSourceSize": true,
+          "color": "#ffffff",
+          "_$child": [
+            {
+              "_$id": "bo6w0nz9",
+              "_$type": "Image",
+              "name": "Image",
+              "x": 19,
+              "y": 8,
+              "width": 123,
+              "height": 25,
+              "centerX": 0,
+              "centerY": 0,
+              "skin": "res://714f6bbf-a658-4849-9cbf-dfbf979a02bc",
+              "useSourceSize": true,
+              "color": "#ffffff"
+            },
+            {
+              "_$id": "a9chaln5",
+              "_$type": "Label",
+              "name": "Label",
+              "x": 60.6986410860801,
+              "y": 3,
+              "width": 65,
+              "height": 40,
+              "text": "0",
+              "font": "MicrosoftYaHei",
+              "fontSize": 26,
+              "color": "rgba(181, 254, 80, 1)",
+              "align": "center",
+              "valign": "middle",
+              "padding": "0,0,0,0"
+            }
+          ]
         },
         {
           "_$id": "u2y1yagb",

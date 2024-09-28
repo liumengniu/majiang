@@ -21,7 +21,7 @@ export default class Main extends Laya.Script {
 	/**游戏区域**/
 	@property({type: Sprite})
 	public gameLayout: Sprite;
-	
+	// 房间号label
 	@property({type: Laya.Label})
 	public roomNum: Laya.Label;
 	
@@ -56,6 +56,9 @@ export default class Main extends Laya.Script {
 	public countdown1: Laya.Image;
 	// 每次打牌后最多20秒倒计时
 	private countdownNum: number = 20;
+	// 剩余多少张牌label
+	@property({type: Laya.Label})
+	public remainingLabel: Laya.Label;
 	
 	/** 打出的牌容器 **/
 	@property({type: Sprite})
@@ -734,6 +737,7 @@ export default class Main extends Laya.Script {
 		const userInfo = dataManager.getData("userInfo");
 		const roomInfo = dataManager.getData("roomInfo");
 		const gameInfo = dataManager.getData("gameInfo");
+		const remainingNum = gameInfo?.remainingNum;
 		const tableIds = gameInfo?.tableIds;
 		this.playerNum = tableIds?.length;
 		const meIdx: number = tableIds.findIndex((o: string) => o == userInfo?.id);
@@ -745,7 +749,8 @@ export default class Main extends Laya.Script {
 		// 绘制全部玩家头像
 		this.renderAllPlayer(roomInfo);
 		this._started = true;
-		this.playAudio("背景音乐")
+		this.playAudio("背景音乐");
+		this.remainingLabel.text = remainingNum?.toString();
 	}
 	
 	
@@ -756,9 +761,12 @@ export default class Main extends Laya.Script {
 	 */
 	deliverCard(cardNum: number, playerId: string): void{
 		const userInfo = dataManager.getData("userInfo");
+		const gameInfo = dataManager.getData("gameInfo");
 		if(userInfo?.id === playerId){  //服务器下发新牌的玩家，需要更新检测，其他人不需要
-			this.activeCardNum = cardNum
+			this.activeCardNum = cardNum;
 		}
+		const remainingNum = gameInfo?.remainingNum;
+		this.remainingLabel.text = remainingNum?.toString()
 	}
 	
 	/**
