@@ -22,10 +22,20 @@
 ├── engine                 # 引擎库的声名文件 - 开发不要动
 ├── library                # 开发不要动
 ├── settings               # 游戏配置项 - 开发不要动
-├── src                    # 项目源码目录
-│   ├── prefab/               # 预制体相关ts代码的集合
-│   ├── main.ts               # 入口启动场景的脚本（也可以换别的，这个自己设置）     
+├── src                    # 项目源码目录（√核心）
+│   ├── prefab/               # 预制体相关ts代码的集合   
+│   ├── configs/              # 公共配置
 │   ├── utils/                # 公共工具类
+│   │   ├── HandleReceivedMessage.ts    # 执行服务端的消息
+│   │   ├── HttpHelper.ts               # http短连接公共类
+│   │   ├── SocketHelper.ts             # websocket长连接公共类
+│   ├── HallScript.ts         # 大厅场景自定义脚本   
+│   ├── HallRT.ts             # 大厅场景UI运行时脚本 
+│   ├── HallRT.generated.ts   # 大厅场景UI运行时脚本基础类 
+│   ├── LoginScript.ts        # 登录场景自定义脚本
+│   ├── Main.ts               # 游戏场景自定义脚本（√最主要的脚本，游戏逻辑都在此）   
+│   ├── MainRT.ts             # 游戏场景UI运行时脚本   
+│   ├── MainRT.generated.ts   # 游戏场景UI运行时脚本基础类   
 ├── .gitignore             # git忽略配置
 ├── package.json           # 依赖表
 └── tsconfig.json          # ts配置文件
