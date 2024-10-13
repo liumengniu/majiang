@@ -18,7 +18,7 @@
 ```
 ├── majiang                # 麻将
 ├── assets                 # 静态资源目录
-├── bin                    # 测试运行的index.html首页的入口，以及IDE内置的代码入口（如html/bundle.js） - 开发不要动
+├── bin                    # 测试运行的index.html首页的入口，以及IDE内置的代码入口（如html/bundle.js）
 ├── engine                 # 引擎库的声名文件 - 开发不要动
 ├── library                # 开发不要动
 ├── settings               # 游戏配置项 - 开发不要动
@@ -35,7 +35,7 @@
 │   ├── LoginScript.ts        # 登录场景自定义脚本
 │   ├── Main.ts               # 游戏场景自定义脚本（√最主要的脚本，游戏逻辑都在此）   
 │   ├── MainRT.ts             # 游戏场景UI运行时脚本   
-│   ├── MainRT.generated.ts   # 游戏场景UI运行时脚本基础类   
+│   └── MainRT.generated.ts   # 游戏场景UI运行时脚本基础类   
 ├── .gitignore             # git忽略配置
 ├── package.json           # 依赖表
 └── tsconfig.json          # ts配置文件
