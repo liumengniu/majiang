@@ -352,19 +352,17 @@ export default class Main extends Laya.Script {
 	 */
 	renderHandCards(idx: number, handCards: number[], pengCards: number[] = [], gangCards: number[] = []): void{
 		this.myCardImgs = [];
-		let img: Laya.Image;
 		// 按客户端玩家视角绘制手牌
 		if (this.viewPos[idx] === 0) { // 玩家本人位置
 			let hbox:any = this.owner.getChildByName(`frontInHand`);
-			const firstX = (Laya.stage.designWidth - handCards.length * 65) / 2 + (pengCards.length/3 + gangCards.length/4) * 46,
-				firstY = Laya.stage.designHeight - 99 - 30;
 			if (hbox) {
-				hbox?.destroyChildren()
+				hbox.destroyChildren();
 			} else {
 				hbox = new HBox();
 				hbox.name = "frontInHand";
-				hbox.pos(firstX, firstY);
 			}
+			let firstX = (Laya.stage.designWidth - handCards.length * 65) / 2 + (pengCards.length/3 + gangCards.length/4) * 46,
+				firstY = Laya.stage.designHeight - 99 - 30;
 			const operateCards = pengCards.concat(gangCards);
 			operateCards?.map((p: number, childIdx: number)=>{
 				let imgUrl = this.getPlayedCardsImageUrl(p, this.viewPos[idx])
@@ -378,8 +376,10 @@ export default class Main extends Laya.Script {
 				let img = new Image(imgUrl);
 				img.name = `myCard`;
 				this.myCardImgs.push(img);
-				img.on(Event.CLICK, this, this.handleCardClick, [firstY, `hbox${idx}`, childIdx, h])
+				hbox.name = "frontInHand";
+				img.on(Event.CLICK, this, this.handleCardClick, [firstY, `frontInHand`, childIdx, h])
 				hbox.size(handCards.length * 65, 99);
+				hbox.pos(firstX, firstY);
 				hbox.addChild(img);
 				return img;
 			})
@@ -404,7 +404,7 @@ export default class Main extends Laya.Script {
 				this.owner.addChild(img);
 			})
 			handCards?.map((h: number, childIdx: number) => {
-				img = new Image(this.rightInHand);
+				let img = new Image(this.rightInHand);
 				img.name = `rightInHand${childIdx}`;
 				img.pos(0, 20 * childIdx);
 				vbox.addChild(img)
@@ -424,12 +424,12 @@ export default class Main extends Laya.Script {
 			operateCards?.map((p: number, childIdx: number) => {
 				let imgUrl = this.getPlayedCardsImageUrl(p, this.viewPos[idx])
 				let img = new Image(imgUrl);
-				img.pos(Laya.stage.designWidth - 200 - childIdx * 42, firstY);
+				img.pos(Laya.stage.designWidth - 200 - childIdx * 40, firstY);
 				img.name = `pengCard`;
 				this.owner.addChild(img);
 			})
 			handCards?.map((h: number, childIdx: number) => {
-				img = new Image(this.oppositeInHand);
+				let img = new Image(this.oppositeInHand);
 				img.pos(childIdx * 44, 0);
 				img.name = `handCard-${idx}-${childIdx}`;
 				hbox.size(handCards?.length * 44, 72);
@@ -456,7 +456,7 @@ export default class Main extends Laya.Script {
 				this.owner.addChild(img);
 			})
 			handCards?.map((h: number, childIdx: number) => {
-				img = new Image(this.leftInHand);
+				let img = new Image(this.leftInHand);
 				vbox.addChild(img);
 			})
 			this.owner.addChild(vbox)
