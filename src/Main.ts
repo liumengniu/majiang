@@ -109,7 +109,7 @@ export default class Main extends Laya.Script {
 	
 	private activeCard: Laya.Image;    //用户当前操作的牌
 	private activeCardNum: number;
-	
+	private clickActiveCardTimestamp: number = 0; // 时间戳（毫秒）
 	
 	private myCardImgs: Array<Laya.Image> =[];
 	private allUiCards: Array<Laya.Image> =[];   // 存储所有牌的UI节点，方便特殊操作
@@ -484,8 +484,14 @@ export default class Main extends Laya.Script {
 			})
 			this.playAudio("牌点击");
 		} else {
-			this.activeCard = cardNode;
-			this.handleCardPlay(cardNum);
+			// 连续快速多次点击要出的牌是无效的，会造成该牌被多次出，需要避免这种错误！
+			const timestamp2 = Date.now();
+			const diff = timestamp2 - this.clickActiveCardTimestamp;
+			if (diff >= 1000) { // 两次时间戳相隔大于等于 1 秒
+				this.clickActiveCardTimestamp = timestamp2;
+				this.activeCard = cardNode;
+				this.handleCardPlay(cardNum);
+			}
 		}
 	}
 	
