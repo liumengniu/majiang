@@ -2,6 +2,7 @@
 
 ## 🔥 [服务端仓库地址](https://github.com/liumengniu/majiang-server)
 ## 🔥 [直接上手？文档地址？点这里](https://liumengniu.github.io/majiang-server/)
+## 🔥 此项目长期维护，有任何问题 [请提交 issue](https://github.com/liumengniu/majiang/issues)， 或者联系作者本人 。
 
 [//]: # (https://github.com/ikatyang/emoji-cheat-sheet 表情仓库)
 
