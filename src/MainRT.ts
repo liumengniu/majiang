@@ -35,7 +35,7 @@ export default class MainRT extends Laya.Scene {
 			//重新加入游戏,重新绘制界面
 			this._control.getDataByPlayerId();
 		} else {
-			this._control?.joinRoom(null)
+			this._control?.joinRoom(null);
 		}
 	}
 	
@@ -77,6 +77,13 @@ export default class MainRT extends Laya.Scene {
 	joinRoom(roomInfo: any): void{
 		this._control?.joinRoom(roomInfo)
 	}
+
+	/**
+	 * 有玩家退出了房间
+	 */
+	quitRoom(roomInfo: any, quitPlayerId: string, roomPlaying: boolean): void{
+		this._control?.quitRoom(roomInfo, quitPlayerId, roomPlaying)
+	}
 	
 	/**
 	 * 准备绘制游戏牌和人物
@@ -97,6 +104,13 @@ export default class MainRT extends Laya.Scene {
 	 */
 	renderHandCards(idx: number, handCards:Array<number>, pengCards: Array<number>, gangCards: Array<number>): void{
 		this._control.renderHandCards(idx, handCards, pengCards, gangCards)
+	}
+
+	/**
+	 * 绘制重连后的背景声音，全部玩家等资源
+	 */
+	renderOtherResourceAfterReconnect(): void{
+		this._control.renderOtherResourceAfterReconnect();
 	}
 	
 	/**

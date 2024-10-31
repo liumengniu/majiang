@@ -1,3 +1,21 @@
 {
-  "name": "majiang"
+  "name": "majiang",
+  "minifyJS": true,
+  "startupScene": "res://daced43e-a7ae-4e64-a4eb-81d0861864f8",
+  "includedScenes": [
+    "res://cd6d04dc-cac3-4be5-a7cf-591e7639dbba",
+    "res://9b931ecf-fde9-44dd-acf3-15f8dc807965"
+  ],
+  "web": {
+    "useSafeFileExtensions": true
+  },
+  "android": {
+    "targetArchitectures": {
+      "ARMv7": false,
+      "ARM64": true,
+      "x86": false,
+      "x86-64": false
+    },
+    "exportFormat": "APK"
+  }
 }

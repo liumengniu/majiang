@@ -58,14 +58,19 @@ class HandleReceivedMessage{
 			// 2、绘制头像
 		} else if (type === "join") {  //加入房间成功
 			MainRT.getInstance().joinRoom(roomInfo);
+		} else if (type === "quit") { // 某个玩家主动退出房间
+			const quitPlayerId = data?.data?.playerId;
+			const roomPlaying = data?.data?.roomPlaying;
+			MainRT.getInstance().quitRoom(roomInfo, quitPlayerId, roomPlaying);
 		} else if (type === "startGame"){
 			MainRT.getInstance().readyGameStart();
 		} else if(type === "reconnect"){
-			MainRT.getInstance().initViewPos()
+			MainRT.getInstance().initViewPos();
 			MainRT.getInstance().renderTimeStatus();
 			gameInfo?.tableIds?.map((o: string, idx: number) => {
 				MainRT.getInstance().renderHandCards(idx, roomInfo[o]?.handCards, roomInfo[o].pengCards, roomInfo[o].gangCards);
 				MainRT.getInstance().renderPlayedCards(null, o, roomInfo, gameInfo);
+				MainRT.getInstance().renderOtherResourceAfterReconnect();
 			})
 		}else if(type === "playCard"){
 			const playerId = data?.data?.playerId;

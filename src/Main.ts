@@ -87,6 +87,8 @@ export default class Main extends Laya.Script {
 	public playerCards3: Laya.Sprite;
 	@property({type: Laya.Image})
 	public backHall: Laya.Image;
+	@property({type: Sprite})
+	public backHallOverlay: Sprite;
 	
 	// declare owner : Laya.Sprite;
 	//ws实例
@@ -115,7 +117,7 @@ export default class Main extends Laya.Script {
 	private allUiCards: Array<Laya.Image> =[];   // 存储所有牌的UI节点，方便特殊操作
 	
 	// 一局允许的玩家数量
-	private allowPlayerCount:number = 1;
+	private allowPlayerCount:number = 2;
 	
 	// layaAir 引擎会在场景或网页失焦和最小化时，timer会置为0帧，timer.frameloop 会停止
 	// 兼容方案： 1、用JS的setInterval  2、使用 onUpdate 生命周期
@@ -123,6 +125,8 @@ export default class Main extends Laya.Script {
 	private timeInterval:number = 1000;
 	/** 开始时间 **/
 	private startTime: number = 0;
+
+	private backgroundSoundNode: Laya.SoundNode;
 	
 	onStart() {}
 	
@@ -166,6 +170,7 @@ export default class Main extends Laya.Script {
 		let bankerImg: Laya.Image = new Image(this.bankerImg);
 		bankerImg.name = "banker"
 		avatarCommon.zOrder = 1;
+		avatarCommon.name = "player_avatar_node_" + idx.toString();
 		bankerImg.zOrder = 2;
 		avatarBg.width = 108;
 		avatarBg.height = 108;
@@ -262,7 +267,11 @@ export default class Main extends Laya.Script {
 		
 		const viewPos: Array<number> = this.viewPos = this.getPlayerViewPos(meIdx, tableIds)
 		
-
+		// 移除已经渲染的全部玩家的头像
+		for (let i = 0; i < 4; i++) {
+			const node = this.owner.getChildByName("player_avatar_node_" + i.toString());
+			node?.removeSelf()
+		}
 		const banker = this.owner.getChildByName("banker")
 		banker?.removeSelf()
 		
@@ -278,8 +287,25 @@ export default class Main extends Laya.Script {
 		if(!roomInfo){
 			roomInfo = dataManager.getData("roomInfo");
 		}
-		this.renderAllPlayer(roomInfo)
+		this.renderAllPlayer(roomInfo);
 	}
+
+	/**
+	 * 有玩家退出房间，如果此时游戏已经开始那么结束该游戏并解散房间
+	 */
+	quitRoom(roomInfo: any, quitPlayerId: string, roomPlaying: boolean): void{
+		if (roomPlaying) {
+			this.backgroundSoundNode.destroy();
+			// 返回大厅场景
+			Laya.Scene.open("Hall.ls", true);
+			return
+		}
+		if(!roomInfo){
+			roomInfo = dataManager.getData("roomInfo");
+		}
+		this.renderAllPlayer(roomInfo);
+	}
+
 	/**
 	 * 开始游戏
 	 * @private
@@ -289,13 +315,13 @@ export default class Main extends Laya.Script {
 		const userInfo = dataManager.getData("userInfo");
 		const gameInfo = dataManager.getData("gameInfo");
 		const tableIds = gameInfo?.tableIds;
-		const room = roomInfo[userInfo?.id];
+		const player = roomInfo[userInfo?.id];
 		// todo 玩家数量检测，开发时可以注销
 		if (tableIds.length < this.allowPlayerCount){
 			return;
 		}
-		if (!room?.isHomeOwner) { // 仅有房主能开始游戏
-			return
+		if (!player?.isHomeOwner) { // 仅有房主能开始游戏
+			return;
 		}
 		this.playerNum = tableIds?.length;
 		const meIdx: number = tableIds.findIndex((o: string) => o == userInfo?.id);
@@ -311,6 +337,29 @@ export default class Main extends Laya.Script {
 	getDataByPlayerId(): void{
 		const userInfo = dataManager.getData("userInfo");
 		this._socket.sendMessage(JSON.stringify({type: "reconnect", data: {userId: userInfo?.id}}))
+	}
+
+	/**
+	 * 绘制重连后的背景声音，全部玩家等资源
+	 */
+	renderOtherResourceAfterReconnect(): void {
+		// 绘制全部玩家头像
+		const roomInfo = dataManager.getData("roomInfo");
+		this.renderAllPlayer(roomInfo);
+		const gameInfo = dataManager.getData("gameInfo");
+		const playerInfo = dataManager.getData("playerInfo");
+		/**
+		 * roomInfo[playerId].status 玩家的房间状态  0 未准备  1 准备  2 游戏中  3 已解散
+		 * playerInfo.playerStatus   玩家的状态  0 未登录   1 已登录   2 房间中  3 游戏中
+		 */
+		if (playerInfo?.playerStatus === 3) {
+			this.startBtn.visible = false;
+			this._started = true;
+			this.playAudio("背景音乐");
+			this.renderTimeStatus();
+		}
+		const remainingNum = gameInfo?.remainingNum;
+		this.remainingLabel.text = remainingNum?.toString();
 	}
 	
 	/**
@@ -350,7 +399,7 @@ export default class Main extends Laya.Script {
 	/**
 	 * 绘制手牌
 	 */
-	renderHandCards(idx: number, handCards: number[], pengCards: number[] = [], gangCards: number[] = []): void{
+	renderHandCards(idx: number, handCards: number[] = [], pengCards: number[] = [], gangCards: number[] = []): void{
 		this.myCardImgs = [];
 		// 按客户端玩家视角绘制手牌
 		if (this.viewPos[idx] === 0) { // 玩家本人位置
@@ -928,12 +977,14 @@ export default class Main extends Laya.Script {
 		this.winningBtn.visible = false
 		this.passBtn.visible = false
 		this.backHall.visible = true
+		this.backHallOverlay.visible = true;
 	}
 	
 	/**
 	 * 返回大厅
 	 */
 	backToHall(): void{
+		this.backgroundSoundNode.destroy();
 		// 打开场景
 		Laya.Scene.open("Hall.ls");
 		// 调用服务端
@@ -967,6 +1018,7 @@ export default class Main extends Laya.Script {
 		sound.autoPlay = true;
 		sound.isMusic = type === "背景音乐";
 		sound.play(type === "背景音乐" ? 0 : 1, Handler.create(this, this.playAudioCb, [sound]))
+		if (type === "背景音乐") this.backgroundSoundNode = sound;
 		this.owner.addChild(sound);
 	}
 	

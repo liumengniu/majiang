@@ -21,7 +21,7 @@ export class Script extends Laya.Script {
 	//组件被激活后执行，此时所有节点和组件均已创建完毕，此方法只执行一次
 	onAwake(): void {
 		this.btn.on(Event.CLICK,this, this.handleLogin);
-		// this.preloadRes()
+		this.preloadRes(); // UI主线程加载网络资源文件会 block UI渲染，影响UX，可以使用 html5 web worker多线程
 	}
 	
 	/**
@@ -29,13 +29,58 @@ export class Script extends Laya.Script {
 	 */
 	preloadRes(): void{
 		let resArr: Array<string> = [
+			/**
+			 * 一小部分图片资源预先加载放置在了 index.html head，这里就不需要再次预加载了，可能某些老旧浏览器不支持 html head preload
+			 * index.html head预加载较多资源会导致 index页面render过于延后，严重影响UX
+			 */
+			// `resources/apes/ui/startImg.jpg`,
+			// `resources/apes/login/loginBtn.png`,
+			`resources/apes/ui/hallBg.jpg`,
+			`resources/apes/dialog/dialogBg.png`,
+			`resources/apes/operate/createRoom.png`,
+			`resources/apes/operate/joinRoom.png`,
+			`resources/apes/ui/table.jpg`,
+			`atlas/comp.png`, // 这是构建时生成的由多个小资源图片组合成的大图片，用于减少资源请求次数，提高性能
 			`resources/sound/背景音乐.mp3`,
 			`resources/sound/牌点击音效.mp3`,
 			`resources/sound/出牌音效.mp3`
 		];
-		Laya.loader.load(resArr).then((res: Array<Laya.Sound>) => {
-		
-		})
+		if (window.Worker) { // 检测浏览器是否支持 HTML5 web worker
+			let script = `
+			// 应该替换成你自己的网站域名
+			const url_prefix = "https://xxx.yyy/";
+			const resourceUrls = [
+			"resources/apes/ui/hallBg.jpg",
+			"resources/apes/dialog/dialogBg.png",
+			"resources/apes/operate/createRoom.png",
+			"resources/apes/operate/joinRoom.png",
+			"resources/apes/ui/table.jpg",
+			"atlas/comp.png",
+			"resources/sound/背景音乐.mp3",
+			"resources/sound/牌点击音效.mp3",
+			"resources/sound/出牌音效.mp3"
+			];
+			for (let i = 0; i < resourceUrls.length; i++) {
+			    fetch(url_prefix + resourceUrls[i]).then(response => {
+				if (response.status === 200) {
+					// 将资源存储在缓存中
+					caches.open('my-cache').then(cache => {
+				    cache.put(url_prefix + resourceUrls[i], response);
+					});
+				}
+				})
+				.catch(error => {
+				console.log("web worker error:", error);
+				});
+			}
+			`
+			let workerBlob = new Blob([script], { type: "text/javascript" });
+			let url = URL.createObjectURL(workerBlob);
+			let worker = new Worker(url);
+		} else {
+			Laya.loader.load(resArr).then((res: Array<Laya.Sound>) => {
+			})
+		}
 	}
 	
 	/**
@@ -61,6 +106,8 @@ export class Script extends Laya.Script {
 			dataManager.setData('userInfo',data?.result?.userInfo);
 			dataManager.setData('playerInfo',playerInfo);
 			if(playerInfo && playerInfo?.playerStatus >= 2) { // 判断玩家是否在房间中，如果在游戏中，则直接回到牌桌
+				dataManager.setData("roomInfo", data?.result?.roomInfo);
+				dataManager.setData("gameInfo", data?.result?.gameInfo);
 				Laya.Scene.open("Hall.ls", false, "oldPlayer");
 			} else { // 玩家不在游戏中，进入游戏大厅
 				Laya.Scene.open("Hall.ls");
