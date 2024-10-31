@@ -91,7 +91,10 @@
         "_$ref": "cug0t3t0"
       },
       "backHall": {
-        "_$ref": "e6wo5qwt"
+        "_$ref": "i6uwav6s"
+      },
+      "backHallOverlay": {
+        "_$ref": "pjqq8j7a"
       }
     }
   ],
@@ -103,7 +106,7 @@
       "width": 1334,
       "height": 750,
       "texture": {
-        "_$uuid": "154e0fa2-f4a2-4f35-b7e4-d01d61f63f1b",
+        "_$uuid": "f8c92db8-47b8-4c44-8b04-0674469646c8",
         "_$type": "Texture"
       },
       "_mouseState": 2,
@@ -222,13 +225,13 @@
         {
           "_$id": "e6wo5qwt",
           "_$type": "Image",
-          "name": "backHall",
-          "x": 1116,
+          "name": "backHallOld",
+          "x": 1151,
           "y": 651,
           "width": 158,
           "height": 39,
           "visible": false,
-          "right": 60,
+          "right": 25,
           "bottom": 60,
           "skin": "res://5d6fb62f-3208-45ee-b16b-cb6c04e09d99",
           "useSourceSize": true,
@@ -697,6 +700,32 @@
           "align": "center",
           "valign": "middle",
           "padding": "0,0,0,0"
+        }
+      ]
+    },
+    {
+      "_$id": "pjqq8j7a",
+      "_$type": "Sprite",
+      "name": "backHallOverlay",
+      "x": 1151,
+      "y": 651,
+      "width": 158,
+      "height": 39,
+      "visible": false,
+      "_mouseState": 2,
+      "_$child": [
+        {
+          "_$id": "i6uwav6s",
+          "_$type": "Image",
+          "name": "backHall",
+          "width": 158,
+          "height": 39,
+          "_mouseState": 2,
+          "right": 0,
+          "bottom": 0,
+          "skin": "res://5d6fb62f-3208-45ee-b16b-cb6c04e09d99",
+          "useSourceSize": true,
+          "color": "#ffffff"
         }
       ]
     }

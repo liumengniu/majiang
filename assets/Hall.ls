@@ -27,6 +27,9 @@
       "joinBtn": {
         "_$ref": "jp9shfoz"
       },
+      "joinRoomDialogClose": {
+        "_$ref": "0yvrxc7k"
+      },
       "reconnectDialog": {
         "_$ref": "v241a0m2"
       },
@@ -46,7 +49,7 @@
       "width": 1334,
       "height": 750,
       "texture": {
-        "_$uuid": "bb8c567d-43a6-4933-b438-73695c461efe",
+        "_$uuid": "0a76ea20-fc99-485d-b077-714c12dbd9b8",
         "_$type": "Texture"
       },
       "_mouseState": 2,
