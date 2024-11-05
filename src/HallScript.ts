@@ -100,10 +100,17 @@ export default class HallScript extends Laya.Script {
 	 * 唤起加入房间弹框
 	 */
 	handleJoinRoomDialog(): void{
-		this.joinRoomDialog.visible = true
+		if (!this.joinRoomDialog.visible) {
+			this.joinRoomDialog.visible = true
+		}
+		// this.joinRoomDialog.popup(true, false)
 	}
 
 	handleJoinRoomDialogClose(): void{
+		/*
+		 * 由于Laya默认行为：Dialog内的某个按钮命名为close 或者 cancel sure no yes ok，点击此按钮则会关闭Dialog；所以最好将按钮改名来避免默认行为
+		 * Dialog.close() 会带来怪异行为，最好使用visible属性
+		 */
 		this.joinRoomDialog.visible = false
 	}
 	
@@ -145,7 +152,6 @@ export default class HallScript extends Laya.Script {
 		const userInfo = dataManager.getData('userInfo');
 		let http = new HttpHelper();
 		http.post("/room/joinRoom", {userId: userInfo?.id, roomId: this.roomTextInput?.text}, this.onJoinRoomCallback)
-		this.joinRoomDialog.visible = false
 	}
 	
 	/**

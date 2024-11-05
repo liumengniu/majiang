@@ -92,6 +92,7 @@
           "_mouseState": 2,
           "centerX": 0,
           "centerY": 0,
+          "isModal": true,
           "_$child": [
             {
               "_$id": "fiaf4d4o",
@@ -110,7 +111,7 @@
                 {
                   "_$id": "0yvrxc7k",
                   "_$type": "Button",
-                  "name": "close",
+                  "name": "closeJoinRoomDialog",
                   "x": 725,
                   "width": 60,
                   "height": 60,

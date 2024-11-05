@@ -46,31 +46,66 @@ export class Script extends Laya.Script {
 			`resources/sound/出牌音效.mp3`
 		];
 		if (window.Worker) { // 检测浏览器是否支持 HTML5 web worker
+			// let response = await fetch("/json") wait for HTTP header
+			// let json = await response.json() wait for HTTP body
 			let script = `
 			// 应该替换成你自己的网站域名
 			const url_prefix = "https://xxx.yyy/";
 			const resourceUrls = [
+			"Hall.ls", "Game.ls",
 			"resources/apes/ui/hallBg.jpg",
 			"resources/apes/dialog/dialogBg.png",
 			"resources/apes/operate/createRoom.png",
 			"resources/apes/operate/joinRoom.png",
+			"atlas/comp.atlas",
+			"resources/apes/dialog/confirm.png",
 			"resources/apes/ui/table.jpg",
 			"atlas/comp.png",
+			"resources/apes/ui/room_时间提示框.png",
+			"resources/apes/ui/剩余      张.png",
+			"resources/apes/ui/剩余      局.png",
+			"resources/apes/ui/room_time_0.png",
+			"resources/apes/ui/room_time_1.png",
+			"resources/apes/ui/room_time_2.png",
+			"resources/apes/ui/room_time_3.png",
+			"resources/apes/operate/backHall.png",
+			"resources/apes/ui/remainingBg.png",
+			"resources/apes/ui/activeCard.png",
+			"resources/apes/settlement/win.png",
+			"resources/apes/operate/option_guo.png",
+			"resources/apes/operate/option_peng.png",
+			"resources/apes/operate/option_gang.png",
+			"resources/apes/operate/option_hu.png",
+			"resources/apes/ui/roomIgBg.png",
+			"resources/apes/avatar/avatarBg.png",
+			"resources/apes/avatar/avatarCommon.png",
+			"resources/apes/avatar/avatar.png",
+			"resources/apes/avatar/banker.png",
+			"resources/apes/avatar/avatar2.png",
 			"resources/sound/背景音乐.mp3",
 			"resources/sound/牌点击音效.mp3",
-			"resources/sound/出牌音效.mp3"
+			"resources/sound/出牌音效.mp3",
+			"resources/sound/发牌音效.mp3",
+			"resources/sound/杠音效.mp3",
+			"resources/sound/碰音效.mp3",
+			"resources/sound/胡音效.mp3",
+			"resources/animations/win.png",
+			"resources/animations/win.atlas"
 			];
 			for (let i = 0; i < resourceUrls.length; i++) {
 			    fetch(url_prefix + resourceUrls[i]).then(response => {
-				if (response.status === 200) {
-					// 将资源存储在缓存中
-					caches.open('my-cache').then(cache => {
-				    cache.put(url_prefix + resourceUrls[i], response);
-					});
-				}
+					if (response.status === 200) {
+						// 将资源存储在缓存中
+						//caches.open('my-cache').then(cache => {
+				    	//cache.put(url_prefix + resourceUrls[i], response);
+						//});
+					}
+					return response.blob()
+				}).then((blob) => {
+					console.log("already got http body")
 				})
 				.catch(error => {
-				console.log("web worker error:", error);
+					console.log("web worker error:", error)
 				});
 			}
 			`
